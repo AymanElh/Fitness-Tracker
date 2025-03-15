@@ -38,3 +38,11 @@ Route::get('/login', function() {
 Route::get('/register', function() {
     return view('auth.register');
 })->name('register');
+
+Route::get('/reset-password', function() {
+    return view('auth.reset-password');
+})->name('reset-password');
+
+Route::get('/forget-password', function() {
+    return view('auth.forget-password');
+})->name('forget-password');
