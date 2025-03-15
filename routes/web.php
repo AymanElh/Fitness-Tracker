@@ -29,3 +29,12 @@ Route::get('/admin/exercises', function() {
 Route::get('/admin/exercises/create', function() {
     return view('/admin/exercises/create');
 })->name('admin.exercises.create');
+
+// Auth
+Route::get('/login', function() {
+    return view('auth.login');
+})->name('login');
+
+Route::get('/register', function() {
+    return view('auth.register');
+})->name('register');
