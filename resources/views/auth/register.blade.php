@@ -129,28 +129,28 @@
                 <!-- Full Name -->
                 <div>
                     <x-form.form-label for="name">Full Name</x-form.form-label>
-                    <x-form.form-input id="name" name="name" placeholder="John Doe" />
+                    <x-form.form-input id="name" name="name" placeholder="John Doe" value="{{ old('name') }}" />
                     <x-form.form-error name="name" />
                 </div>
 
                 <!-- Email -->
                 <div>
                     <x-form.form-label for="email">Email</x-form.form-label>
-                    <x-form.form-input id="email" name="email" placeholder="username@example.com" />
+                    <x-form.form-input id="email" name="email" placeholder="username@example.com" value="{{ old('email') }}" />
                     <x-form.form-error name="email" />
                 </div>
 
                 <!-- Password -->
                 <div>
                     <x-form.form-label for="password">Password</x-form.form-label>
-                    <x-form.form-input id="password" name="password" placeholder="*******" />
+                    <x-form.form-input id="password" name="password" type="password" placeholder="*******"  />
                     <x-form.form-error name="password" />
                 </div>
 
                 <!-- Confirm Password -->
                 <div>
                     <x-form.form-label for="password_confirmation">Confirm Password</x-form.form-label>
-                    <x-form.form-input id="password_confirmation" name="password_confirmation" placeholder="******" />
+                    <x-form.form-input id="password_confirmation" name="password_confirmation" type="password" placeholder="******" />
                     <x-form.form-error name="password_confirmation" />
                 </div>
             </div>

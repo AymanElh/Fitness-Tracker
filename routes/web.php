@@ -8,7 +8,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function() {
     return view('admin.dashboard');
-});
+})->name('dashboard');
 
 Route::get('/admin/users', function() {
     return view('admin.users.index');
@@ -31,13 +31,12 @@ Route::get('/admin/exercises/create', function() {
 })->name('admin.exercises.create');
 
 // Auth
-Route::get('/login', function() {
-    return view('auth.login');
-})->name('login');
+Route::get('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'showRegisterForm'])->name('register');
+Route::post('register', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
 
-Route::get('/register', function() {
-    return view('auth.register');
-})->name('register');
+Route::get('/login', [\App\Http\Controllers\Auth\SessionController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [\App\Http\Controllers\Auth\SessionController::class, 'login']);
+
 
 Route::get('/reset-password', function() {
     return view('auth.reset-password');

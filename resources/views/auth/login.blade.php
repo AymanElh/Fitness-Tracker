@@ -124,22 +124,10 @@
         <!-- Login Form -->
         <form class="space-y-5 sm:space-y-6" action="{{ route('login') }}" method="POST">
             @csrf
-
             <div class="space-y-4 sm:space-y-5">
                 <div>
                     <x-form.form-label for="email" class="text-sm font-medium text-gray-700 mb-1 block">Email address</x-form.form-label>
-                    <div class="form-input-focus rounded-lg transition duration-300">
-                        <x-form.form-input
-                            name="email"
-                            id="email"
-                            type="email"
-                            placeholder="you@example.com"
-                            :value="old('email')"
-                            autocomplete="email"
-                            class="block w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-0 focus:border-indigo-500 transition-all duration-300 text-sm sm:text-base"
-                            required
-                        />
-                    </div>
+                    <x-form.form-input id="email" name="email" placeholder="you@example.com" type="email" />
                     <x-form.form-error name="email" class="mt-1 text-xs sm:text-sm text-red-600" />
                 </div>
 
