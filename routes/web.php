@@ -37,11 +37,16 @@ Route::post('register', [\App\Http\Controllers\Auth\RegisterController::class, '
 Route::get('/login', [\App\Http\Controllers\Auth\SessionController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [\App\Http\Controllers\Auth\SessionController::class, 'login']);
 
+Route::get('/password/reset', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'showForgetPasswordForm'])->name('password.request');
+Route::post('/password/email', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
 
-Route::get('/reset-password', function() {
-    return view('auth.reset-password');
-})->name('reset-password');
+Route::get('/password/reset/{token}', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/password/reset', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
 
-Route::get('/forget-password', function() {
-    return view('auth.forget-password');
-})->name('forget-password');
+//Route::get('/reset-password', function() {
+//    return view('auth.reset-password');
+//})->name('reset-password');
+//
+//Route::get('/forget-password', function() {
+//    return view('auth.forget-password');
+//})->name('forget-password');

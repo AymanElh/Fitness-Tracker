@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Models\PasswordReset;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use Carbon\Carbon;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -57,5 +59,26 @@ class UserRepository implements UserRepositoryInterface
             return $user->fresh();
         }
         return null;
+    }
+
+    public function createPasswordReset(string $email, string $token)
+    {
+        return PasswordReset::updateOrCreate(
+            ['email' => $email],
+            [
+                'token' => $token,
+                'created_at' => Carbon::now()
+            ]
+        );
+    }
+
+    public function findPasswordReset(string $email)
+    {
+        return PasswordReset::where('email', $email)->where('created_at', '>=', Carbon::now()->subHour())->first();
+    }
+
+    public function deletePasswordReset(string $email)
+    {
+        return PasswordReset::where('email', $email)->delete();
     }
 }

@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Mail\ResetPassword;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 
 class AuthService
 {
@@ -18,6 +21,10 @@ class AuthService
         $this->userRepository = $userRepository;
     }
 
+    /**
+     * @param array $data
+     * @return mixed
+     */
     public function register(array $data)
     {
         $user = $this->userRepository->create($data);
@@ -27,6 +34,10 @@ class AuthService
         return $user;
     }
 
+    /**
+     * @param array $credentials
+     * @return false|mixed
+     */
     public function login(array $credentials)
     {
         $user = $this->userRepository->findByEmail($credentials['email']);
@@ -39,12 +50,52 @@ class AuthService
         return $user;
     }
 
-        public function logout() : bool
-        {
-            Auth::logout();
-            session()->invalidate();
-            session()->regenerateToken();
+    /**
+     * @return bool
+     */
+    public function logout(): bool
+    {
+        Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
 
-            return true;
+        return true;
+    }
+
+    /**
+     * @param string $email
+     * @return false|void
+     */
+    public function sendPasswordResetLink(string $email)
+    {
+        $user = $this->userRepository->findByEmail($email);
+        if(!$user) {
+            return false;
         }
+
+        $token = Password::createToken($user);
+//        dd($token);
+        $this->userRepository->createPasswordReset($email, $token);
+        Mail::to($email)->send(new ResetPassword($token, $user->name));
+        return $token;
+    }
+
+    public function resetPassword(array $data) : bool
+    {
+        $reset = $this->userRepository->findPasswordReset($data['email']);
+        if(!$reset || $reset->token !== $data['token']) {
+            return false;
+        }
+
+        $user = $this->userRepository->findByEmail($data['email']);
+
+        if(!$user) {
+            return false;
+        }
+
+        $this->userRepository->update($user->id, ['password' =>  $data['password']]);
+        $this->userRepository->deletePasswordReset($data['email']);
+
+        return true;
+    }
 }
