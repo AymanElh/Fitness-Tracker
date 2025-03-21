@@ -45,4 +45,37 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+    // Methods for roles and permissions
+
+    public function roles(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+    public function hasRole($role) : bool
+    {
+        if(is_string($role)) {
+            return $this->roles()->where('name', $role)->exists();
+        }
+
+        if(is_int($role)) {
+            return $this->roles()->where('id', $role)->exists();
+        }
+
+        if($role instanceof Role) {
+            return $this->roles()->where('id', $role->id)->exists;
+        }
+    }
+
+    public function hasAnyRoles(array $roles) : bool
+    {
+        foreach($roles as $role) {
+            if($this->hasRole($role)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
