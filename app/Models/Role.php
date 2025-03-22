@@ -70,4 +70,5 @@ class Role extends Model
 
         return [$permissions instanceof Permission ? $permissions->id : $permissions];
     }
+
 }

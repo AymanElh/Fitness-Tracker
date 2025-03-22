@@ -40,169 +40,55 @@
 
             <!-- Flash Messages -->
             @if(session('success'))
-                <div id="successAlert"
-                     class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-sm">
-                    <div class="flex items-center">
-                        <div class="py-1">
-                            <svg class="h-6 w-6 text-green-500 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="font-bold">Success!</p>
-                            <p class="text-sm">{{ session('success') }}</p>
-                        </div>
-                        <button onclick="document.getElementById('successAlert').remove()" class="ml-auto">
-                            <svg class="h-4 w-4 text-green-700" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
+                <x-alert type="success" id="successAlert">
+                    <p class="font-bold">Success!</p>
+                    <p class="text-sm">{{ session('success') }}</p>
+                </x-alert>
             @endif
 
             @if(session('error'))
-                <div id="errorAlert"
-                     class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-sm">
-                    <div class="flex items-center">
-                        <div class="py-1">
-                            <svg class="h-6 w-6 text-red-500 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="font-bold">Error!</p>
-                            <p class="text-sm">{{ session('error') }}</p>
-                        </div>
-                        <button onclick="document.getElementById('errorAlert').remove()" class="ml-auto">
-                            <svg class="h-4 w-4 text-red-700" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
+                <x-alert type="error" id="errorAlert">
+                    <p class="font-bold">Error!</p>
+                    <p class="text-sm">{{ session('error') }}</p>
+                </x-alert>
             @endif
 
             @if ($errors->any())
-                <div id="validationErrors"
-                     class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-sm">
-                    <div class="flex items-center">
-                        <div class="py-1">
-                            <svg class="h-6 w-6 text-red-500 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="font-bold">Please fix the following errors:</p>
-                            <ul class="mt-1 list-disc list-inside text-sm">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        <button onclick="document.getElementById('validationErrors').remove()" class="ml-auto">
-                            <svg class="h-4 w-4 text-red-700" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
+                <x-alert type="error" id="validationErrors">
+                    <p class="font-bold">Please fix the following errors:</p>
+                    <ul class="mt-1 list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </x-alert>
             @endif
 
             <!-- Stats Section -->
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-6">
                 <!-- Total Roles Card -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="px-4 py-5 sm:p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-indigo-500 rounded-md p-3">
-                                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                     viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                </svg>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Total Roles
-                                    </dt>
-                                    <dd class="flex items-baseline">
-                                        <div class="text-2xl font-semibold text-gray-900">
-                                            {{ $totalRoles }}
-                                        </div>
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <x-stat-card
+                    title="Total Roles"
+                    value="{{ $totalRoles }}"
+                    color="indigo"
+                    icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>'
+                />
 
                 <!-- Users with Roles Card -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="px-4 py-5 sm:p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
-                                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                     viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-                                </svg>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Users with Roles
-                                    </dt>
-                                    <dd class="flex items-baseline">
-                                        <div class="text-2xl font-semibold text-gray-900">
-                                            {{ $totalUsers }}
-                                        </div>
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <x-stat-card
+                    title="Users with Roles"
+                    value="{{ $totalUsers }}"
+                    color="green"
+                    icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>'
+                />
 
                 <!-- Permissions Card -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="px-4 py-5 sm:p-6">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
-                                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                     viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                                </svg>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Total Permissions
-                                    </dt>
-                                    <dd class="flex items-baseline">
-                                        <div class="text-2xl font-semibold text-gray-900">
-                                            {{ $totalPermissions }}
-                                        </div>
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <x-stat-card
+                    title="Total Permissions"
+                    value="{{ $totalPermissions }}"
+                    color="yellow"
+                    icon=' <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>'
+                />
             </div>
 
             <!-- Search and Filter Section -->
@@ -320,15 +206,16 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div class="flex justify-end space-x-2">
-                                                <a href="{{ route('roles.edit', $role->id) }}"
-                                                   class="text-indigo-600 hover:text-indigo-900">
-                                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                         viewBox="0 0 24 24" stroke="currentColor">
+                                                <button type="button"
+                                                        onclick="openEditRoleModal({{ $role->id }})"
+                                                        class="text-indigo-600 hover:text-indigo-900">
+                                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                               stroke-width="2"
                                                               d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
                                                     </svg>
-                                                </a>
+                                                </button>
 
                                                 <button type="button"
                                                         onclick="openDeleteConfirmModal({{ $role->id }}, '{{ $role->name }}')"
@@ -391,137 +278,162 @@
     </div>
 
     <!-- Create Role Modal -->
-    <div id="createRoleModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title"
-         role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-            <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <form action="{{ route('roles.store') }}" method="POST">
-                    @csrf
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div
-                                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg class="h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                     viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                                </svg>
-                            </div>
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                    Create New Role
-                                </h3>
-                                <div class="mt-6 space-y-6">
-                                    <div>
-                                        <label for="name" class="block text-sm font-medium text-gray-700">Role
-                                            Name</label>
-                                        <div class="mt-1">
-                                            <input type="text" name="name" id="name"
-                                                   class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                                   placeholder="Enter role name" required>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                                        <div class="mt-1">
-                                            <textarea name="description" id="description" rows="3"
-                                                      class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                                      placeholder="Enter role description"></textarea>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label for="permissions" class="block text-sm font-medium text-gray-700">Permissions</label>
-                                        <div class="mt-1 relative">
-                                            <select id="permissions" name="permissions[]" multiple
-                                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md h-32">
-                                                @foreach(\App\Models\Permission::all() as $permission)
-                                                    <option
-                                                        value="{{ $permission->id }}">{{ $permission->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            <p class="mt-2 text-sm text-gray-500">Hold Ctrl (or Cmd) to select multiple
-                                                permissions</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="submit"
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
-                            Create Role
-                        </button>
-                        <button type="button"
-                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                                onclick="closeCreateRoleModal()">
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Confirmation Modal -->
-    <div id="deleteConfirmModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title"
-         role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-            <div
-                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div
-                            class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                            </svg>
-                        </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                Delete Role
-                            </h3>
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-500" id="deleteConfirmText">
-                                    Are you sure you want to delete this role? This action cannot be undone.
-                                </p>
-                            </div>
-                        </div>
+    <x-modal id="createRoleModal" title="Create New Role" iconType="create">
+        <form action="{{ route('roles.store') }}" method="POST">
+            @csrf
+            <div class="space-y-6">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Role Name</label>
+                    <div class="mt-1">
+                        <input type="text" name="name" id="name"
+                               class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                               placeholder="Enter role name" required>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <form id="deleteRoleForm" method="POST" action="{{ route('roles.destroy', $role) }}">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
-                            Delete
-                        </button>
-                    </form>
+
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                    <div class="mt-1">
+                    <textarea name="description" id="description" rows="3"
+                              class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                              placeholder="Enter role description"></textarea>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="permissions" class="block text-sm font-medium text-gray-700">Permissions</label>
+                    <div class="mt-1 relative">
+                        <select id="permissions" name="permissions[]" multiple
+                                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md h-32">
+                            @foreach(\App\Models\Permission::all() as $permission)
+                                <option value="{{ $permission->id }}">{{ $permission->name }}</option>
+                            @endforeach
+                        </select>
+                        <p class="mt-2 text-sm text-gray-500">Hold Ctrl (or Cmd) to select multiple permissions</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-5 mt-6 border-t border-gray-200">
+                <div class="flex justify-end">
                     <button type="button"
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                            onclick="closeDeleteConfirmModal()">
+                            class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            onclick="closeCreateRoleModal()">
                         Cancel
+                    </button>
+                    <button type="submit"
+                            class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Create Role
                     </button>
                 </div>
             </div>
+        </form>
+    </x-modal>
+
+    <!-- Edit Modal -->
+    <x-modal id="editRoleModal" title="Edit Role" iconType="edit">
+        <form id="updateRoleForm" action="" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="space-y-6">
+                <input type="hidden" name="role_id" id="edit_role_id">
+
+                <div>
+                    <label for="edit_name" class="block text-sm font-medium text-gray-700">Role Name</label>
+                    <div class="mt-1">
+                        <input type="text" name="name" id="edit_name"
+                               class="shadow-sm focus:ring-yellow-500 focus:border-yellow-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                               placeholder="Enter role name" required>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="edit_description" class="block text-sm font-medium text-gray-700">Description</label>
+                    <div class="mt-1">
+                    <textarea name="description" id="edit_description" rows="3"
+                              class="shadow-sm focus:ring-yellow-500 focus:border-yellow-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                              placeholder="Enter role description"></textarea>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="edit_permissions" class="block text-sm font-medium text-gray-700">Permissions</label>
+                    <div class="mt-1 relative">
+                        <select id="edit_permissions" name="permissions[]" multiple
+                                class="shadow-sm focus:ring-yellow-500 focus:border-yellow-500 block w-full sm:text-sm border-gray-300 rounded-md h-32">
+                            @foreach(\App\Models\Permission::all() as $permission)
+                                <option value="{{ $permission->id }}">{{ $permission->name }}</option>
+                            @endforeach
+                        </select>
+                        <p class="mt-2 text-sm text-gray-500">Hold Ctrl (or Cmd) to select multiple permissions</p>
+                    </div>
+                </div>
+
+                <div id="is_system_role_notice" class="hidden mt-4 p-4 bg-yellow-50 rounded-md">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                 fill="currentColor">
+                                <path fill-rule="evenodd"
+                                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-yellow-800">System role</h3>
+                            <div class="mt-2 text-sm text-yellow-700">
+                                <p>This is a core system role. Some settings may be restricted.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-5 mt-6 border-t border-gray-200">
+                <div class="flex justify-end">
+                    <button type="button"
+                            class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                            onclick="closeEditRoleModal()">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                        Update Role
+                    </button>
+                </div>
+            </div>
+        </form>
+    </x-modal>
+
+    <!-- Delete Confirmation Modal -->
+    <x-modal id="deleteConfirmModal" title="Delete Role" iconType="delete">
+        <div class="space-y-4">
+            <p class="text-sm text-gray-500" id="deleteConfirmText">
+                Are you sure you want to delete this role? This action cannot be undone.
+            </p>
+
+            <div class="pt-5 mt-6 border-t border-gray-200">
+                <div class="flex justify-end space-x-3">
+                    <button type="button"
+                            class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                            onclick="closeDeleteConfirmModal()">
+                        Cancel
+                    </button>
+                    <form id="deleteRoleForm" method="POST" action="" class="inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
+    </x-modal>
 
     <script>
+        const roles = @json($roles);
         // Modal functions
         function openCreateRoleModal() {
             document.getElementById('createRoleModal').classList.remove('hidden');
@@ -530,6 +442,51 @@
         function closeCreateRoleModal() {
             document.getElementById('createRoleModal').classList.add('hidden');
         }
+
+        // Open edit role modal
+        function openEditRoleModal(roleId) {
+            console.log(roleId);
+            const role = roles.find(r => r.id === roleId);
+            if (!role) return;
+
+            document.getElementById('edit_name').value = role.name;
+            document.getElementById('edit_description').value = role.description || '';
+
+            // Clear all selected permissions first
+            const permissionSelect = document.getElementById('edit_permissions');
+            Array.from(permissionSelect.options).forEach(option => {
+                option.selected = false;
+            });
+
+            // Select the role's permissions
+            if (role.permissions && role.permissions.length > 0) {
+                role.permissions.forEach(permission => {
+                    const option = permissionSelect.querySelector(`option[value="${permission.id}"]`);
+                    if (option) option.selected = true;
+                });
+            }
+
+            // Show warning if this is a system role
+            const systemRoleNotice = document.getElementById('is_system_role_notice');
+            if (role.is_system) {
+                systemRoleNotice.classList.remove('hidden');
+                document.getElementById('edit_name').readOnly = true;
+            } else {
+                systemRoleNotice.classList.add('hidden');
+                document.getElementById('edit_name').readOnly = false;
+            }
+
+            // Set the form action URL
+            document.getElementById('updateRoleForm').action = `{{ url('/admin/roles') }}/${roleId}`;
+            document.getElementById('edit_role_id').value = roleId;
+
+            document.getElementById('editRoleModal').classList.remove('hidden');
+        }
+        // close edit role modal
+        function closeEditRoleModal() {
+            document.getElementById('editRoleModal').classList.add('hidden');
+        }
+
 
         function openDeleteConfirmModal(roleId, roleName) {
             const hasUsers = document.querySelector(`tr[data-role-id="${roleId}"] td:nth-child(3) div`).textContent.trim() !== '0';

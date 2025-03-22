@@ -55,6 +55,18 @@ Route::put('/admin/roles/{role}', [RoleController::class, 'update'])->name('role
 Route::delete('/admin/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
 
 Route::resource('/admin/permissions', PermissionController::class);
+
+Route::get('/admin/user', function () {
+    return "Users Page";
+})->name('users.index');
+
+Route::get('/admin/user/create', function() {
+    return "create user";
+})->name('users.create');
+
+Route::get('/admin/users/{user}', function () {
+    return "users show";
+})->name('users.show');
 //Route::get('/reset-password', function() {
 //    return view('auth.reset-password');
 //})->name('reset-password');
