@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RoleController extends Controller
 {
@@ -14,8 +15,16 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
-        return view('admin.roles.index', ['roles' => $roles]);
+        $roles = Role::withCount('users')->with('permissions')->get();
+        $totalUsers = $roles->sum('users_count');
+        $totalPermissions = Permission::count();
+
+        return view('admin.roles.index', [
+            'roles' => $roles,
+            'totalRoles' => $roles->count(),
+            'totalUsers' => $totalUsers,
+            'totalPermissions' => $totalPermissions
+        ]);
     }
 
     /**
@@ -33,7 +42,7 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required'],
+            'name' => ['required', 'string', 'max:255', 'unique:roles,name'],
             'description'=> ['nullable', 'string', 'max:1000'],
             'permissions' => ['nullable', 'array']
         ]);
@@ -48,10 +57,10 @@ class RoleController extends Controller
                 $role->givePermissionTo($request->permissions);
             }
 
-            return redirect()->route('roles.index')->with('success', "Role {$role} created successfully.");
+            return redirect()->route('roles.index')->with('success', "Role '{$role->name}' created successfully.");
         } catch (\Exception $e) {
-            \Log::error("Error creating new role: " . $e->getMessage());
-            return back()->withErrors('errors', "Role Creation Failed");
+            Log::error("Error creating new role: " . $e->getMessage());
+            return back()->withErrors(['error' => "Role creation failed: {$e->getMessage()}"]);
         }
     }
 
@@ -60,7 +69,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        $role->load('permissions');
+        $role->load(['permissions', 'users']);
         return view('admin.roles.show', ['role' => $role]);
     }
 
@@ -69,7 +78,14 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return view('admin.roles.edit', ['role' => $role]);
+        $permissions = Permission::all();
+        $role->load('permissions');
+
+        return view('admin.roles.edit', [
+            'role' => $role,
+            'permissions' => $permissions,
+            'rolePermissions' => $role->permissions->pluck('id')->toArray()
+        ]);
     }
 
     /**
@@ -78,8 +94,8 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:roles,name,'.$role->id],
+            'description' => ['nullable', 'string', 'max:1000'],
             'permissions' => ['nullable', 'array']
         ]);
 
@@ -89,14 +105,13 @@ class RoleController extends Controller
                 'description' => $request->description
             ]);
 
-            if($request->has('permissions')) {
-                $role->sync($request->permissions ?? []);
-            }
+            // Sync permissions
+            $role->givePermissionTo($request->permissions ?? []);
 
-            return redirect()->route('roles.show')->with("success", "Role updated successfully");
+            return redirect()->route('roles.index')->with('success', "Role '{$role->name}' updated successfully");
         } catch (\Exception $e) {
-            \Log::error("Error updating the role: " . $e->getMessage());
-            return back()->withErrors('errors', "Error updating the role");
+            Log::error("Error updating role: " . $e->getMessage());
+            return back()->withErrors(['error' => "Error updating role: {$e->getMessage()}"]);
         }
     }
 
@@ -105,11 +120,17 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        if($role->users()->count() > 0) {
-            return back()->with('errors', "Cannot delete a role has assigned roles");
-        }
+        try {
+            if($role->users()->count() > 0) {
+                return back()->with('error', "Cannot delete a role that has assigned users");
+            }
 
-        $role->delete();
-        return redirect()->route('admin.roles.index')->with('success', "Role deleted successfully");
+            $roleName = $role->name;
+            $role->delete();
+            return redirect()->route('roles.index')->with('success', "Role '{$roleName}' deleted successfully");
+        } catch (\Exception $e) {
+            Log::error("Error deleting role: " . $e->getMessage());
+            return back()->withErrors(['error' => "Error deleting role: {$e->getMessage()}"]);
+        }
     }
 }

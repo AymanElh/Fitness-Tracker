@@ -25,7 +25,7 @@ class AuthService
      * @param array $data
      * @return mixed
      */
-    public function register(array $data)
+    public function register(array $data): mixed
     {
         $user = $this->userRepository->create($data);
 //        event(new Registred($user));
@@ -38,7 +38,7 @@ class AuthService
      * @param array $credentials
      * @return false|mixed
      */
-    public function login(array $credentials)
+    public function login(array $credentials): mixed
     {
         $user = $this->userRepository->findByEmail($credentials['email']);
 

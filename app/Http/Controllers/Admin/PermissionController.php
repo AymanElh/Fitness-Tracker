@@ -13,10 +13,22 @@ class PermissionController extends Controller
     public function index()
     {
         try {
-            return Permission::all();
+            $permissions = Permission::withCount('roles')->get();
+            $totalPermissions = $permissions->count();
+            $modules = $permissions->pluck('module')->filter()->unique()->values();
+            $totalAssignments = $permissions->sum('roles_count');
+            return view('admin.permissions.index', [
+                'permissions' => $permissions,
+                'totalPermissions' => $totalPermissions,
+                'moduleCount' => $modules->count(),
+                'totalAssignments' => $totalAssignments,
+                'customPermissions' => 33,
+                'currentDateTime' => now()->format('Y-m-d H:m:s'),
+                'currentUser' => "ayman"
+            ]);
         } catch(\Exception $e) {
-            \Log::error("Error fetching permissions");
-            return null;
+            \Log::error("Error fetching permissions" . $e->getMessage());
+            return back()->withErrors(['error' => "Error to get stats"]);
         }
     }
 
@@ -26,21 +38,23 @@ class PermissionController extends Controller
             'name' => ['required', 'string', 'max:255', 'unique:permissions'],
             'description' => ['required', 'string', 'max:1000']
         ]);
-
+//        dd($request->all());
         try {
-            Permission::create([
-                'nane' => $request->name,
+            $permission = Permission::create([
+                'name' => $request->name,
                 'description' => $request->descripton
             ]);
+            return redirect()->route('permissions.index')->with('success', "Permission {$permission->name} created successfully");
         } catch (Exception $e) {
             \Log::error("error creating permission: " . $e->getMessage());
+            return back()->withInput()->withErrors(['error' => "Failed to create permission: {$e->getMessage()}"]);
         }
     }
 
     public function show(Permission $permission)
     {
         $permission->load('roles');
-        return view('admin.permissions.show', compact('permission'));
+        return view('permissions.show', compact('permission'));
     }
 
     public function update(Request $request, Permission $permission)
@@ -57,7 +71,7 @@ class PermissionController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('admin.permissions.index')
+        return redirect()->route('permissions.index')
             ->with('success', 'Permission updated successfully.');
     }
 
@@ -70,7 +84,7 @@ class PermissionController extends Controller
 
         $permission->delete();
 
-        return redirect()->route('admin.permissions.index')
+        return redirect()->route('permissions.index')
             ->with('success', 'Permission deleted successfully.');
     }
 }

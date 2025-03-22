@@ -16,13 +16,13 @@
                             <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
                             </svg>
-                            Last updated: {{ date('F j, Y, g:i a', strtotime('2025-03-20 18:13:01')) }}
+                            Last updated: {{ date('F j, Y, g:i a', strtotime($currentDateTime)) }}
                         </div>
                         <div class="mt-2 flex items-center text-sm text-gray-500">
                             <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 005 10a6 6 0 0012 0c0-.35-.035-.69-.1-1.021A5 5 0 0010 11z" clip-rule="evenodd" />
                             </svg>
-                            Updated by: AymanElhand
+                            Updated by: {{ $currentUser }}
                         </div>
                     </div>
                 </div>
@@ -37,6 +37,74 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Flash Messages -->
+            @if(session('success'))
+                <div id="successAlert" class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-sm">
+                    <div class="flex items-center">
+                        <div class="py-1">
+                            <svg class="h-6 w-6 text-green-500 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-bold">Success!</p>
+                            <p class="text-sm">{{ session('success') }}</p>
+                        </div>
+                        <button onclick="document.getElementById('successAlert').remove()" class="ml-auto">
+                            <svg class="h-4 w-4 text-green-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div id="errorAlert" class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-sm">
+                    <div class="flex items-center">
+                        <div class="py-1">
+                            <svg class="h-6 w-6 text-red-500 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-bold">Error!</p>
+                            <p class="text-sm">{{ session('error') }}</p>
+                        </div>
+                        <button onclick="document.getElementById('errorAlert').remove()" class="ml-auto">
+                            <svg class="h-4 w-4 text-red-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div id="validationErrors" class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-sm">
+                    <div class="flex items-center">
+                        <div class="py-1">
+                            <svg class="h-6 w-6 text-red-500 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-bold">Please fix the following errors:</p>
+                            <ul class="mt-1 list-disc list-inside text-sm">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <button onclick="document.getElementById('validationErrors').remove()" class="ml-auto">
+                            <svg class="h-4 w-4 text-red-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            @endif
 
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-6">
@@ -56,7 +124,7 @@
                                     </dt>
                                     <dd class="flex items-baseline">
                                         <div class="text-2xl font-semibold text-gray-900">
-                                            18
+                                            {{ $totalPermissions }}
                                         </div>
                                     </dd>
                                 </dl>
@@ -81,7 +149,7 @@
                                     </dt>
                                     <dd class="flex items-baseline">
                                         <div class="text-2xl font-semibold text-gray-900">
-                                            6
+                                            {{ $moduleCount }}
                                         </div>
                                         <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
                                             <span>modules</span>
@@ -109,7 +177,7 @@
                                     </dt>
                                     <dd class="flex items-baseline">
                                         <div class="text-2xl font-semibold text-gray-900">
-                                            42
+                                            {{ $totalAssignments }}
                                         </div>
                                         <p class="ml-2 flex items-baseline text-sm font-semibold text-blue-600">
                                             <span>assignments</span>
@@ -137,7 +205,7 @@
                                     </dt>
                                     <dd class="flex items-baseline">
                                         <div class="text-2xl font-semibold text-gray-900">
-                                            3
+                                            {{ $customPermissions }}
                                         </div>
                                         <p class="ml-2 flex items-baseline text-sm font-semibold text-yellow-600">
                                             <span>custom</span>
@@ -169,12 +237,14 @@
                         <div class="flex items-center space-x-3">
                             <select id="moduleFilter" name="moduleFilter" class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                 <option value="">All Modules</option>
-                                <option value="users">Users</option>
-                                <option value="roles">Roles</option>
-                                <option value="content">Content</option>
-                                <option value="reports">Reports</option>
-                                <option value="settings">Settings</option>
-                                <option value="api">API</option>
+                                @php
+                                    $modules = $permissions->pluck('module')->unique()->sort()->values()->all();
+                                @endphp
+                                @foreach($modules as $module)
+                                    @if(!empty($module))
+                                        <option value="{{ $module }}">{{ ucfirst($module) }}</option>
+                                    @endif
+                                @endforeach
                             </select>
 
                             <select id="sortPermissions" name="sortPermissions" class="mt-1 block pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
@@ -183,6 +253,8 @@
                                 <option value="module_asc">Module (A-Z)</option>
                                 <option value="created_desc">Newest First</option>
                                 <option value="created_asc">Oldest First</option>
+                                <option value="roles_desc">Most Used</option>
+                                <option value="roles_asc">Least Used</option>
                             </select>
                         </div>
                     </div>
@@ -217,247 +289,139 @@
                                     </th>
                                 </tr>
                                 </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                <!-- Permission 1: view_dashboard -->
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900">view_dashboard</div>
-                                        <div class="text-xs text-gray-500">ID: 1</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Dashboard
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-900 max-w-xs">Allows users to view the main dashboard</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">5</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        March 15, 2025
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <div class="flex justify-end space-x-2">
-                                            <button type="button" onclick="openEditPermissionModal(1)" class="text-indigo-600 hover:text-indigo-900">
-                                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                </svg>
-                                            </button>
-                                            <button type="button" onclick="openDeletePermissionModal(1)" class="text-red-600 hover:text-red-900">
-                                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <!-- Permission 2: manage_users -->
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900">manage_users</div>
-                                        <div class="text-xs text-gray-500">ID: 2</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            Users
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-900 max-w-xs">Allows managing user accounts</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">2</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        March 15, 2025
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <div class="flex justify-end space-x-2">
-                                            <button type="button" onclick="openEditPermissionModal(2)" class="text-indigo-600 hover:text-indigo-900">
-                                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                </svg>
-                                            </button>
-                                            <button type="button" onclick="openDeletePermissionModal(2)" class="text-red-600 hover:text-red-900">
-                                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <!-- Permission 3: create_users -->
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900">create_users</div>
-                                        <div class="text-xs text-gray-500">ID: 3</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            Users
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-900 max-w-xs">Allows creating new user accounts</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">2</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        March 15, 2025
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <div class="flex justify-end space-x-2">
-                                            <button type="button" onclick="openEditPermissionModal(3)" class="text-indigo-600 hover:text-indigo-900">
-                                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                </svg>
-                                            </button>
-                                            <button type="button" onclick="openDeletePermissionModal(3)" class="text-red-600 hover:text-red-900">
-                                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <!-- Permission 4: edit_users -->
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900">edit_users</div>
-                                        <div class="text-xs text-gray-500">ID: 4</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            Users
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-900 max-w-xs">Allows editing existing user accounts</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">2</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        March 15, 2025
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <div class="flex justify-end space-x-2">
-                                            <button type="button" onclick="openEditPermissionModal(4)" class="text-indigo-600 hover:text-indigo-900">
-                                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                </svg>
-                                            </button>
-                                            <button type="button" onclick="openDeletePermissionModal(4)" class="text-red-600 hover:text-red-900">
-                                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <!-- Permission 5: manage_roles -->
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900">manage_roles</div>
-                                        <div class="text-xs text-gray-500">ID: 5</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
-                                            Roles
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-900 max-w-xs">Allows managing user roles</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">2</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        March 15, 2025
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <div class="flex justify-end space-x-2">
-                                            <button type="button" onclick="openEditPermissionModal(5)" class="text-indigo-600 hover:text-indigo-900">
-                                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                </svg>
-                                            </button>
-                                            <button type="button" onclick="openDeletePermissionModal(5)" class="text-red-600 hover:text-red-900">
-                                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <!-- More permissions rows would go here -->
+                                <tbody id="permissionsTableBody" class="bg-white divide-y divide-gray-200">
+                                @if($permissions->count() > 0)
+                                    @foreach($permissions as $permission)
+                                        <tr class="hover:bg-gray-50 permission-row"
+                                            data-id="{{ $permission->id }}"
+                                            data-name="{{ strtolower($permission->name) }}"
+                                            data-module="{{ strtolower($permission->module ?? '') }}"
+                                            data-roles="{{ $permission->roles_count }}"
+                                            data-created="{{ $permission->created_at->timestamp ?? 0 }}">
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm font-medium text-gray-900">{{ $permission->name }}</div>
+                                                <div class="text-xs text-gray-500">ID: {{ $permission->id }}</div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                @if($permission->module)
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                                        @if($permission->module == 'dashboard') bg-green-100 text-green-800
+                                                        @elseif($permission->module == 'users') bg-blue-100 text-blue-800
+                                                        @elseif($permission->module == 'roles') bg-purple-100 text-purple-800
+                                                        @elseif($permission->module == 'content') bg-yellow-100 text-yellow-800
+                                                        @elseif($permission->module == 'reports') bg-red-100 text-red-800
+                                                        @elseif($permission->module == 'settings') bg-gray-100 text-gray-800
+                                                        @elseif($permission->module == 'api') bg-indigo-100 text-indigo-800
+                                                        @else bg-gray-100 text-gray-800 @endif">
+                                                        {{ ucfirst($permission->module) }}
+                                                    </span>
+                                                @else
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                        Other
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <div class="text-sm text-gray-900 max-w-xs">
+                                                    {{ $permission->description ?? 'No description provided' }}
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm text-gray-900">{{ $permission->roles_count }}</div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ $permission->created_at ? $permission->created_at->format('Y-m-d') : 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <div class="flex justify-end space-x-2">
+                                                    <button type="button" onclick="openEditPermissionModal({{ $permission->id }})" class="text-indigo-600 hover:text-indigo-900">
+                                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                        </svg>
+                                                    </button>
+                                                    <button type="button"
+                                                            onclick="openDeletePermissionModal({{ $permission->id }}, '{{ $permission->name }}')"
+                                                            class="text-red-600 hover:text-red-900 {{ $permission->roles_count > 0 ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                                        {{$permission->roles_count > 0 ? 'disabled' : '' }}>
+                                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-10 text-center text-gray-500">
+                                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                            </svg>
+                                            <h3 class="mt-2 text-sm font-medium text-gray-900">No permissions found</h3>
+                                            <p class="mt-1 text-sm text-gray-500">Get started by creating a new permission.</p>
+                                            <div class="mt-6">
+                                                <button type="button" onclick="openCreatePermissionModal()" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                                    </svg>
+                                                    New Permission
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endif
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                    <div class="flex-1 flex justify-between sm:hidden">
-                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            Previous
-                        </a>
-                        <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            Next
-                        </a>
-                    </div>
-                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm text-gray-700">
-                                Showing
-                                <span class="font-medium">1</span>
-                                to
-                                <span class="font-medium">5</span>
-                                of
-                                <span class="font-medium">18</span>
-                                results
-                            </p>
+
+                @if($permissions->count() > 0)
+                    <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                        <div class="flex-1 flex justify-between sm:hidden">
+                            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                Previous
+                            </a>
+                            <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                Next
+                            </a>
                         </div>
-                        <div>
-                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">Previous</span>
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                                <a href="#" aria-current="page" class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                    1
-                                </a>
-                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                    2
-                                </a>
-                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                    3
-                                </a>
-                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-                                ...
-                            </span>
-                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                    4
-                                </a>
-                                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">Next</span>
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                            </nav>
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-sm text-gray-700">
+                                    Showing
+                                    <span class="font-medium">1</span>
+                                    to
+                                    <span class="font-medium">{{ min($permissions->count(), 10) }}</span>
+                                    of
+                                    <span class="font-medium">{{ $permissions->count() }}</span>
+                                    results
+                                </p>
+                            </div>
+                            @if($permissions->count() > 10)
+                                <div>
+                                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                            <span class="sr-only">Previous</span>
+                                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
+                                        <a href="#" aria-current="page" class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                            1
+                                        </a>
+                                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                            <span class="sr-only">Next</span>
+                                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
+                                    </nav>
+                                </div>
+                            @endif
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -470,7 +434,7 @@
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
             <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <form action="" method="POST">
+                <form action="{{ route('permissions.store') }}" method="POST">
                     @csrf
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
@@ -608,6 +572,22 @@
                                             <p class="text-gray-500">Core permissions cannot be deleted and are essential for system operation</p>
                                         </div>
                                     </div>
+
+                                    <div id="is_core_locked_notice" class="hidden mt-4 p-4 bg-yellow-50 rounded-md">
+                                        <div class="flex">
+                                            <div class="flex-shrink-0">
+                                                <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                            <div class="ml-3">
+                                                <h3 class="text-sm font-medium text-yellow-800">Core permission status can't be changed</h3>
+                                                <div class="mt-2 text-sm text-yellow-700">
+                                                    <p>This permission is essential for system operation and its core status cannot be modified.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -633,9 +613,7 @@
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
             <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <form id="deletePermissionForm" action="" method="POST">
-                    @csrf
-                    @method('DELETE')
+                <div id="deletePermissionForm">
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
                             <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
@@ -648,85 +626,90 @@
                                     Delete Permission
                                 </h3>
                                 <div class="mt-2">
-                                    <p class="text-sm text-gray-500">
+                                    <p class="text-sm text-gray-500" id="delete-permission-text">
                                         Are you sure you want to delete this permission? This action cannot be undone.
                                     </p>
                                     <p class="mt-2 text-sm text-red-500">
-                                        Warning: Deleting this permission will remove it from all associated roles.
+                                        Warning: Deleting this permission will remove it permanently from the system.
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
-                            Delete
-                        </button>
+                        <form id="deletePermissionFormActual" action="" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                Delete
+                            </button>
+                        </form>
                         <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onclick="closeDeletePermissionModal()">
                             Cancel
                         </button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- JS Script -->
     <script>
-        // Modal functions
+        // all permission json
+        const permissions = @json($permissions);
+        // Open and close the create Permission Modal
         function openCreatePermissionModal() {
             document.getElementById('createPermissionModal').classList.remove('hidden');
         }
-
         function closeCreatePermissionModal() {
             document.getElementById('createPermissionModal').classList.add('hidden');
         }
 
+        // Open and Close edit permission Modal
         function openEditPermissionModal(permissionId) {
-            // This would normally fetch permission data and populate the form
-            document.getElementById('editPermissionModal').classList.remove('hidden');
-            document.getElementById('updatePermissionForm').action = `/permissions/${permissionId}`;
+            const permission = permissions.find(p => p.id === permissionId);
+            if(!permission)  return;
+
+            document.getElementById('edit_permission_name').value = permission.name;
+            document.getElementById('edit_module').value = permission.module || '';
+            document.getElementById('edit_description').value = permission.description;
+
+            document.getElementById('updatePermissionForm').action = `{{ url("admin/permissions") }}/${permissionId}`
             document.getElementById('edit_permission_id').value = permissionId;
-
-            // For demo purposes, set some values based on the permission ID
-            if (permissionId === 1) {
-                document.getElementById('edit_permission_name').value = 'view_dashboard';
-                document.getElementById('edit_module').value = 'dashboard';
-                document.getElementById('edit_description').value = 'Allows users to view the main dashboard';
-                document.getElementById('edit_is_core').checked = true;
-            } else if (permissionId === 2) {
-                document.getElementById('edit_permission_name').value = 'manage_users';
-                document.getElementById('edit_module').value = 'users';
-                document.getElementById('edit_description').value = 'Allows managing user accounts';
-                document.getElementById('edit_is_core').checked = true;
-            } else {
-                // Default values for other IDs
-                document.getElementById('edit_permission_name').value = `permission_${permissionId}`;
-                document.getElementById('edit_module').value = '';
-                document.getElementById('edit_description').value = `Description for permission ${permissionId}`;
-                document.getElementById('edit_is_core').checked = false;
-            }
+            document.getElementById('editPermissionModal').classList.remove('hidden');
         }
-
         function closeEditPermissionModal() {
             document.getElementById('editPermissionModal').classList.add('hidden');
         }
 
-        function openDeletePermissionModal(permissionId) {
-            document.getElementById('deletePermissionModal').classList.remove('hidden');
-            document.getElementById('deletePermissionForm').action = `/permissions/${permissionId}`;
-        }
+        // open and close delete permission modal
 
+        function openDeletePermissionModal(permissionId, permissionName) {
+            const permission = permissions.find(p => p.id === permissionId);
+            if (!permission) return;
+
+            if (permission.roles_count > 0) {
+                alert('Cannot delete a permission that is assigned to roles.');
+                return;
+            }
+
+            document.getElementById('delete-permission-text').textContent = `Are you sure you want to delete the permission "${permissionName}"? This action cannot be undone.`;
+            document.getElementById('deletePermissionFormActual').action = `{{ url('/admin/permissions') }}/${permissionId}`;
+            document.getElementById('deletePermissionModal').classList.remove('hidden');
+        }
         function closeDeletePermissionModal() {
             document.getElementById('deletePermissionModal').classList.add('hidden');
         }
 
         // Close modals when clicking outside
         window.onclick = function(event) {
+            // console.log(event);
             const createModal = document.getElementById('createPermissionModal');
             const editModal = document.getElementById('editPermissionModal');
             const deleteModal = document.getElementById('deletePermissionModal');
-
+            // console.log(createModal);
             if (event.target === createModal) {
+                // console.log("create modal");
                 closeCreatePermissionModal();
             } else if (event.target === editModal) {
                 closeEditPermissionModal();
@@ -735,43 +718,92 @@
             }
         }
 
-        // Search functionality
-        document.getElementById('permissionSearch').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const rows = document.querySelectorAll('tbody tr');
+        // search
+        document.getElementById("permissionSearch").addEventListener('input', function (e) {
+            const searchField = e.target.value.toLocaleLowerCase();
+            filterPermissions();
+        })
 
-            rows.forEach(row => {
-                const name = row.querySelector('td:first-child').textContent.toLowerCase();
-                const module = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                const description = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-
-                if (name.includes(searchTerm) || module.includes(searchTerm) || description.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+        // Sort functionality
+        document.getElementById('sortPermissions').addEventListener('change', function(e) {
+            sortPermissions();
         });
 
-        // Module filtering
-        document.getElementById('moduleFilter').addEventListener('change', function(e) {
-            const filterValue = e.target.value.toLowerCase();
-            const rows = document.querySelectorAll('tbody tr');
-
-            if (!filterValue) {
-                rows.forEach(row => row.style.display = '');
-                return;
-            }
+        // Filter Permissions
+        function filterPermissions() {
+            const searchTerm = document.getElementById("permissionSearch").value.toLowerCase();
+            const moduleFilter = document.getElementById('moduleFilter').value.toLowerCase();
+            const rows = document.querySelectorAll('.permission-row');
 
             rows.forEach(row => {
-                const module = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const name = row.getAttribute('data-name');
+                // const module = row.getAttribute('data-module');
+                const description = row.querySelector('td:nth-child(3) div').textContent.toLowerCase();
 
-                if (module.includes(filterValue)) {
-                    row.style.display = '';
+                const matchedSearch = name.includes(searchTerm) || description.includes(searchTerm);
+
+                // const matchesModule = !moduleFilter || (module && module === moduleFilter);
+                // console.log(matchesModule);
+
+                if(matchedSearch) {
+                    row.style.display  = '';
                 } else {
                     row.style.display = 'none';
                 }
+            })
+        }
+
+        // sorting
+        function sortPermissions() {
+            const sortOption = document.getElementById('sortPermissions').value;
+            const tbody = document.getElementById('permissionsTableBody');
+            // console.log(tbody);
+            const rows = Array.from(tbody.querySelectorAll('.permission-row'));
+            // console.log(rows);
+
+            rows.sort((a, b) => {
+                switch(sortOption) {
+                    case 'name_asc':
+                        return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+                    case 'name_desc':
+                        return b.getAttribute('data-name').localeCompare(a.getAttribute('data-name'));
+                    case 'module_asc':
+                        return (a.getAttribute('data-module') || '').localeCompare(b.getAttribute('data-module') || '');
+                    case 'created_desc':
+                        return parseInt(b.getAttribute('data-created')) - parseInt(a.getAttribute('data-created'));
+                    case 'created_asc':
+                        return parseInt(a.getAttribute('data-created')) - parseInt(b.getAttribute('data-created'));
+                    case 'roles_desc':
+                        return parseInt(b.getAttribute('data-roles')) - parseInt(a.getAttribute('data-roles'));
+                    case 'roles_asc':
+                        return parseInt(a.getAttribute('data-roles')) - parseInt(b.getAttribute('data-roles'));
+                    default:
+                        return 0;
+                }
             });
+
+            // Remove existing rows
+            rows.forEach(row => row.remove());
+
+            // Append sorted rows
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Initialize filtering and sorting
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto hide flash messages after 5 seconds
+            setTimeout(function() {
+                const successAlert = document.getElementById('successAlert');
+                const errorAlert = document.getElementById('errorAlert');
+                const validationErrors = document.getElementById('validationErrors');
+
+                if (successAlert) successAlert.remove();
+                if (errorAlert) errorAlert.remove();
+                if (validationErrors) validationErrors.remove();
+            }, 10000);
+
+            // Apply initial sorting
+            sortPermissions();
         });
     </script>
 @endsection
