@@ -42,7 +42,7 @@ class PermissionController extends Controller
         try {
             $permission = Permission::create([
                 'name' => $request->name,
-                'description' => $request->descripton
+                'description' => $request->description
             ]);
             return redirect()->route('permissions.index')->with('success', "Permission {$permission->name} created successfully");
         } catch (Exception $e) {
