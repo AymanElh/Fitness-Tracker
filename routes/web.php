@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RoleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -43,6 +45,28 @@ Route::post('/password/email', [\App\Http\Controllers\Auth\ForgotPasswordControl
 Route::get('/password/reset/{token}', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/password/reset', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
 
+
+//Route::resource('/admin/roles', RoleController::class);
+Route::get('/admin/roles', [RoleController::class, 'index'])->name('roles.index');
+Route::get('/admin/roles/{role}', [RoleController::class, 'show'])->name('roles.show');
+Route::post('/admin/roles', [RoleController::class, 'store'])->name('roles.store');
+Route::get('/admin/roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+Route::put('/admin/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+Route::delete('/admin/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+
+Route::resource('/admin/permissions', PermissionController::class);
+
+Route::get('/admin/user', function () {
+    return "Users Page";
+})->name('users.index');
+
+Route::get('/admin/user/create', function() {
+    return "create user";
+})->name('users.create');
+
+Route::get('/admin/users/{user}', function () {
+    return "users show";
+})->name('users.show');
 //Route::get('/reset-password', function() {
 //    return view('auth.reset-password');
 //})->name('reset-password');
