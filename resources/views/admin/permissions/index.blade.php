@@ -384,6 +384,9 @@
                             <option value="dashboard">Dashboard</option>
                             <option value="users">Users</option>
                             <option value="roles">Roles</option>
+                            <option value="permissions">Permissions</option>
+                            <options value="meals">Meals</options>
+                            <option value="exercises">Exercises</option>
                             <option value="other">Other</option>
                         </select>
                     </div>

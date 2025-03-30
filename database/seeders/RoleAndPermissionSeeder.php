@@ -15,20 +15,20 @@ class RoleAndPermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-            ['name' => 'view_users', 'description' => 'Can view users list'],
-            ['name' => 'create_users', 'description' => 'Can create new users'],
-            ['name' => 'edit_users', 'description' => 'Can edit existing users'],
-            ['name' => 'delete_users', 'description' => 'Can delete users'],
+            ['name' => 'View Users', 'description' => 'Can view users list', 'slug' => 'view-users', 'module' => 'users'],
+            ['name' => 'Create Users', 'description' => 'Can create new users', 'slug' => 'create-users', 'module' => 'users'],
+            ['name' => 'Edit Users', 'description' => 'Can edit existing users', 'slug' => 'edit-users', 'module' => 'users'],
+            ['name' => 'Delete Users', 'description' => 'Can delete users', 'slug' => 'delete-users', 'module' => 'users'],
 
-            ['name' => 'view_exercises', 'description' => 'Can view exercises list'],
-            ['name' => 'create_exercises', 'description' => 'Can create new exercises'],
-            ['name' => 'edit_exercises', 'description' => 'Can edit existing exercises'],
-            ['name' => 'delete_exercises', 'description' => 'Can delete exercises'],
+            ['name' => 'View Exercises', 'description' => 'Can view exercises list', 'slug' => 'view-exercises', 'module' => 'exercises'],
+            ['name' => 'Create Exercises', 'description' => 'Can create new exercises', 'slug' => 'create-exercises', 'module' => 'exercises'],
+            ['name' => 'Edit Exercises', 'description' => 'Can edit existing exercises', 'slug' => 'edit-exercises', 'module' => 'exercises'],
+            ['name' => 'Delete Exercises', 'description' => 'Can delete exercises', 'slug' => 'delete-exercises', 'module' => 'exercises'],
 
-            ['name' => 'view_meals', 'description' => 'Can view meals list'],
-            ['name' => 'create_meals', 'description' => 'Can create new meals'],
-            ['name' => 'edit_meals', 'description' => 'Can edit existing meals'],
-            ['name' => 'delete_meals', 'description' => 'Can delete meals'],
+            ['name' => 'View Meals', 'description' => 'Can view meals list', 'slug' => 'view-meals', 'module' => 'meals'],
+            ['name' => 'Create Meals', 'description' => 'Can create new meals', 'slug' => 'create-meals', 'module' => 'meals'],
+            ['name' => 'Edit Meals', 'description' => 'Can edit existing meals', 'slug' => 'edit-meals', 'module' => 'meals'],
+            ['name' => 'Delete Meals', 'description' => 'Can delete meals', 'slug' => 'delete-meals', 'module' => 'meals'],
         ];
 
         foreach($permissions as $permission) {

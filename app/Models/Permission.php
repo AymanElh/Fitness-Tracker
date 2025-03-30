@@ -10,7 +10,9 @@ class Permission extends Model
     use HasFactory;
     protected $fillable  = [
         'name',
-        'description',
+        'slug',
+        'module',
+        'description'
     ];
 
     public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
