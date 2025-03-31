@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Mockery\Exception;
 
@@ -32,7 +33,7 @@ class PermissionController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:permissions'],
@@ -40,8 +41,12 @@ class PermissionController extends Controller
         ]);
 //        dd($request->all());
         try {
+            $slug = Str::slug($request->name);
+
             $permission = Permission::create([
                 'name' => $request->name,
+                'slug' => $slug,
+                'module' => $request->module,
                 'description' => $request->description
             ]);
             return redirect()->route('permissions.index')->with('success', "Permission {$permission->name} created successfully");
@@ -61,13 +66,16 @@ class PermissionController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('permissions')->ignore($permission->id)],
-            'display_name' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
+            'module' => 'required|string|max:255',
         ]);
+
+        $slug = Str::slug($request->name);
 
         $permission->update([
             'name' => $request->name,
-            'display_name' => $request->display_name,
+            'slug' => $slug, // Add the generated slug
+            'module' => $request->module, // Add module field
             'description' => $request->description,
         ]);
 
