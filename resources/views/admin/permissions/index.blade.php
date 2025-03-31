@@ -384,6 +384,9 @@
                             <option value="dashboard">Dashboard</option>
                             <option value="users">Users</option>
                             <option value="roles">Roles</option>
+                            <option value="permissions">Permissions</option>
+                            <options value="meals">Meals</options>
+                            <option value="exercises">Exercises</option>
                             <option value="other">Other</option>
                         </select>
                     </div>
@@ -594,7 +597,6 @@
         }
 
         // open and close delete permission modal
-
         function openDeletePermissionModal(permissionId, permissionName) {
             const permission = permissions.find(p => p.id === permissionId);
             if (!permission) return;
@@ -633,8 +635,13 @@
         // search
         document.getElementById("permissionSearch").addEventListener('input', function (e) {
             const searchField = e.target.value.toLocaleLowerCase();
+            // console.log("Search Field: ", searchField);
             filterPermissions();
-        })
+        });
+
+        document.getElementById("moduleFilter").addEventListener("change", function(e) {
+            filterPermissions();
+        });
 
         // Sort functionality
         document.getElementById('sortPermissions').addEventListener('change', function (e) {
@@ -646,18 +653,19 @@
             const searchTerm = document.getElementById("permissionSearch").value.toLowerCase();
             const moduleFilter = document.getElementById('moduleFilter').value.toLowerCase();
             const rows = document.querySelectorAll('.permission-row');
-
+            console.log("Module Filter: ", rows);
             rows.forEach(row => {
                 const name = row.getAttribute('data-name');
-                // const module = row.getAttribute('data-module');
+                const module = row.getAttribute('data-module');
+
                 const description = row.querySelector('td:nth-child(3) div').textContent.toLowerCase();
 
                 const matchedSearch = name.includes(searchTerm) || description.includes(searchTerm);
 
-                // const matchesModule = !moduleFilter || (module && module === moduleFilter);
-                // console.log(matchesModule);
+                const matchesModule = !moduleFilter || (module && module === moduleFilter);
+                console.log(matchesModule);
 
-                if (matchedSearch) {
+                if (matchedSearch && matchesModule) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
