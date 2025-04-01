@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\FoodItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -74,3 +75,8 @@ Route::get('/admin/users/{user}', function () {
 //Route::get('/forget-password', function() {
 //    return view('auth.forget-password');
 //})->name('forget-password');
+
+
+Route::get('/foods', [FoodItemController::class, 'index'])->name('food-items.index');
+Route::get('/food-items/search', [FoodItemController::class, 'search'])->name('food-items.search');
+Route::post('/food-items', [FoodItemController::class, 'store'])->name('food-items.store');
