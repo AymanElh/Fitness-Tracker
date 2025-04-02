@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\FoodController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\FoodItemController;
@@ -77,6 +78,12 @@ Route::get('/admin/users/{user}', function () {
 //})->name('forget-password');
 
 
-Route::get('/foods', [FoodItemController::class, 'index'])->name('food-items.index');
-Route::get('/food-items/search', [FoodItemController::class, 'search'])->name('food-items.search');
-Route::post('/food-items', [FoodItemController::class, 'store'])->name('food-items.store');
+//Route::get('/foods', [FoodController::class, 'index'])->name('food-items.index');
+//Route::get('/food-items/search', [FoodController::class, 'search'])->name('food-items.search');
+//Route::post('/food-items', [FoodController::class, 'store'])->name('food-items.store');
+
+Route::get('/foods', [FoodController::class, 'index'])->name('food-items.index');
+
+Route::get('/food', function() {
+    return view('admin.foods.food-items');
+});
