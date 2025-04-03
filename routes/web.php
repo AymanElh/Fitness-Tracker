@@ -3,7 +3,6 @@
 use App\Http\Controllers\Admin\FoodController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\FoodItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -48,15 +47,28 @@ Route::get('/password/reset/{token}', [\App\Http\Controllers\Auth\ResetPasswordC
 Route::post('/password/reset', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
 
 
-//Route::resource('/admin/roles', RoleController::class);
-Route::get('/admin/roles', [RoleController::class, 'index'])->name('roles.index');
-Route::get('/admin/roles/{role}', [RoleController::class, 'show'])->name('roles.show');
-Route::post('/admin/roles', [RoleController::class, 'store'])->name('roles.store');
-Route::get('/admin/roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
-Route::put('/admin/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
-Route::delete('/admin/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+Route::middleware('auth')->group(function() {
+    Route::prefix('/admin/foods')->name('admin.foods.')->group(function() {
+        Route::get('/', function() {
+            return view('admin.foods.index');
+        })->name('index');
 
-Route::resource('/admin/permissions', PermissionController::class);
+        Route::get('/{food}', [FoodController::class, 'show'])->name('show');
+
+    });
+
+    Route::middleware('role:admin')->group(function() {
+        //Route::resource('/admin/roles', RoleController::class);
+        Route::get('/admin/roles', [RoleController::class, 'index'])->name('roles.index');
+        Route::get('/admin/roles/{role}', [RoleController::class, 'show'])->name('roles.show');
+        Route::post('/admin/roles', [RoleController::class, 'store'])->name('roles.store');
+        Route::get('/admin/roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+        Route::put('/admin/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+        Route::delete('/admin/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+        Route::resource('/admin/permissions', PermissionController::class);
+    });
+});
+
 
 Route::get('/admin/user', function () {
     return "Users Page";
@@ -82,12 +94,7 @@ Route::get('/admin/users/{user}', function () {
 //Route::get('/food-items/search', [FoodController::class, 'search'])->name('food-items.search');
 //Route::post('/food-items', [FoodController::class, 'store'])->name('food-items.store');
 
-Route::prefix('/admin/foods')->name('admin.foods.')->group(function() {
-    Route::get('/', function() {
-        return view('admin.foods.index');
-    });
 
-});
 
 
 // api routes
@@ -95,3 +102,4 @@ Route::get('/api/foods', [FoodController::class, 'index']);
 Route::post('/api/foods', [FoodController::class, 'store']);
 Route::get('/api/foods/{id}', [FoodController::class, 'getFoodData']);
 Route::post('/api/foods/{id}', [FoodController::class, 'update']);
+Route::delete('/api/foods/{id}', [FoodController::class, 'destroy']);

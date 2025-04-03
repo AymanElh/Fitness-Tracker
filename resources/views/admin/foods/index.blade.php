@@ -182,15 +182,18 @@
                                 </thead>
                                 <tbody id="foodsTableBody" class="bg-white divide-y divide-gray-200">
 
-                                    <tr id="loading-indicator">
-                                        <td colspan="8" class="px-6 py-4 text-center">
-                                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-500 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                            </svg>
-                                            Loading food items...
-                                        </td>
-                                    </tr>
+                                <tr id="loading-indicator">
+                                    <td colspan="8" class="px-6 py-4 text-center">
+                                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-500 inline"
+                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                                    stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor"
+                                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Loading food items...
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -523,9 +526,8 @@
         </div>
 
         <div class="bg-gray-50 px-4 py-3 mt-6 sm:px-6 sm:flex sm:flex-row-reverse">
-            <form id="deleteFoodForm" action="" method="POST">
+            <form id="deleteFoodForm" action="">
                 @csrf
-                @method('DELETE')
                 <button type="submit"
                         class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                     Delete
@@ -573,9 +575,9 @@
                 updateFoodForm.addEventListener('submit', handleUpdateFood);
             }
             //
-            // if (deleteFoodForm) {
-            //     deleteFoodForm.addEventListener('submit', handleDeleteFood);
-            // }
+            if (deleteFoodForm) {
+                deleteFoodForm.addEventListener('submit', handleDeleteFood);
+            }
 
             // Handle search input
             if (foodSearch) {
@@ -619,7 +621,7 @@
         async function fetchFoods() {
             try {
                 const loadingIndicator = document.getElementById('loading-indicator');
-                if(loadingIndicator) loadingIndicator.style.display = '';
+                if (loadingIndicator) loadingIndicator.style.display = '';
 
                 const response = await fetch('/api/foods', {
                     method: 'GET',
@@ -635,13 +637,13 @@
                 console.log("Fetched data: ", data);
                 if (loadingIndicator) loadingIndicator.style.display = 'none';
 
-                if(tableBody) {
+                if (tableBody) {
                     const loadingRow = loadingIndicator ? loadingIndicator.parentNode : null;
                     console.log("Loading row: ", loadingRow);
                     tableBody.innerHTML = "";
                 }
                 console.log(data.data.foods);
-                if(data.data.foods && data.data.foods.length > 0) {
+                if (data.data.foods && data.data.foods.length > 0) {
                     data.data.foods.forEach(food => {
                         // console.log(food);
                         addFoodRow(food);
@@ -650,8 +652,7 @@
                     // document.getElementById('totalFoods').textContent = data.data.totalFoods;
                 }
 
-            }
-            catch (error) {
+            } catch (error) {
                 console.log('Error fetching foods: ', error.message);
             }
         }
@@ -665,8 +666,8 @@
                         <div class="py-1">
                             <svg class="h-6 w-6 mr-4 text-${type === 'success' ? 'green' : 'red'}-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 ${type === 'success'
-                        ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />'
-                        : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />'}
+                ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />'
+                : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />'}
                             </svg>
                         </div>
                         <div class="flex-grow">
@@ -742,15 +743,15 @@
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
                         ${food.image_url ?
-                    `<div class="flex-shrink-0 h-10 w-10">
+                `<div class="flex-shrink-0 h-10 w-10">
                                 <img class="h-10 w-10 rounded-full object-cover" src="${food.image_url}" alt="${food.name}">
                             </div>` :
-                    `<div class="flex-shrink-0 h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
+                `<div class="flex-shrink-0 h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
                                 <svg class="h-6 w-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
                                 </svg>
                             </div>`
-                }
+            }
                         <div class="ml-4">
                             <div class="text-sm font-medium text-gray-900">${food.name}</div>
                             <div class="text-xs text-gray-500">ID: ${food.id}</div>
@@ -759,14 +760,14 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     ${food.category ?
-                    `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
                                style="background-color: ${hexToRgba(categoryColor, 0.1)}; color: ${categoryColor};">
                             ${categoryName}
                         </span>` :
-                    `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
                             Uncategorized
                         </span>`
-                }
+            }
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     ${food.portion_default}
@@ -785,15 +786,14 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div class="flex justify-end space-x-2">
-                        <button type="button"
-                                onclick="openViewFoodModal(${food.id})"
+                        <a      href="/admin/foods/${food.id}"
                                 class="text-blue-600 hover:text-blue-900">
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg"
                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                             </svg>
-                        </button>
+                        </a>
                         <button type="button"
                                 onclick="openEditFoodModal(${food.id})"
                                 class="text-indigo-600 hover:text-indigo-900">
@@ -855,7 +855,7 @@
                     }
                 }
 
-                if(result.success) {
+                if (result.success) {
                     closeCreateFoodModal();
                     addFoodRow(result.food);
                     createFoodForm.reset();
@@ -874,7 +874,6 @@
             // Get form data
             const foodId = document.getElementById('edit_food_id').value;
             const formData = new FormData(updateFoodForm);
-
 
 
             try {
@@ -916,6 +915,46 @@
                 // Handle any other errors
                 console.error('Error updating food:', error.message);
                 showFlashMessages(error.message || 'An error occurred', 'error');
+            }
+        }
+
+        async function handleDeleteFood(event) {
+            event.preventDefault();
+            const foodId = deleteFoodForm.getAttribute('data-food-id');
+            console.log(foodId);
+            try {
+                const response = await fetch(`/api/foods/${foodId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': "application/json",
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                })
+
+                const result = await response.json();
+
+                // Check response
+                if (!response.ok) {
+                    throw new Error(result.message || 'An error occurred');
+                }
+
+                if (result.success) {
+                    // Close modal
+                    closeDeleteFoodModal();
+
+                    // Show success flash message
+                    showFlashMessages('success', result.message);
+
+                    // Remove row from table
+                    const foodRow = document.querySelector(`.food-row[data-id="${foodId}"]`);
+                    if (foodRow) {
+                        foodRow.remove();
+                    }
+                }
+            } catch (error) {
+                console.log("Error deleting food: ", error.message);
+                showFlashMessages('false', error.message)
             }
         }
 
@@ -1009,7 +1048,7 @@
             try {
                 // Fetch food data from server endpoint
                 const response = await fetch(`/api/foods/${foodId}`, {
-                    headers: { 'Accept': 'application/json' }
+                    headers: {'Accept': 'application/json'}
                 });
 
                 if (!response.ok) {
@@ -1085,7 +1124,7 @@
 
         function openDeleteFoodModal(foodId, foodName) {
             document.getElementById('delete-food-text').textContent = `Are you sure you want to delete "${foodName}"? This action cannot be undone.`;
-            deleteFoodForm.action = `/foods/${foodId}`;
+            deleteFoodForm.setAttribute("data-food-id", foodId);
             deleteFoodModal.classList.remove('hidden');
         }
 

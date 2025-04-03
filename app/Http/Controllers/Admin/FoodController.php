@@ -159,9 +159,11 @@ class FoodController extends Controller
         }
     }
 
-    public function destroy(Food $food): \Illuminate\Http\JsonResponse
+    public function destroy(int $foodId): \Illuminate\Http\JsonResponse
     {
         try {
+            $food = Food::find($foodId);
+            \Log::info("Deleting Food: " . $food);
             $name = $food->name;
             $food->delete();
 
@@ -211,5 +213,22 @@ class FoodController extends Controller
                 'message' => "Error fetching statistics"
             ], 500);
         }
+    }
+
+    public function show(Food $food)
+    {
+        $food->load(['category']);
+
+        // Get related foods (same category, limited to 6)
+        $relatedFoods = Food::where('category_id', $food->category_id)
+            ->where('id', '!=', $food->id)
+            ->inRandomOrder()
+            ->limit(6)
+            ->get();
+
+        return view('admin.foods.show', [
+            'food' => $food,
+            'relatedFoods' => $relatedFoods
+        ]);
     }
 }
