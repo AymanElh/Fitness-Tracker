@@ -47,36 +47,14 @@
                 </div>
             </div>
 
-            <!-- Flash Messages -->
-            @if(session('success'))
-                <x-alert type="success" id="successAlert">
-                    <p class="font-bold">Success!</p>
-                    <p class="text-sm">{{ session('success') }}</p>
-                </x-alert>
-            @endif
-
-            @if(session('error'))
-                <x-alert type="error" id="errorAlert">
-                    <p class="font-bold">Error!</p>
-                    <p class="text-sm">{{ session('error') }}</p>
-                </x-alert>
-            @endif
-
-            @if ($errors->any())
-                <x-alert type="error" id="validationErrors">
-                    <p class="font-bold">Please fix the following errors:</p>
-                    <ul class="mt-1 list-disc list-inside text-sm">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </x-alert>
-            @endif
+            <!-- Flash messages with js -->
+            <div id="flashMessages"></div>
 
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-6">
                 <!-- Total Foods Card -->
                 <x-stat-card
+                    id="totalFoods"
                     title="Total Food Items"
                     value="{{ $totalFoods ?? 0}}"
                     color="green"
@@ -85,6 +63,7 @@
 
                 <!-- Total Categories Card -->
                 <x-stat-card
+                    id="totalCategories"
                     title="Food Categories"
                     value="{{ $categoryCount ?? 0}}"
                     color="blue"
@@ -94,6 +73,7 @@
 
                 <!-- Average Calories Card -->
                 <x-stat-card
+                    id="avgCalories"
                     title="Avg. Calories"
                     value="{{ $avgCalories ?? 0 }}"
                     subtitle="per serving"
@@ -201,205 +181,29 @@
                                 </tr>
                                 </thead>
                                 <tbody id="foodsTableBody" class="bg-white divide-y divide-gray-200">
-                                @if($foods->count() > 0)
-                                    @foreach($foods as $food)
-                                        <tr class="hover:bg-gray-50 food-row"
-                                            data-id="{{ $food->id }}"
-                                            data-name="{{ strtolower($food->name) }}"
-                                            data-category="{{ strtolower($food->category ?? '') }}"
-                                            data-calories="{{ $food->nutrients['calories'] ?? 0 }}"
-                                            data-protein="{{ $food->nutrients['protein_g'] ?? 0 }}"
-                                            data-carbs="{{ $food->nutrients['carbs_g'] ?? 0 }}"
-                                            data-fat="{{ $food->nutrients['fat_g'] ?? 0 }}">
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="flex items-center">
-                                                    @if($food->image_url)
-                                                        <div class="flex-shrink-0 h-10 w-10">
-                                                            <img class="h-10 w-10 rounded-full object-cover" src="{{ $food->image_url }}" alt="{{ $food->name }}">
-                                                        </div>
-                                                    @else
-                                                        <div class="flex-shrink-0 h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
-                                                            <svg class="h-6 w-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                                                            </svg>
-                                                        </div>
-                                                    @endif
-                                                    <div class="ml-4">
-                                                        <div class="text-sm font-medium text-gray-900">{{ $food->name }}</div>
-                                                        <div class="text-xs text-gray-500">ID: {{ $food->id }}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                @if($food->category)
-                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                                        @if($food->category->name == 'Fruits') bg-green-100 text-green-800
-                                                        @elseif($food->category->name == 'Vegetables') bg-emerald-100 text-emerald-800
-                                                        @elseif($food->category->name == 'Meats') bg-red-100 text-red-800
-                                                        @elseif($food->category->name == 'Dairy') bg-blue-100 text-blue-800
-                                                        @elseif($food->category->name == 'Grains') bg-yellow-100 text-yellow-800
-                                                        @elseif($food->category->name == 'Seafood') bg-cyan-100 text-cyan-800
-                                                        @elseif($food->category->name == 'Snacks') bg-orange-100 text-  orange-800
-                                                        @elseif($food->category->name == 'Beverages') bg-indigo-100 text-indigo-800
-                                                        @else bg-gray-100 text-gray-800 @endif">
-                                                        {{ ucfirst($food->category->name) }}
-                                                    </span>
-                                                @else
-                                                    <span
-                                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                                        Uncategorized
-                                                    </span>
-                                                @endif
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $food->portion_default }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900">{{ $food->nutrients['calories'] ?? 'N/A' }}</div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900">{{ $food->nutrients['protein_g'] ?? 'N/A' }}</div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900">{{ $food->nutrients['carbs_g'] ?? 'N/A' }}</div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900">{{ $food->nutrients['fat_g'] ?? 'N/A' }}</div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <div class="flex justify-end space-x-2">
-                                                    <button type="button"
-                                                            onclick="openViewFoodModal({{ $food->id }})"
-                                                            class="text-blue-600 hover:text-blue-900">
-                                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg"
-                                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                        </svg>
-                                                    </button>
-                                                    <button type="button"
-                                                            onclick="openEditFoodModal({{ $food->id }})"
-                                                            class="text-indigo-600 hover:text-indigo-900">
-                                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg"
-                                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                  stroke-width="2"
-                                                                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                                                        </svg>
-                                                    </button>
-                                                    <button type="button"
-                                                            onclick="openDeleteFoodModal({{ $food->id }}, '{{ $food->name }}')"
-                                                            class="text-red-600 hover:text-red-900">
-                                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg"
-                                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                  stroke-width="2"
-                                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    <tr>
-                                        <td colspan="8" class="px-6 py-10 text-center text-gray-500">
-                                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none"
-                                                 stroke="currentColor" viewBox="0 0 24 24"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                      d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+
+                                    <tr id="loading-indicator">
+                                        <td colspan="8" class="px-6 py-4 text-center">
+                                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-500 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                             </svg>
-                                            <h3 class="mt-2 text-sm font-medium text-gray-900">No food items found</h3>
-                                            <p class="mt-1 text-sm text-gray-500">Get started by adding a new food item to your database.</p>
-                                            <div class="mt-6">
-                                                <button type="button" onclick="openCreateFoodModal()"
-                                                        class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
-                                                         viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd"
-                                                              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                                              clip-rule="evenodd"/>
-                                                    </svg>
-                                                    Add Food Item
-                                                </button>
-                                            </div>
+                                            Loading food items...
                                         </td>
                                     </tr>
-                                @endif
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- Pagination -->
-
-                @if($foods->count() > 0)
-                    <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                        <div class="flex-1 flex justify-between sm:hidden">
-                            <a href="#"
-                               class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                                Previous
-                            </a>
-                            <a href="#"
-                               class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                                Next
-                            </a>
-                        </div>
-                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                            <div>
-                                <p class="text-sm text-gray-700">
-                                    Showing
-                                    <span class="font-medium">1</span>
-                                    to
-                                    <span class="font-medium">{{ min($foods->count(), 10) }}</span>
-                                    of
-                                    <span class="font-medium">{{ $foods->count() }}</span>
-                                    results
-                                </p>
-                            </div>
-                            @if($foods->count() > 10)
-                                <div>
-                                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                                         aria-label="Pagination">
-                                        <a href="#"
-                                           class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                            <span class="sr-only">Previous</span>
-                                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                                 fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                      d="M12.707 5.x293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                                      clip-rule="evenodd"/>
-                                            </svg>
-                                        </a>
-                                        <a href="#" aria-current="page"
-                                           class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                            1
-                                        </a>
-                                        <a href="#"
-                                           class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                            <span class="sr-only">Next</span>
-                                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                                 fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                                      clip-rule="evenodd"/>
-                                            </svg>
-                                        </a>
-                                    </nav>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                @endif
             </div>
         </div>
     </div>
 
     <!-- Create Food Modal -->
     <x-modal id="createFoodModal" title="Add New Food Item" iconType="create">
-        <form action="#" method="post">
+        <form id="createFoodForm" action="" method="post">
             @csrf
             <div class="mt-6 space-y-6">
                 <div>
@@ -416,16 +220,9 @@
                     <div class="mt-1">
                         <select id="category" name="category"
                                 class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                            <option value="">Select Category</option>
-                            <option value="fruits">Fruits</option>
-                            <option value="vegetables">Vegetables</option>
-                            <option value="meats">Meats</option>
-                            <option value="dairy">Dairy</option>
-                            <option value="grains">Grains</option>
-                            <option value="seafood">Seafood</option>
-                            <option value="snacks">Snacks</option>
-                            <option value="beverages">Beverages</option>
-                            <option value="other">Other</option>
+                            @foreach($foodCategories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -446,6 +243,7 @@
                             <input type="number" name="nutrients[calories]" id="calories"
                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                    placeholder="e.g. 165">
+                            <span class="text-red-500 text-sm mt-1 error-message"></span>
                         </div>
                     </div>
 
@@ -455,6 +253,7 @@
                             <input type="number" step="0.1" name="nutrients[protein_g]" id="protein_g"
                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                    placeholder="e.g. 31">
+                            <span class="text-red-500 text-sm mt-1 error-message"></span>
                         </div>
                     </div>
 
@@ -464,6 +263,7 @@
                             <input type="number" step="0.1" name="nutrients[carbs_g]" id="carbs_g"
                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                    placeholder="e.g. 0">
+                            <span class="text-red-500 text-sm mt-1 error-message"></span>
                         </div>
                     </div>
 
@@ -473,6 +273,7 @@
                             <input type="number" step="0.1" name="nutrients[fat_g]" id="fat_g"
                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                    placeholder="e.g. 3.6">
+                            <span class="text-red-500 text-sm mt-1 error-message"></span>
                         </div>
                     </div>
                 </div>
@@ -484,6 +285,7 @@
                             <input type="number" step="0.1" name="nutrients[fiber_g]" id="fiber_g"
                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                    placeholder="e.g. 0">
+                            <span class="text-red-500 text-sm mt-1 error-message"></span>
                         </div>
                     </div>
 
@@ -498,7 +300,8 @@
                 </div>
 
                 <div>
-                    <label for="description" class="block text-sm font-medium text-gray-700">Description (Optional)</label>
+                    <label for="description" class="block text-sm font-medium text-gray-700">Description
+                        (Optional)</label>
                     <div class="mt-1">
                         <textarea id="description" name="description" rows="3"
                                   class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
@@ -522,10 +325,10 @@
     </x-modal>
 
     <!-- Edit Food Modal -->
-    <x-modal id="editFoodModal" title="Edit Food Item" icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />'>
-        <form id="updateFoodForm" action="" method="post">
+    <x-modal id="editFoodModal" title="Edit Food Item"
+             icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />'>
+        <form id="updateFoodForm" action="">
             @csrf
-            @method('PUT')
             <div class="mt-6 space-y-6">
                 <input type="hidden" name="food_id" id="edit_food_id">
 
@@ -542,22 +345,16 @@
                     <div class="mt-1">
                         <select id="edit_category" name="category"
                                 class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                            <option value="">Select Category</option>
-                            <option value="fruits">Fruits</option>
-                            <option value="vegetables">Vegetables</option>
-                            <option value="meats">Meats</option>
-                            <option value="dairy">Dairy</option>
-                            <option value="grains">Grains</option>
-                            <option value="seafood">Seafood</option>
-                            <option value="snacks">Snacks</option>
-                            <option value="beverages">Beverages</option>
-                            <option value="other">Other</option>
+                            @foreach($foodCategories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
 
                 <div>
-                    <label for="edit_portion_default" class="block text-sm font-medium text-gray-700">Default Portion</label>
+                    <label for="edit_portion_default" class="block text-sm font-medium text-gray-700">Default
+                        Portion</label>
                     <div class="mt-1">
                         <input type="text" name="portion_default" id="edit_portion_default"
                                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
@@ -640,13 +437,17 @@
     </x-modal>
 
     <!-- View Food Modal -->
-    <x-modal id="viewFoodModal" title="Food Item Details" icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />'>
+    <x-modal id="viewFoodModal" title="Food Item Details"
+             icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />'>
         <div class="mt-4">
             <div class="bg-white p-4 rounded-lg">
                 <div class="flex items-center mb-4">
-                    <div id="view_food_image" class="h-16 w-16 bg-gray-200 rounded-full flex items-center justify-center mr-4">
-                        <svg class="h-8 w-8 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                    <div id="view_food_image"
+                         class="h-16 w-16 bg-gray-200 rounded-full flex items-center justify-center mr-4">
+                        <svg class="h-8 w-8 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+                             viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/>
                         </svg>
                     </div>
                     <div>
@@ -725,11 +526,14 @@
             <form id="deleteFoodForm" action="" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                <button type="submit"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                     Delete
                 </button>
             </form>
-            <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onclick="closeDeleteFoodModal()">
+            <button type="button"
+                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    onclick="closeDeleteFoodModal()">
                 Cancel
             </button>
         </div>
@@ -745,13 +549,33 @@
         const updateFoodForm = document.getElementById('updateFoodForm');
         const deleteFoodForm = document.getElementById('deleteFoodForm');
         const viewEditFoodButton = document.getElementById('viewEditFoodButton');
+        const createFoodForm = document.getElementById('createFoodForm');
+        const tableBody = document.getElementById('foodsTableBody');
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        // Get all foods
+        fetchFoods();
 
         // Search and filter functionality
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const foodSearch = document.getElementById('foodSearch');
             const categoryFilter = document.getElementById('categoryFilter');
             const nutritionFilter = document.getElementById('nutritionFilter');
             const sortFoods = document.getElementById('sortFoods');
+
+            // Set up form submissions with AJAX
+            if (createFoodForm) {
+                createFoodForm.addEventListener('submit', handleCreateFood);
+            }
+
+            if (updateFoodForm) {
+                updateFoodForm.addEventListener('submit', handleUpdateFood);
+            }
+            //
+            // if (deleteFoodForm) {
+            //     deleteFoodForm.addEventListener('submit', handleDeleteFood);
+            // }
 
             // Handle search input
             if (foodSearch) {
@@ -777,19 +601,323 @@
             setTimeout(() => {
                 const successAlert = document.getElementById('successAlert');
                 if (successAlert) {
-                    successAlert.style.display = 'none';
+                    successAlert.classList.add('hidden');
                 }
-            }, 3000);
+            }, 10000);
 
             // Set up view edit button action
             if (viewEditFoodButton) {
-                viewEditFoodButton.addEventListener('click', function() {
+                viewEditFoodButton.addEventListener('click', function () {
                     const foodId = this.getAttribute('data-id');
                     closeViewFoodModal();
                     openEditFoodModal(foodId);
                 });
             }
         });
+
+        // Fetch foods
+        async function fetchFoods() {
+            try {
+                const loadingIndicator = document.getElementById('loading-indicator');
+                if(loadingIndicator) loadingIndicator.style.display = '';
+
+                const response = await fetch('/api/foods', {
+                    method: 'GET',
+                });
+
+                console.log("Response: ", response.ok);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch foods');
+                }
+
+                const data = await response.json();
+                console.log("Fetched data: ", data);
+                if (loadingIndicator) loadingIndicator.style.display = 'none';
+
+                if(tableBody) {
+                    const loadingRow = loadingIndicator ? loadingIndicator.parentNode : null;
+                    console.log("Loading row: ", loadingRow);
+                    tableBody.innerHTML = "";
+                }
+                console.log(data.data.foods);
+                if(data.data.foods && data.data.foods.length > 0) {
+                    data.data.foods.forEach(food => {
+                        // console.log(food);
+                        addFoodRow(food);
+                    });
+                    // console.log(document.getElementById('totalFoods'))
+                    // document.getElementById('totalFoods').textContent = data.data.totalFoods;
+                }
+
+            }
+            catch (error) {
+                console.log('Error fetching foods: ', error.message);
+            }
+        }
+
+        // Show flash messages
+        function showFlashMessages(type, message) {
+            const flashContainer = document.getElementById('flashMessages');
+            const alertHtml = `
+                <div class="bg-${type === 'success' ? 'green' : 'red'}-100 border-${type === 'success' ? 'green' : 'red'}-500 text-${type === 'success' ? 'green' : 'red'}-700 mb-4 p-4 rounded shadow-sm border-l-4">
+                    <div class="flex items-center">
+                        <div class="py-1">
+                            <svg class="h-6 w-6 mr-4 text-${type === 'success' ? 'green' : 'red'}-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                ${type === 'success'
+                        ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />'
+                        : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />'}
+                            </svg>
+                        </div>
+                        <div class="flex-grow">
+                            <p class="font-bold">${type === 'success' ? 'Success!' : 'Error!'}</p>
+                            <p class="text-sm">${message}</p>
+                        </div>
+                        <button onclick="this.parentElement.parentElement.remove()" class="ml-auto">
+                            <svg class="h-4 w-4 text-${type === 'success' ? 'green' : 'red'}-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            flashContainer.innerHTML = alertHtml;
+        }
+
+        // Display Validation errors
+        function displayValidationErrors(errors) {
+            Object.keys(errors).forEach(field => {
+                console.log(field);
+                let inputField;
+
+                // Handle nested fields (nutrients.calories)
+                if (field.includes('.')) {
+                    const [parent, child] = field.split('.');
+                    inputField = document.querySelector(`[name="${parent}.${child}"]`) ||
+                        document.querySelector(`[name="${parent}[${child}]"]`);
+                } else {
+                    inputField = document.querySelector(`[name="${field}"]`);
+                }
+
+                if (inputField) {
+                    const errorSpan = document.createElement('span');
+                    errorSpan.className = 'error-message text-xs text-red-600 mt-1';
+                    errorSpan.textContent = errors[field][0];
+                    inputField.parentNode.appendChild(errorSpan);
+                }
+            });
+        }
+
+        // clear validation errors
+        function clearValidationErrors() {
+            document.querySelectorAll('.error-message').forEach(el => el.remove());
+        }
+
+        // Add food to table body
+        function addFoodRow(food) {
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-gray-50 food-row';
+
+            row.setAttribute('data-id', food.id);
+            row.setAttribute('data-name', food.name.toLowerCase());
+            row.setAttribute('data-category', food.category_id || '');
+            row.setAttribute('data-calories', food.nutrients.calories || 0);
+            row.setAttribute('data-protein', food.nutrients.protein_g || 0);
+            row.setAttribute('data-carbs', food.nutrients.carbs_g || 0);
+            row.setAttribute('data-fat', food.nutrients.fat_g || 0);
+            row.setAttribute('data-fiber', food.nutrients.fiber_g || 0);
+
+            // Prepare category display information
+            let categoryName = 'Uncategorized';
+            let categoryColor = '#6B7280'; // Default gray
+
+            if (food.category) {
+                categoryName = food.category.name;
+                categoryColor = food.category.color_code || '#6B7280';
+            }
+
+            // Build row HTML content
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        ${food.image_url ?
+                    `<div class="flex-shrink-0 h-10 w-10">
+                                <img class="h-10 w-10 rounded-full object-cover" src="${food.image_url}" alt="${food.name}">
+                            </div>` :
+                    `<div class="flex-shrink-0 h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
+                                <svg class="h-6 w-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                                </svg>
+                            </div>`
+                }
+                        <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">${food.name}</div>
+                            <div class="text-xs text-gray-500">ID: ${food.id}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    ${food.category ?
+                    `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                               style="background-color: ${hexToRgba(categoryColor, 0.1)}; color: ${categoryColor};">
+                            ${categoryName}
+                        </span>` :
+                    `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                            Uncategorized
+                        </span>`
+                }
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    ${food.portion_default}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">${food.nutrients.calories || 'N/A'}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">${food.nutrients.protein_g || 'N/A'}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">${food.nutrients.carbs_g || 'N/A'}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">${food.nutrients.fat_g || 'N/A'}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <div class="flex justify-end space-x-2">
+                        <button type="button"
+                                onclick="openViewFoodModal(${food.id})"
+                                class="text-blue-600 hover:text-blue-900">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                        <button type="button"
+                                onclick="openEditFoodModal(${food.id})"
+                                class="text-indigo-600 hover:text-indigo-900">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                        </button>
+                        <button type="button"
+                                onclick="openDeleteFoodModal(${food.id}, '${food.name}')"
+                                class="text-red-600 hover:text-red-900">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                </td>
+            `;
+
+            // Add the new row to the table
+            tableBody.append(row);
+        }
+
+        // Create a new food
+        async function handleCreateFood(event) {
+            event.preventDefault();
+            clearValidationErrors();
+            const formData = new FormData(createFoodForm);
+            console.log("Form data: ", formData);
+            // console.log("Form data: ", Object.fromEntries(formData));
+
+            try {
+                const response = await fetch('/api/foods', {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: formData
+                })
+                const result = await response.json();
+                // console.log("Response: ", result);
+
+                // Check if there are validation errors
+                if (!response.ok) {
+                    if (response.status === 422 && result.errors) {
+                        // Validation errors
+                        // console.log("response errors: ", result.errors);
+                        displayValidationErrors(result.errors)
+                        return;
+                    } else {
+                        // Other errors
+                        throw new Error(result.message || 'An error occurred');
+                    }
+                }
+
+                if(result.success) {
+                    closeCreateFoodModal();
+                    addFoodRow(result.food);
+                    createFoodForm.reset();
+                    showFlashMessages('success', result.message);
+                }
+            } catch (error) {
+                console.log("Error creating food: ", error.message);
+            }
+        }
+
+        // update a food
+        async function handleUpdateFood(event) {
+            event.preventDefault();
+            clearValidationErrors();
+
+            // Get form data
+            const foodId = document.getElementById('edit_food_id').value;
+            const formData = new FormData(updateFoodForm);
+
+
+
+            try {
+                // Send request using Fetch API
+                const response = await fetch(`/api/foods/${foodId}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: formData
+                });
+
+                // Parse response
+                const result = await response.json();
+                console.log(response);
+                // Check if there are validation errors
+                if (!response.ok) {
+                    if (response.status === 422 && result.errors) {
+                        // Validation errors
+                        showFlashMessages('Please fix the following errors:', 'error', result.errors);
+                        displayValidationErrors(result.errors);
+                        return;
+                    } else {
+                        // Other errors
+                        throw new Error(result.message || 'An error occurred');
+                    }
+                }
+
+                if (result.success) {
+                    // Close modal
+                    closeEditFoodModal();
+
+                    // Show success flash message
+                    showFlashMessages('success', result.message);
+
+                    await fetchFoods();
+                }
+            } catch (error) {
+                // Handle any other errors
+                console.error('Error updating food:', error.message);
+                showFlashMessages(error.message || 'An error occurred', 'error');
+            }
+        }
 
         // Filter foods based on search and filters
         function filterFoods() {
@@ -877,34 +1005,39 @@
             createFoodModal.classList.add('hidden');
         }
 
-        function openEditFoodModal(foodId) {
-            // Fetch food data from server
-            fetch(`/api/foods/${foodId}`)
-                .then(response => response.json())
-                .then(food => {
-                    // Populate form fields
-                    document.getElementById('edit_food_id').value = food.id;
-                    document.getElementById('edit_food_name').value = food.name;
-                    document.getElementById('edit_category').value = food.category || '';
-                    document.getElementById('edit_portion_default').value = food.portion_default;
-                    document.getElementById('edit_calories').value = food.nutrients.calories;
-                    document.getElementById('edit_protein_g').value = food.nutrients.protein_g;
-                    document.getElementById('edit_carbs_g').value = food.nutrients.carbs_g;
-                    document.getElementById('edit_fat_g').value = food.nutrients.fat_g;
-                    document.getElementById('edit_fiber_g').value = food.nutrients.fiber_g || '';
-                    document.getElementById('edit_sugar_g').value = food.nutrients.sugar_g || '';
-                    document.getElementById('edit_description').value = food.description || '';
-
-                    // Set form action
-                    updateFoodForm.action = `/foods/${foodId}`;
-
-                    // Show modal
-                    editFoodModal.classList.remove('hidden');
-                })
-                .catch(error => {
-                    console.error('Error fetching food data:', error);
-                    alert('Error loading food data. Please try again.');
+        async function openEditFoodModal(foodId) {
+            try {
+                // Fetch food data from server endpoint
+                const response = await fetch(`/api/foods/${foodId}`, {
+                    headers: { 'Accept': 'application/json' }
                 });
+
+                if (!response.ok) {
+                    showFlashMessages(false, "Failed to fetch data");
+                    throw new Error("Failed to fetch data");
+                }
+
+                const data = await response.json();
+                const food = data.food;
+
+                document.getElementById('edit_food_id').value = food.id;
+                document.getElementById('edit_food_name').value = food.name;
+                document.getElementById('edit_portion_default').value = food.portion_default;
+                document.getElementById('edit_calories').value = food.nutrients.calories;
+                document.getElementById('edit_protein_g').value = food.nutrients.protein_g;
+                document.getElementById('edit_carbs_g').value = food.nutrients.carbs_g;
+                document.getElementById('edit_fat_g').value = food.nutrients.fat_g;
+                document.getElementById('edit_fiber_g').value = food.nutrients.fiber_g || '';
+                document.getElementById('edit_sugar_g').value = food.nutrients.sugar_g || '';
+                document.getElementById('edit_description').value = food.description || '';
+
+                editFoodModal.classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Error fetching food data:", error);
+                showFlashMessages(false, "Error loading food data. Please try again.");
+            }
+
         }
 
         function closeEditFoodModal() {
@@ -963,6 +1096,22 @@
         // Helper function to capitalize first letter
         function ucfirst(string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        function hexToRgba(hex, opacity = 1) {
+            if (!hex) return `rgba(107, 114, 128, ${opacity})`; // Default gray
+
+            hex = hex.replace('#', '');
+
+            if (hex.length === 3) {
+                hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+            }
+
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+
+            return `rgba(${r}, ${g}, ${b}, ${opacity})`;
         }
     </script>
 @endsection

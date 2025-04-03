@@ -1,4 +1,4 @@
-@props(['title', 'value', 'icon', 'color', 'subtitle' => null])
+@props(['title', 'value', 'icon', 'color', 'subtitle' => null, 'id' => null])
 
 @php
     $colors = [
@@ -26,7 +26,7 @@
                         {{ $title }}
                     </dt>
                     <dd class="flex items-baseline">
-                        <div class="text-2xl font-semibold text-gray-900">
+                        <div class="text-2xl font-semibold text-gray-900 @if($id) id={{ $id }} @endif">
                             {{ $value }}
                         </div>
                         @if($subtitle)

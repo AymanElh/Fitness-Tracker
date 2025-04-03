@@ -82,8 +82,16 @@ Route::get('/admin/users/{user}', function () {
 //Route::get('/food-items/search', [FoodController::class, 'search'])->name('food-items.search');
 //Route::post('/food-items', [FoodController::class, 'store'])->name('food-items.store');
 
-Route::get('/foods', [FoodController::class, 'index'])->name('food-items.index');
+Route::prefix('/admin/foods')->name('admin.foods.')->group(function() {
+    Route::get('/', function() {
+        return view('admin.foods.index');
+    });
 
-Route::get('/food', function() {
-    return view('admin.foods.food-items');
 });
+
+
+// api routes
+Route::get('/api/foods', [FoodController::class, 'index']);
+Route::post('/api/foods', [FoodController::class, 'store']);
+Route::get('/api/foods/{id}', [FoodController::class, 'getFoodData']);
+Route::post('/api/foods/{id}', [FoodController::class, 'update']);
