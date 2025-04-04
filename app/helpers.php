@@ -92,3 +92,14 @@ if (!function_exists('fiberDailyValue')) {
         return round(($grams / 28) * 100); // Based on 28g daily value
     }
 }
+
+
+/**
+ * Handle the active nav item on the sidebar
+ */
+if(!function_exists('isActive')) {
+    function isActive($routeName, $activeClass = 'bg-gray-900 text-white', $inactiveClass = '') {
+//        dump(request()->routeIs($routeName) );
+        return request()->routeIs($routeName) ? $activeClass : $inactiveClass;
+    }
+}

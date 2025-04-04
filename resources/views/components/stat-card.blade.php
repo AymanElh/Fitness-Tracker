@@ -10,6 +10,8 @@
         'indigo' => 'bg-indigo-500',
     ];
     $bgColor = $colors[$color] ?? "bg-gray-500";
+
+    $dataAttr = $id ? "id\"{$id}\" data-stat=\"{$id}\"" : "";
 @endphp
 
 <div class="bg-white overflow-hidden shadow rounded-lg">
@@ -26,7 +28,7 @@
                         {{ $title }}
                     </dt>
                     <dd class="flex items-baseline">
-                        <div class="text-2xl font-semibold text-gray-900 @if($id) id={{ $id }} @endif">
+                        <div class="text-2xl font-semibold text-gray-900 {!! $dataAttr !!}">
                             {{ $value }}
                         </div>
                         @if($subtitle)
