@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\FoodController;
+use App\Http\Controllers\Admin\MealController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use Illuminate\Support\Facades\Route;
@@ -52,9 +53,18 @@ Route::middleware('auth')->group(function() {
         Route::get('/', function() {
             return view('admin.foods.index');
         })->name('index');
-
         Route::get('/{food}', [FoodController::class, 'show'])->name('show');
+    });
 
+    Route::prefix('/admin')->name('admin.')->group(function() {
+        // Meal routes
+        Route::get('/meals', [MealController::class, 'index'])->name('meals.index');
+        Route::post('/meals/store', [MealController::class, 'store'])->name('meals.store');
+        Route::get('/meals/stats/refresh', [MealController::class, 'getStats'])->name('meals.stats.refresh');
+        Route::get('/meals/search-foods', [MealController::class, 'searchFoods'])->name('meals.search-foods');
+        Route::get('/meals/{meal}', [MealController::class, 'show'])->name('meals.show');
+        Route::put('/meals/{meal}', [MealController::class, 'update'])->name('meals.update');
+        Route::delete('/meals/{meal}', [MealController::class, 'destroy'])->name('meals.destroy');
     });
 
     Route::middleware('role:admin')->group(function() {
@@ -66,6 +76,7 @@ Route::middleware('auth')->group(function() {
         Route::put('/admin/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
         Route::delete('/admin/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
         Route::resource('/admin/permissions', PermissionController::class);
+
     });
 });
 
