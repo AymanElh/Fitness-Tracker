@@ -39,6 +39,19 @@ class ExerciseController extends Controller
         return redirect()->route('admin.exercises.index')->with('success', 'Exercise Created Successfully');
     }
 
+    public function show(Exercise $exercise)
+    {
+        $exercise->load('creator');
+
+        $relatedExercises = Exercise::where('muscle_group', $exercise->muscle_group)
+            ->where('id', '!=', $exercise->id)
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+
+        return view('admin.exercises.show', compact('exercise', 'relatedExercises'));
+    }
+
     public function edit(Exercise $exercise)
     {
         $exerciseTypes = Exercise::getTypeOptions();
