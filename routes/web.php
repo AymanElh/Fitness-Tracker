@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ExerciseController;
 use App\Http\Controllers\Admin\FoodController;
 use App\Http\Controllers\Admin\MealController;
 use App\Http\Controllers\Admin\PermissionController;
@@ -26,9 +27,9 @@ Route::get('/admin/meals', function() {
     return view('admin.users.index');
 })->name('admin.meals.index');
 
-Route::get('/admin/exercises', function() {
-    return view('admin.exercises.index');
-})->name('admin.exercises');
+//Route::get('/admin/exercises', function() {
+//    return view('admin.exercises.index');
+//})->name('admin.exercises');
 
 Route::get('/admin/exercises/create', function() {
     return view('/admin/exercises/create');
@@ -77,6 +78,10 @@ Route::middleware('auth')->group(function() {
         Route::delete('/admin/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
         Route::resource('/admin/permissions', PermissionController::class);
 
+    });
+
+    Route::middleware('role:admin')->prefix('/admin')->name('admin.')->group(function() {
+        Route::resource('/exercises', ExerciseController::class);
     });
 });
 
