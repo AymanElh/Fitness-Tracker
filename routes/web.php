@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExerciseController;
 use App\Http\Controllers\Admin\FoodController;
 use App\Http\Controllers\Admin\MealController;
@@ -17,15 +18,12 @@ Route::get('/dashboard', function() {
 
 Route::get('/admin/users', function() {
     return view('admin.users.index');
-})->name('admin.users');
+})->name('admin.users.index');
 
 Route::get('/admin/users/create', function() {
     return view('admin.users.create');
 })->name('admin.users.create');
 
-Route::get('/admin/meals', function() {
-    return view('admin.users.index');
-})->name('admin.meals.index');
 
 //Route::get('/admin/exercises', function() {
 //    return view('admin.exercises.index');
@@ -83,6 +81,8 @@ Route::middleware('auth')->group(function() {
     Route::middleware('role:admin')->prefix('/admin')->name('admin.')->group(function() {
         Route::resource('/exercises', ExerciseController::class);
     });
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 
