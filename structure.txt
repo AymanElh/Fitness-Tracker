@@ -1,0 +1,285 @@
+.
+├── app
+│   ├── helpers.php
+│   ├── Http
+│   │   ├── Controllers
+│   │   │   ├── Admin
+│   │   │   │   ├── DashboardController.php
+│   │   │   │   ├── ExerciseController.php
+│   │   │   │   ├── FoodController.php
+│   │   │   │   ├── MealController.php
+│   │   │   │   ├── PermissionController.php
+│   │   │   │   └── RoleController.php
+│   │   │   ├── Auth
+│   │   │   │   ├── ForgotPasswordController.php
+│   │   │   │   ├── RegisterController.php
+│   │   │   │   ├── ResetPasswordController.php
+│   │   │   │   └── SessionController.php
+│   │   │   ├── Controller.php
+│   │   │   ├── FrontOffice
+│   │   │   │   ├── ExerciseController.php
+│   │   │   │   ├── FoodsController.php
+│   │   │   │   └── MealsController.php
+│   │   │   └── TestController.php
+│   │   ├── Middleware
+│   │   │   ├── CheckPermission.php
+│   │   │   └── CheckRole.php
+│   │   └── Requests
+│   │       ├── Auth
+│   │       │   ├── LoginRequest.php
+│   │       │   ├── RegisterRequest.php
+│   │       │   └── ResetPasswordRequest.php
+│   │       ├── EditExerciseRequest.php
+│   │       ├── FoodStoreRequest.php
+│   │       └── StoreExerciseRequest.php
+│   ├── Mail
+│   │   └── ResetPassword.php
+│   ├── Models
+│   │   ├── Exercise.php
+│   │   ├── FoodCategory.php
+│   │   ├── Food.php
+│   │   ├── MealItem.php
+│   │   ├── Meal.php
+│   │   ├── PasswordReset.php
+│   │   ├── Permission.php
+│   │   ├── Role.php
+│   │   └── User.php
+│   ├── Providers
+│   │   ├── AppServiceProvider.php
+│   │   ├── RoleServiceProvider.php
+│   │   └── TelescopeServiceProvider.php
+│   ├── Repositories
+│   │   ├── Interfaces
+│   │   │   └── UserRepositoryInterface.php
+│   │   └── UserRepository.php
+│   ├── Services
+│   │   └── AuthService.php
+│   └── View
+│       └── Components
+│           └── AuthLayout.php
+├── artisan
+├── bootstrap
+│   ├── app.php
+│   ├── cache
+│   │   ├── packages.php
+│   │   └── services.php
+│   └── providers.php
+├── composer.json
+├── composer.lock
+├── config
+│   ├── app.php
+│   ├── auth.php
+│   ├── cache.php
+│   ├── database.php
+│   ├── filesystems.php
+│   ├── logging.php
+│   ├── mail.php
+│   ├── queue.php
+│   ├── services.php
+│   ├── session.php
+│   └── telescope.php
+├── database
+│   ├── factories
+│   │   └── UserFactory.php
+│   ├── migrations
+│   │   ├── 0001_01_01_000000_create_users_table.php
+│   │   ├── 0001_01_01_000001_create_cache_table.php
+│   │   ├── 0001_01_01_000002_create_jobs_table.php
+│   │   ├── 2025_03_20_102535_create_roles_table.php
+│   │   ├── 2025_03_20_102700_create_permissions_table.php
+│   │   ├── 2025_03_20_102902_create_user_role_table.php
+│   │   ├── 2025_03_20_103138_create_role_permission_table.php
+│   │   ├── 2025_04_01_125101_create_food_categories_table.php
+│   │   ├── 2025_04_01_143931_create_food_items_table.php
+│   │   ├── 2025_04_02_164206_create_telescope_entries_table.php
+│   │   ├── 2025_04_04_230207_create_meals_table.php
+│   │   └── 2025_04_13_180135_create_exercises_table.php
+│   └── seeders
+│       ├── DatabaseSeeder.php
+│       ├── ExerciseSeeder.php
+│       ├── FoodItemsSeeder.php
+│       └── RoleAndPermissionSeeder.php
+├── docker-compose.yml
+├── Dockerfile
+├── package.json
+├── package-lock.json
+├── phpunit.xml
+├── postcss.config.js
+├── public
+│   ├── build
+│   │   ├── assets
+│   │   │   ├── app-CM1trzJc.css
+│   │   │   └── app-DspuE8pW.js
+│   │   └── manifest.json
+│   ├── favicon.ico
+│   ├── index.php
+│   ├── js
+│   │   └── admin
+│   │       ├── foods.js
+│   │       └── meals.js
+│   └── robots.txt
+├── README.md
+├── resources
+│   ├── css
+│   │   └── app.css
+│   ├── js
+│   │   ├── app.js
+│   │   ├── bootstrap.js
+│   │   └── foods.js
+│   └── views
+│       ├── admin
+│       │   ├── dashboard.blade.php
+│       │   ├── exercises
+│       │   │   ├── create.blade.php
+│       │   │   ├── edit.blade.php
+│       │   │   ├── index.blade.php
+│       │   │   └── show.blade.php
+│       │   ├── foods
+│       │   │   ├── food-items.blade.php
+│       │   │   ├── index.blade.php
+│       │   │   └── show.blade.php
+│       │   ├── meals
+│       │   │   ├── index.blade.php
+│       │   │   └── view.blade.php
+│       │   ├── permissions
+│       │   │   └── index.blade.php
+│       │   ├── roles
+│       │   │   ├── create.blade.php
+│       │   │   ├── edit.blade.php
+│       │   │   ├── index.blade.php
+│       │   │   └── show.blade.php
+│       │   └── users
+│       │       ├── create.blade.php
+│       │       └── index.blade.php
+│       ├── auth
+│       │   ├── forget-password.blade.php
+│       │   ├── login.blade.php
+│       │   ├── register.blade.php
+│       │   └── reset-password.blade.php
+│       ├── components
+│       │   ├── alert.blade.php
+│       │   ├── exercise-card.blade.php
+│       │   ├── feature-card.blade.php
+│       │   ├── food-card.blade.php
+│       │   ├── form
+│       │   │   ├── button.blade.php
+│       │   │   ├── form-checkbox.blade.php
+│       │   │   ├── form-error.blade.php
+│       │   │   ├── form-input.blade.php
+│       │   │   └── form-label.blade.php
+│       │   ├── meal-card.blade.php
+│       │   ├── modal.blade.php
+│       │   ├── sidebar.blade.php
+│       │   └── stat-card.blade.php
+│       ├── email
+│       │   └── reset-password.blade.php
+│       ├── frontoffice
+│       │   ├── components
+│       │   ├── pages
+│       │   │   ├── exercise-details.blade.php
+│       │   │   ├── exercises.blade.php
+│       │   │   ├── food-details.blade.php
+│       │   │   ├── foods.blade.php
+│       │   │   ├── home.blade.php
+│       │   │   ├── meal-details.blade.php
+│       │   │   └── meals.blade.php
+│       │   └── partials
+│       │       ├── footer.blade.php
+│       │       ├── header.blade.php
+│       │       └── navbar.blade.php
+│       ├── layouts
+│       │   ├── admin.blade.php
+│       │   ├── app.blade.php
+│       │   └── auth.blade.php
+│       └── welcome.blade.php
+├── routes
+│   ├── console.php
+│   └── web.php
+├── storage
+│   ├── app
+│   │   ├── private
+│   │   └── public
+│   ├── framework
+│   │   ├── cache
+│   │   │   └── data
+│   │   ├── sessions
+│   │   ├── testing
+│   │   └── views
+│   │       ├── 00636511e0514a0f9c03e21c7ddb20f0.php
+│   │       ├── 055b2aaff571bfa316fe0e5ca0c8d7a1.php
+│   │       ├── 09ee47cb6b2ead6fe59c09eda6d900b2.php
+│   │       ├── 0d8298b96808340e41f4e6ad48b7e461.php
+│   │       ├── 0ed3d3f31175f793e18a4520e5788aae.php
+│   │       ├── 1156aeaf1762886f1703a59b368e3591.php
+│   │       ├── 132b834a0a58f1e712afb341f8622879.php
+│   │       ├── 13908c918157ccfc7c05c05195757833.php
+│   │       ├── 19d1ca22cd8db231f88e0685e9c3a20e.php
+│   │       ├── 21cb5394d497fc1df351f4f1d3a97157.php
+│   │       ├── 223ff35cfc2f3b6a868c0a81ecc2d5ed.php
+│   │       ├── 275c7c02e2528e6029079c885e2d2418.php
+│   │       ├── 2c8d8cf9d210ab6cde55cda870058926.php
+│   │       ├── 2ef4f2b3dcb88f30626d69a5d44733f6.php
+│   │       ├── 310aefc637c07f6f6d01d2909493c5e7.php
+│   │       ├── 335419fb05eb6e29effb8692e494e538.php
+│   │       ├── 368072756c233ac30f0cf310e266ea82.php
+│   │       ├── 419551074a50fbe34ef86a0e07ca7190.php
+│   │       ├── 4d94879e785a23022bc0477ee9516e59.php
+│   │       ├── 4ee3ab6db1fa8b9c29091a68e99cacf9.php
+│   │       ├── 531c9894cdda611e907bcb8142814842.php
+│   │       ├── 547dcfa5affab15904a216f57ec548cf.php
+│   │       ├── 5c2001e939204ec0b7ec56c9a9f31d3d.php
+│   │       ├── 6800044c740c04fdc0b8df8eae13943d.php
+│   │       ├── 6c405c8d743f20d760c37a42fdf6d1ee.php
+│   │       ├── 70854a709d5d61e1ae14f6bb22affa84.php
+│   │       ├── 7e33b743a27113c4160f4c552f8b4db1.php
+│   │       ├── 8453e29650825cbed2622e9c7042d2c7.php
+│   │       ├── 8af96f1aa4ca539680bbb419b6450c05.php
+│   │       ├── 8b77322ea40de4645844c2e3622c3810.php
+│   │       ├── 931737c889bcb943f8fc79654d164835.php
+│   │       ├── 9d3cb674640407c43c6224567ec47ced.php
+│   │       ├── a120438d505ca9da755be63e962e88d7.php
+│   │       ├── a3557068ed5b47425d76d1f6f3777346.php
+│   │       ├── a409957c32073e5572a809a8a11b2836.php
+│   │       ├── a43dffac7f28722de66800e4b9a5f5b9.php
+│   │       ├── a6e017772dac798c684f8ca4ea6a433e.php
+│   │       ├── aaf1842dcc3c0edadc30604c760208a4.php
+│   │       ├── ac95352bcdc7cb6b645348f21d9bb43e.php
+│   │       ├── b35fbc06e39df6fd7e7217f02e78986d.php
+│   │       ├── b7614af8a563cdaeb0050e00f5b51739.php
+│   │       ├── bae129cef9e600352d1c88ca55b5c61c.php
+│   │       ├── bc0924af1af9ba2633a2bfbab30e3fef.php
+│   │       ├── c5ad4cf16a5735bf8b3bffc23ace35d3.php
+│   │       ├── ca25abc58848b3a2d8eafc531e7824cf.php
+│   │       ├── cd9178fea8f195e53410858872101e50.php
+│   │       ├── ce736fd573d8b6eae68ccff3adfe0e79.php
+│   │       ├── d252de7308025bd7e3679ec212f7cde1.php
+│   │       ├── d52f526cdd9a0360bfc3814248f8a897.php
+│   │       ├── d6386d1f17f16f23757d94a31abf0c8e.php
+│   │       ├── dd310000961f2d208873a737c27d849a.php
+│   │       ├── de54b63ec3ab71aaa6d71eb783fbdb15.php
+│   │       ├── e175c77b14e84e668da9fab9eb42824e.php
+│   │       ├── e27dc49122d281d5ba911a470cac8b10.php
+│   │       ├── e5f9cadffd0030e6f94a707e4a5cdd0f.php
+│   │       ├── e64a517f5d31316c10f1181e23841b1b.php
+│   │       ├── e767695027c396f9603e064d10df8e5b.php
+│   │       ├── e9bb43523d72328cdd4bf96541cab25d.php
+│   │       ├── f35c1ee9486679cd0ff0ddd907b0d481.php
+│   │       ├── f366261db7ef884e18e55328ff7c083f.php
+│   │       ├── f72ad657e979dac0f40829ddfb903109.php
+│   │       ├── f8b2d90177b06a2b5fea0a17c48db2f3.php
+│   │       ├── fb2d928222653aa6de47592ec4c01e55.php
+│   │       ├── fea62ea78877c7118eb545507523b1e3.php
+│   │       └── ff0287b16b1537d62a0074d5fbe09d11.php
+│   └── logs
+│       └── laravel.log
+├── structure.txt
+├── tailwind.config.js
+├── tests
+│   ├── Feature
+│   │   └── ExampleTest.php
+│   ├── TestCase.php
+│   └── Unit
+│       └── ExampleTest.php
+└── vite.config.js
+
+65 directories, 218 files
