@@ -1,80 +1,27 @@
 <x-auth-layout>
-    <x-slot:title>Login | FitnessTracker</x-slot>
+    <x-slot:title>Login | FitTrack</x-slot>
 
     <x-slot:styles>
         <style>
-            /* Base styles */
             .form-input-focus:focus-within {
                 border-color: #3b82f6;
                 box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
             }
 
-            .animated-button {
-                position: relative;
-                overflow: hidden;
-                transition: all 0.3s ease;
+            input {
+                background-color: rgba(30, 41, 59, 0.8);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                color: white;
             }
 
-            .animated-button:after {
-                content: "";
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 300%;
-                height: 300%;
-                background: rgba(255, 255, 255, 0.1);
-                transform: translate(-50%, -50%) scale(0);
-                border-radius: 50%;
-                transition: transform 0.6s ease;
+            input::placeholder {
+                color: rgba(255, 255, 255, 0.5);
             }
 
-            .animated-button:hover:after {
-                transform: translate(-50%, -50%) scale(1);
-            }
-
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-
-            .fade-in {
-                animation: fadeIn 0.5s ease forwards;
-            }
-
-            /* Responsive adjustments */
-            @media (max-width: 640px) {
-                .login-container {
-                    padding-left: 1rem;
-                    padding-right: 1rem;
-                    width: 100%;
-                }
-
-                .login-header h2 {
-                    font-size: 1.75rem;
-                }
-
-                .social-buttons {
-                    flex-direction: column;
-                    gap: 0.75rem;
-                }
-            }
-
-            @media (min-width: 641px) and (max-width: 1023px) {
-                .login-container {
-                    padding-left: 1.5rem;
-                    padding-right: 1.5rem;
-                    width: 90%;
-                    max-width: 28rem;
-                }
-            }
-
-            @media (min-width: 1024px) {
-                .login-container {
-                    padding-left: 2rem;
-                    padding-right: 2rem;
-                    width: 100%;
-                    max-width: 32rem;
-                }
+            input:focus {
+                border-color: #3b82f6;
+                background-color: rgba(30, 41, 59, 0.9);
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
             }
         </style>
     </x-slot:styles>
@@ -82,12 +29,12 @@
     <div class="w-full login-container mx-auto space-y-6 sm:space-y-8 fade-in">
         <!-- Header -->
         <div class="text-center login-header">
-            <h2 class="mt-4 sm:mt-6 text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+            <h2 class="mt-4 sm:mt-6 text-2xl sm:text-3xl font-bold text-white tracking-tight">
                 Welcome Back
             </h2>
-            <p class="mt-2 sm:mt-3 text-sm sm:text-base text-gray-600">
+            <p class="mt-2 sm:mt-3 text-sm sm:text-base text-gray-400">
                 Start your fitness journey today or
-                <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-300">
+                <a href="{{ route('register') }}" class="font-medium gradient-text hover:opacity-90 transition-colors duration-300">
                     create a new account
                 </a>
             </p>
@@ -95,7 +42,7 @@
 
         <!-- Social Login Buttons -->
         <div class="space-y-3 pt-2 social-buttons sm:space-y-3">
-            <button class="w-full flex items-center justify-center px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-300">
+            <button class="w-full flex items-center justify-center px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-100 transition-all duration-300">
                 <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
                 </svg>
@@ -112,10 +59,10 @@
 
         <div class="relative my-5 sm:my-6">
             <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-gray-200"></div>
+                <div class="w-full border-t border-slate-700"></div>
             </div>
             <div class="relative flex justify-center text-sm">
-                <span class="px-3 sm:px-4 bg-gray-50 text-gray-500 text-xs sm:text-sm font-medium">
+                <span class="px-3 sm:px-4 bg-slate-900 text-gray-400 text-xs sm:text-sm font-medium">
                     Or sign in with email
                 </span>
             </div>
@@ -126,48 +73,62 @@
             @csrf
             <div class="space-y-4 sm:space-y-5">
                 <div>
-                    <x-form.form-label for="email" class="text-sm font-medium text-gray-700 mb-1 block">Email address</x-form.form-label>
-                    <x-form.form-input id="email" name="email" placeholder="you@example.com" type="email" />
-                    <x-form.form-error name="email" class="mt-1 text-xs sm:text-sm text-red-600" />
+                    <label for="email" class="text-sm font-medium text-gray-300 mb-1 block">Email address</label>
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="you@example.com"
+                        required
+                        class="block w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg shadow-sm focus:outline-none transition-all duration-300 text-sm sm:text-base"
+                    />
+                    @error('email')
+                    <p class="mt-1 text-xs sm:text-sm text-red-500">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
                     <div class="flex flex-wrap justify-between items-center mb-1">
-                        <x-form.form-label for="password" class="text-sm font-medium text-gray-700 block">Password</x-form.form-label>
-                        <a href="" class="text-xs sm:text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-300 mt-0.5 sm:mt-0">
+                        <label for="password" class="text-sm font-medium text-gray-300 block">Password</label>
+                        <a href="" class="text-xs sm:text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors duration-300 mt-0.5 sm:mt-0">
                             Forgot password?
                         </a>
                     </div>
                     <div class="form-input-focus rounded-lg transition duration-300">
-                        <x-form.form-input
+                        <input
                             name="password"
                             id="password"
                             type="password"
                             placeholder="••••••••"
                             autocomplete="current-password"
-                            class="block w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-0 focus:border-indigo-500 transition-all duration-300 text-sm sm:text-base"
+                            class="block w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg shadow-sm focus:outline-none transition-all duration-300 text-sm sm:text-base"
                             required
                         />
                     </div>
-                    <x-form.form-error name="password" class="mt-1 text-xs sm:text-sm text-red-600" />
+                    @error('password')
+                    <p class="mt-1 text-xs sm:text-sm text-red-500">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
 
             <div class="flex items-center justify-between pt-1 sm:pt-2">
                 <div class="flex items-center">
-
-                    <x-form.form-label class="ml-2 sm:ml-3 block text-xs sm:text-sm text-gray-700" for="remember_me">
+                    <input
+                        id="remember_me"
+                        name="remember_me"
+                        type="checkbox"
+                        class="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                    <label class="ml-2 sm:ml-3 block text-xs sm:text-sm text-gray-400" for="remember_me">
                         Remember me
-                    </x-form.form-label>
+                    </label>
                 </div>
             </div>
 
             <div class="pt-3 sm:pt-4">
                 <button
                     type="submit"
-                    class="animated-button w-full flex justify-center items-center py-2.5 sm:py-3 px-3 sm:px-4 border border-transparent rounded-lg shadow-sm text-sm sm:text-base font-medium
-                           text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2
-                           focus:ring-indigo-500 transition-all duration-300"
+                    class="animated-button btn-primary w-full flex justify-center items-center py-2.5 sm:py-3 px-3 sm:px-4 border border-transparent rounded-lg shadow-sm text-sm sm:text-base font-medium text-white transition-all duration-300"
                 >
                     <span>Sign in</span>
                     <svg class="ml-1.5 sm:ml-2 h-4 w-4 sm:h-5 sm:w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -178,9 +139,9 @@
         </form>
 
         <div class="text-center mt-5 sm:mt-6">
-            <p class="text-xs sm:text-sm text-gray-500">
+            <p class="text-xs sm:text-sm text-gray-400">
                 Don't have an account?
-                <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-300">
+                <a href="{{ route('register') }}" class="font-medium gradient-text hover:opacity-90 transition-colors duration-300">
                     Sign up now
                 </a>
             </p>
@@ -199,11 +160,13 @@
                 const inputs = document.querySelectorAll('input:not([type="checkbox"])');
                 inputs.forEach(input => {
                     input.addEventListener('focus', () => {
-                        input.parentElement.classList.add('border-indigo-500');
+                        input.classList.add('ring-1');
+                        input.classList.add('ring-blue-500');
                     });
 
                     input.addEventListener('blur', () => {
-                        input.parentElement.classList.remove('border-indigo-500');
+                        input.classList.remove('ring-1');
+                        input.classList.remove('ring-blue-500');
                     });
                 });
 

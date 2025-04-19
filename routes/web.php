@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\RoleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('frontoffice.pages.home');
 });
 
 Route::get('/dashboard', function() {
