@@ -12,6 +12,15 @@ Route::get('/', function () {
     return view('frontoffice.pages.home');
 });
 
+Route::get('/exercises', [\App\Http\Controllers\FrontOffice\ExerciseController::class, 'index'])->name('exercises.index');
+Route::get('/exercises/{exercise}', [\App\Http\Controllers\FrontOffice\ExerciseController::class, 'show'])->name('exercises.show');
+
+Route::get('/meals', [\App\Http\Controllers\FrontOffice\MealsController::class, 'index'])->name('meals.index');
+Route::get('/meals/{meal}', [\App\Http\Controllers\FrontOffice\MealsController::class, 'show'])->name('meals.show');
+
+Route::get('/foods', [\App\Http\Controllers\FrontOffice\FoodsController::class, 'index'])->name('foods.index');
+Route::get('/foods/{food}', [\App\Http\Controllers\FrontOffice\FoodsController::class, 'show'])->name('foods.show');
+
 Route::get('/dashboard', function() {
     return view('admin.dashboard');
 })->name('dashboard');
