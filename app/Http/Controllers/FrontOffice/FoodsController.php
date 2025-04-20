@@ -14,19 +14,7 @@ class FoodsController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Food::query();
-
-        // Apply filters
-        if ($request->filled('category')) {
-            $query->where('category_id', $request->category);
-        }
-
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
-
-        // Paginate results
-        $foods = $query->paginate(9);
+        $foods = Food::all();
 
         // Fetch categories for the filter dropdown
         $categories = FoodCategory::all();
