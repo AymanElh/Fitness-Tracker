@@ -65,6 +65,51 @@
                     </a>
                 </div>
             @endif
+
+            <!-- Community Plans -->
+            @if($publicPlans->count() > 0)
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">Community Exercise Plans</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @foreach($publicPlans as $plan)
+                            <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-purple-500/30 transition duration-300">
+                                <div class="p-6">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <h3 class="text-xl font-bold text-white">{{ $plan->name }}</h3>
+                                        <span class="px-3 py-1 rounded-full text-xs font-medium {{ $plan->level_badge }}">
+                                        {{ ucfirst($plan->level) }}
+                                    </span>
+                                    </div>
+
+                                    <p class="text-gray-400 mb-4 line-clamp-2">{{ $plan->description ?: 'No description provided' }}</p>
+
+                                    <div class="flex items-center mb-2">
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($plan->user->name) }}&background=random"
+                                             alt="User avatar"
+                                             class="w-6 h-6 rounded-full mr-2">
+                                        <span class="text-gray-300 text-sm">Created by {{ $plan->user->name }}</span>
+                                    </div>
+
+                                    <div class="flex items-center mb-6">
+                                        <div class="flex items-center mr-6">
+                                            <i class="fas fa-calendar-alt text-purple-400 mr-2"></i>
+                                            <span class="text-gray-300">{{ $plan->duration_weeks }} weeks</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-dumbbell text-purple-400 mr-2"></i>
+                                            <span class="text-gray-300">{{ $plan->days->count() }} days</span>
+                                        </div>
+                                    </div>
+
+                                    <a href="{{ route('exercise-plans.show', $plan) }}" class="w-full bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 py-2 rounded-lg text-center block transition">
+                                        <i class="fas fa-eye mr-2"></i> View Plan
+                                    </a>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         </div>
     </section>
 @endsection
