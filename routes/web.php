@@ -92,6 +92,24 @@ Route::middleware('auth')->group(function() {
     });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/exercise-plans', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'index'])->name('exercise-plans.index');
+    Route::get('/exercise-plans/create', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'create'])->name('exercise-plans.create');
+    Route::post('/exercise-plans', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'store'])->name('exercise-plans.store');
+    Route::get('/exercise-plans/{plan}', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'show'])->name('exercise-plans.show');
+    Route::get('/exercise-plans/{plan}/edit', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'edit'])->name('exercise-plans.edit');
+    Route::put('/exercise-plans/{plan}', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'update'])->name('exercise-plans.update');
+    Route::delete('/exercise-plans/{plan}', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'destroy'])->name('exercise-plans.destroy');
+
+
+    Route::post('/exercise-plans/{plan}/days', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'addDay'])->name('exercise-plans.days.store');
+    Route::put('/exercise-plan-days/{day}', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'updateDay'])->name('exercise-plans.days.update');
+    Route::delete('/exercise-plan-days/{day}', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'deleteDay'])->name('exercise-plans.days.destroy');
+
+
+    Route::post('/exercise-plan-days/{day}/exercises', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'addExercise'])->name('exercise-plans.exercises.store');
+    Route::put('/exercise-plan-items/{item}', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'updateExercise'])->name('exercise-plans.exercises.update');
+    Route::delete('/exercise-plan-items/{item}', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'deleteExercise'])->name('exercise-plans.exercises.destroy');
 });
 
 
