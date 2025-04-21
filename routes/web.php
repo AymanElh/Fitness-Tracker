@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\FoodController;
 use App\Http\Controllers\Admin\MealController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FrontOffice\NutritionPlanController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,15 +23,15 @@ Route::get('/meals/{meal}', [\App\Http\Controllers\FrontOffice\MealsController::
 Route::get('/foods', [\App\Http\Controllers\FrontOffice\FoodsController::class, 'index'])->name('foods.index');
 Route::get('/foods/{food}', [\App\Http\Controllers\FrontOffice\FoodsController::class, 'show'])->name('foods.show');
 
-Route::get('/dashboard', function() {
+Route::get('/dashboard', function () {
     return view('admin.dashboard');
 })->name('dashboard');
 
-Route::get('/admin/users', function() {
+Route::get('/admin/users', function () {
     return view('admin.users.index');
 })->name('admin.users.index');
 
-Route::get('/admin/users/create', function() {
+Route::get('/admin/users/create', function () {
     return view('admin.users.create');
 })->name('admin.users.create');
 
@@ -39,7 +40,7 @@ Route::get('/admin/users/create', function() {
 //    return view('admin.exercises.index');
 //})->name('admin.exercises');
 
-Route::get('/admin/exercises/create', function() {
+Route::get('/admin/exercises/create', function () {
     return view('/admin/exercises/create');
 })->name('admin.exercises.create');
 
@@ -57,15 +58,15 @@ Route::get('/password/reset/{token}', [\App\Http\Controllers\Auth\ResetPasswordC
 Route::post('/password/reset', [\App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
 
 
-Route::middleware('auth')->group(function() {
-    Route::prefix('/admin/foods')->name('admin.foods.')->group(function() {
-        Route::get('/', function() {
+Route::middleware('auth')->group(function () {
+    Route::prefix('/admin/foods')->name('admin.foods.')->group(function () {
+        Route::get('/', function () {
             return view('admin.foods.index');
         })->name('index');
         Route::get('/{food}', [FoodController::class, 'show'])->name('show');
     });
 
-    Route::prefix('/admin')->name('admin.')->group(function() {
+    Route::prefix('/admin')->name('admin.')->group(function () {
         // Meal routes
         Route::get('/meals', [MealController::class, 'index'])->name('meals.index');
         Route::post('/meals/store', [MealController::class, 'store'])->name('meals.store');
@@ -76,7 +77,7 @@ Route::middleware('auth')->group(function() {
         Route::delete('/meals/{meal}', [MealController::class, 'destroy'])->name('meals.destroy');
     });
 
-    Route::middleware('role:admin')->group(function() {
+    Route::middleware('role:admin')->group(function () {
         //Route::resource('/admin/roles', RoleController::class);
         Route::get('/admin/roles', [RoleController::class, 'index'])->name('roles.index');
         Route::get('/admin/roles/{role}', [RoleController::class, 'show'])->name('roles.show');
@@ -88,7 +89,7 @@ Route::middleware('auth')->group(function() {
 
     });
 
-    Route::middleware('role:admin')->prefix('/admin')->name('admin.')->group(function() {
+    Route::middleware('role:admin')->prefix('/admin')->name('admin.')->group(function () {
         Route::resource('/exercises', ExerciseController::class);
     });
 
@@ -116,34 +117,21 @@ Route::middleware('auth')->group(function() {
     // Nutrition plans routes
     Route::resource('nutrition-plans', NutritionPlanController::class);
 
+    // Users route
+    Route::middleware(["auth", "role:admin"])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::patch('/users/{user}/ban', [UserController::class, 'ban'])->name('users.ban');
+        Route::patch('/users/{user}/reinstate', [UserController::class, 'reinstate'])->name('users.reinstate');
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    });
 });
-
-
-Route::get('/admin/user', function () {
-    return "Users Page";
-})->name('users.index');
-
-Route::get('/admin/user/create', function() {
-    return "create user";
-})->name('users.create');
-
-Route::get('/admin/users/{user}', function () {
-    return "users show";
-})->name('users.show');
-//Route::get('/reset-password', function() {
-//    return view('auth.reset-password');
-//})->name('reset-password');
-//
-//Route::get('/forget-password', function() {
-//    return view('auth.forget-password');
-//})->name('forget-password');
 
 
 //Route::get('/foods', [FoodController::class, 'index'])->name('food-items.index');
 //Route::get('/food-items/search', [FoodController::class, 'search'])->name('food-items.search');
 //Route::post('/food-items', [FoodController::class, 'store'])->name('food-items.store');
-
-
 
 
 // api routes
