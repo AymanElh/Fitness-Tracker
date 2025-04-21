@@ -115,6 +115,7 @@ Route::middleware('auth')->group(function() {
 
     // Nutrition plans routes
     Route::resource('nutrition-plans', NutritionPlanController::class);
+
 });
 
 
