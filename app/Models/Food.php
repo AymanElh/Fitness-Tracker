@@ -45,4 +45,8 @@ class Food extends Model
         return $this->belongsTo(FoodCategory::class, 'category_id', 'id');
     }
 
+    public function getCalories()
+    {
+        return $this->nutrients['calories'] ?? 0;
+    }
 }

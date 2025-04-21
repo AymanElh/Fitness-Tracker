@@ -74,4 +74,12 @@ class Meal extends Model
             return $item->nutrients['fat_g'] ?? 0;
         });
     }
+
+    // In your Meal model, add methods to calculate total nutrition
+    public function totalCalories()
+    {
+        return $this->items->sum(function($item) {
+            return $item->food ? $item->food->getCalories() * $item->quantity : 0;
+        });
+    }
 }
