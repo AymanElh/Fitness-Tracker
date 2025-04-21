@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\FoodController;
 use App\Http\Controllers\Admin\MealController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\FrontOffice\NutritionPlanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -93,6 +94,7 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Exercise Plans routes
     Route::get('/exercise-plans', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'index'])->name('exercise-plans.index');
     Route::get('/exercise-plans/create', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'create'])->name('exercise-plans.create');
     Route::post('/exercise-plans', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'store'])->name('exercise-plans.store');
@@ -110,6 +112,9 @@ Route::middleware('auth')->group(function() {
     Route::post('/exercise-plan-days/{day}/exercises', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'addExercise'])->name('exercise-plans.exercises.store');
     Route::put('/exercise-plan-items/{item}', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'updateExercise'])->name('exercise-plans.exercises.update');
     Route::delete('/exercise-plan-items/{item}', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'deleteExercise'])->name('exercise-plans.exercises.destroy');
+
+    // Nutrition plans routes
+    Route::resource('nutrition-plans', NutritionPlanController::class);
 });
 
 
