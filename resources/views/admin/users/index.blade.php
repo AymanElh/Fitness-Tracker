@@ -1,134 +1,170 @@
-<!-- resources/views/admin/users.blade.php -->
+<!-- resources/views/admin/users/index.blade.php -->
 @extends('layouts.admin')
 
-@section('title', 'Users')
+@section('title', 'User Management')
 
 @section('content')
-    <div class="p-6">
+    <div class="container px-6 mx-auto">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-semibold text-gray-900">User Management</h1>
-            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-                Add User
-            </button>
+            <h2 class="text-2xl font-semibold text-gray-800">User Management</h2>
         </div>
 
-        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <div class="p-4 bg-gray-50 border-b flex justify-between items-center">
-                <div class="flex items-center space-x-4">
-                    <input type="text" placeholder="Search a user" class="border px-3 py-2 rounded-lg w-64">
-                    <select class="border px-3 py-2 rounded-lg">
-                        <option>Filter by status</option>
-                        <option>Active</option>
-                        <option>Inactive</option>
+        <!-- Filters -->
+        <div class="bg-white p-4 rounded-lg shadow-sm mb-6">
+            <form action="{{ route('admin.users.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                    <input type="text" name="search" id="search" value="{{ request('search') }}"
+                           class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                           placeholder="Name or email">
+                </div>
+
+                <div>
+                    <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select name="status" id="status"
+                            class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+                        <option value="">All Statuses</option>
+                        <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+                        <option value="banned" {{ request('status') == 'banned' ? 'selected' : '' }}>Banned</option>
                     </select>
                 </div>
-            </div>
 
-            <table class="w-full">
-                <thead class="bg-gray-100 border-b">
+                <div>
+                    <label for="sort_by" class="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+                    <select name="sort_by" id="sort_by"
+                            class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+                        <option value="created_at" {{ request('sort_by') == 'created_at' ? 'selected' : '' }}>Registration Date</option>
+                        <option value="name" {{ request('sort_by') == 'name' ? 'selected' : '' }}>Name</option>
+                        <option value="email" {{ request('sort_by') == 'email' ? 'selected' : '' }}>Email</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="sort_dir" class="block text-sm font-medium text-gray-700 mb-1">Sort Direction</label>
+                    <select name="sort_dir" id="sort_dir"
+                            class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+                        <option value="desc" {{ request('sort_dir') == 'desc' ? 'selected' : '' }}>Descending</option>
+                        <option value="asc" {{ request('sort_dir') == 'asc' ? 'selected' : '' }}>Ascending</option>
+                    </select>
+                </div>
+
+                <div class="md:col-span-4 flex justify-end space-x-3">
+                    @if(request()->hasAny(['search', 'status', 'sort_by', 'sort_dir']))
+                        <a href="{{ route('admin.users.index') }}" class="px-4 py-2 text-sm bg-gray-200 hover:bg-gray-300 rounded-md">
+                            Reset Filters
+                        </a>
+                    @endif
+
+                    <button type="submit" class="px-4 py-2 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-md">
+                        Apply Filters
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Users Table -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        <input type="checkbox" class="rounded">
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        User
                     </th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Name
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Registration Date
                     </th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Email
-                    </th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Goal
-                    </th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Status
                     </th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
                     </th>
                 </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                @php
-                    $users = [
-                        [
-                            'name' => 'Jean Dupont',
-                            'email' => 'jean.dupont@exemple.com',
-                            'goal' => 'Weight loss',
-                            'status' => 'Active'
-                        ],
-                        [
-                            'name' => 'Marie Leclerc',
-                            'email' => 'marie.leclerc@exemple.com',
-                            'goal' => 'Muscle gain',
-                            'status' => 'Active'
-                        ],
-                        [
-                            'name' => 'Paul Martin',
-                            'email' => 'paul.martin@exemple.com',
-                            'goal' => 'Endurance',
-                            'status' => 'Inactive'
-                        ]
-                    ]
-                @endphp
-
-                @foreach($users as $user)
+                <tbody class="divide-y divide-gray-200">
+                @forelse($users as $user)
                     <tr>
-                        <td class="px-4 py-3">
-                            <input type="checkbox" class="rounded">
-                        </td>
-                        <td class="px-4 py-3">
+                        <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                                <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                                    {{ substr($user['name'], 0, 2) }}
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full" src="{{ $user->profile_photo_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}" alt="{{ $user->name }}">
                                 </div>
-                                <div>
-                                    <div class="text-sm font-medium text-gray-900">
-                                        {{ $user['name'] }}
-                                    </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
+                                    <div class="text-sm text-gray-500">{{ $user->email }}</div>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-4 py-3 text-sm text-gray-500">
-                            {{ $user['email'] }}
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ $user->created_at->format('M d, Y') }}
                         </td>
-                        <td class="px-4 py-3 text-sm text-gray-500">
-                            {{ $user['goal'] }}
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @if($user->status === 'active')
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Active
+                                </span>
+                            @else
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    Banned
+                                    @if($user->banned_at)
+                                        <span class="ml-1 text-gray-500">({{ $user->banned_at->diffForHumans() }})</span>
+                                    @endif
+                                </span>
+                            @endif
                         </td>
-                        <td class="px-4 py-3">
-                        <span class="px-2 py-1 rounded-full text-xs font-medium
-                            {{ $user['status'] == 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                            {{ $user['status'] }}
-                        </span>
-                        </td>
-                        <td class="px-4 py-3 flex space-x-2">
-                            <button class="text-blue-600 hover:text-blue-900">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                </svg>
-                            </button>
-                            <button class="text-red-600 hover:text-red-900">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                @if(auth()->id() !== $user->id)
+                                    @if($user->status === 'active')
+                                        <form action="{{ route('admin.users.ban', $user) }}" method="POST" class="inline-block">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" onclick="return confirm('Are you sure you want to ban this user?')"
+                                                    class="text-yellow-600 hover:text-yellow-900">
+                                                Ban
+                                            </button>
+                                        </form>
+                                    @else
+                                        <form action="{{ route('admin.users.reinstate', $user) }}" method="POST" class="inline-block">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" onclick="return confirm('Are you sure you want to reinstate this user?')"
+                                                    class="text-green-600 hover:text-green-900">
+                                                Reinstate
+                                            </button>
+                                        </form>
+                                    @endif
+
+                                    <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')"
+                                                class="text-red-600 hover:text-red-900">
+                                            Delete
+                                        </button>
+                                    </form>
+                                @else
+                                    <span class="text-gray-400">(You)</span>
+                                @endif
+
+                                <a href="{{ route('admin.users.edit', $user) }}" class="text-blue-600 hover:text-blue-900">
+                                    Edit
+                                </a>
+                            </div>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                            No users found.
+                        </td>
+                    </tr>
+                @endforelse
                 </tbody>
             </table>
 
-            <div class="p-4 bg-gray-50 border-t flex justify-between items-center">
-            <span class="text-sm text-gray-600">
-                Showing 1-3 of 3 users
-            </span>
-                <div class="space-x-2">
-                    <button class="px-3 py-1 border rounded-lg hover:bg-gray-100">
-                        Previous
-                    </button>
-                    <button class="px-3 py-1 border rounded-lg hover:bg-gray-100">
-                        Next
-                    </button>
-                </div>
+            <div class="px-6 py-3">
+                {{ $users->links() }}
             </div>
         </div>
     </div>
