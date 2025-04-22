@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -21,6 +22,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'bio',
+        'weight',
+        'height',
+        'date_of_birth',
+        'gender',
+        'profile_photo_path',
         'status',
         'banned_at'
     ];
@@ -45,6 +52,9 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'date_of_birth' => 'date',
+            'weight' => 'float',
+            'height' => 'float'
         ];
     }
 
@@ -139,5 +149,57 @@ class User extends Authenticatable
             }
         }
         return true;
+    }
+
+    /**
+     * Get the URL for the user's profile photo.
+     */
+    public function getProfilePhotoUrlAttribute(): string
+    {
+        if ($this->profile_photo_path) {
+            return Storage::disk('public')->url($this->profile_photo_path);
+        }
+
+        return 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&color=7F9CF5&background=EBF4FF';
+    }
+
+    /**
+     * Calculate BMI (Body Mass Index) if height and weight are provided.
+     */
+    public function getBmiAttribute(): float|null
+    {
+        if ($this->height && $this->weight) {
+            $heightInMeters = $this->height / 100; // Convert cm to m
+            return round($this->weight / ($heightInMeters * $heightInMeters), 1);
+        }
+
+        return null;
+    }
+
+    /**
+     * Get BMI category.
+     */
+    public function getBmiCategoryAttribute(): string|null
+    {
+        $bmi = $this->bmi;
+
+        if (!$bmi) return null;
+
+        if ($bmi < 18.5) return 'Underweight';
+        if ($bmi < 25) return 'Normal weight';
+        if ($bmi < 30) return 'Overweight';
+        return 'Obese';
+    }
+
+    /**
+     * Get user's age based on date of birth.
+     */
+    public function getAgeAttribute(): int|null
+    {
+        if ($this->date_of_birth) {
+            return $this->date_of_birth->age;
+        }
+
+        return null;
     }
 }

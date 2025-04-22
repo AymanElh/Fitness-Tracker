@@ -17,10 +17,14 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <a href="{{ url('/login') }}" class="text-gray-300 hover:text-white transition duration-300 hidden md:inline">Login</a>
-                    <a href="{{ url('/register') }}" class="btn-primary py-2 px-6 rounded-full text-white font-medium flex items-center">
-                        Get Started <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
+                    @if(Auth::check())
+                        <a class="text-gray-300 hover:text-white transition duration-300 hidden md:inline" href="{{ route('logout') }}">Logout</a>
+                    @else
+                        <a href="{{ url('/login') }}" class="text-gray-300 hover:text-white transition duration-300 hidden md:inline">Login</a>
+                        <a href="{{ url('/register') }}" class="btn-primary py-2 px-6 rounded-full text-white font-medium flex items-center">
+                            Get Started <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    @endif
                 </div>
 
                 <div class="md:hidden">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SessionController extends Controller
 {
@@ -31,7 +32,12 @@ class SessionController extends Controller
         {
             $request->session()->regenerate();
 //            dd("user logged in");
-            return redirect()->route('dashboard');
+            $user = Auth::user();
+            if($user->hasRole('admin')) {
+                return redirect()->route('dashboard');
+            } else {
+                return redirect()->route('home');
+            }
         }
 
         return back()->withErrors(['email' => "These credentials doesn't match our records"]);

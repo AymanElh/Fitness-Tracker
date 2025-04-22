@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Pivot table for meal items (foods in a meal)
+        // Pivot table for meal items
         Schema::create('meal_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('meal_id')->constrained()->onDelete('cascade');
