@@ -57,7 +57,7 @@ class RoleController extends Controller
                 $role->givePermissionTo($request->permissions);
             }
 
-            return redirect()->route('roles.index')->with('success', "Role '{$role->name}' created successfully.");
+            return redirect()->route('admin.roles.index')->with('success', "Role '{$role->name}' created successfully.");
         } catch (\Exception $e) {
             Log::error("Error creating new role: " . $e->getMessage());
             return back()->withErrors(['error' => "Role creation failed: {$e->getMessage()}"]);
@@ -108,7 +108,7 @@ class RoleController extends Controller
             // Sync permissions
             $role->givePermissionTo($request->permissions ?? []);
 
-            return redirect()->route('roles.index')->with('success', "Role '{$role->name}' updated successfully");
+            return redirect()->route('admin.roles.index')->with('success', "Role '{$role->name}' updated successfully");
         } catch (\Exception $e) {
             Log::error("Error updating role: " . $e->getMessage());
             return back()->withErrors(['error' => "Error updating role: {$e->getMessage()}"]);
@@ -127,7 +127,7 @@ class RoleController extends Controller
 
             $roleName = $role->name;
             $role->delete();
-            return redirect()->route('roles.index')->with('success', "Role '{$roleName}' deleted successfully");
+            return redirect()->route('admin.roles.index')->with('success', "Role '{$roleName}' deleted successfully");
         } catch (\Exception $e) {
             Log::error("Error deleting role: " . $e->getMessage());
             return back()->withErrors(['error' => "Error deleting role: {$e->getMessage()}"]);

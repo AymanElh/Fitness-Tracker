@@ -362,7 +362,7 @@
 
     <!-- Create Permission Modal -->
     <x-modal id="createPermissionModal" title="Create New Permission" iconType="create">
-        <form action="{{ route('permissions.store') }}" method="post">
+        <form action="{{ route('admin.permissions.store') }}" method="post">
             @csrf
             <div class="mt-6 space-y-6">
                 <div>

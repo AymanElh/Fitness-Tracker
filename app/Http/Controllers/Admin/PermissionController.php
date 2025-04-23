@@ -49,7 +49,7 @@ class PermissionController extends Controller
                 'module' => $request->module,
                 'description' => $request->description
             ]);
-            return redirect()->route('permissions.index')->with('success', "Permission {$permission->name} created successfully");
+            return redirect()->route('admin.permissions.index')->with('success', "Permission {$permission->name} created successfully");
         } catch (Exception $e) {
             \Log::error("error creating permission: " . $e->getMessage());
             return back()->withInput()->withErrors(['error' => "Failed to create permission: {$e->getMessage()}"]);
@@ -79,7 +79,7 @@ class PermissionController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('permissions.index')
+        return redirect()->route('admin.permissions.index')
             ->with('success', 'Permission updated successfully.');
     }
 
@@ -92,7 +92,7 @@ class PermissionController extends Controller
 
         $permission->delete();
 
-        return redirect()->route('permissions.index')
+        return redirect()->route('admin.permissions.index')
             ->with('success', 'Permission deleted successfully.');
     }
 }
