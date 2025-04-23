@@ -80,6 +80,7 @@
                         type="email"
                         placeholder="you@example.com"
                         required
+                        value="{{ old('email') }}"
                         class="block w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg shadow-sm focus:outline-none transition-all duration-300 text-sm sm:text-base"
                     />
                     @error('email')

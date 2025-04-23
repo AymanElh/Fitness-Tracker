@@ -15,9 +15,7 @@ use App\Http\Controllers\FrontOffice\NutritionPlanController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('frontoffice.pages.home');
-})->name('home');
+Route::get('/', [\App\Http\Controllers\FrontOffice\HomeController::class, 'index'])->name('home');
 
 
 Route::get('/dashboard', function () {

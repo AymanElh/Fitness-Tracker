@@ -40,7 +40,7 @@ class SessionController extends Controller
             }
         }
 
-        return back()->withErrors(['email' => "These credentials doesn't match our records"]);
+        return back()->withErrors(['email' => "These credentials doesn't match our records"])->withInput();
     }
 
     public function logout()
