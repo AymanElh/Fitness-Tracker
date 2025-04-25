@@ -4,13 +4,13 @@
     <div class="container mx-auto px-4 py-6">
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-semibold text-gray-900">Create Role</h1>
-            <a href="{{ route('roles.index') }}" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
+            <a href="{{ route('admin.roles.index') }}" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
                 Back to Roles
             </a>
         </div>
 
         <div class="bg-white rounded-lg shadow-md p-6">
-            <form action="{{ route('roles.store') }}" method="POST">
+            <form action="{{ route('admin.roles.store') }}" method="POST">
                 @csrf
 
                 <div class="mb-4">

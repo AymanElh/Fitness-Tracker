@@ -25,7 +25,7 @@
                                         <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                                         </svg>
-                                        <a href="{{ route('roles.index') }}" class="ml-2 text-sm font-medium text-gray-500 hover:text-gray-700">Roles</a>
+                                        <a href="{{ route('admin.roles.index') }}" class="ml-2 text-sm font-medium text-gray-500 hover:text-gray-700">Roles</a>
                                     </div>
                                 </li>
                                 <li>
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <div class="mt-5 flex sm:mt-0 sm:ml-4">
-                        <a href="{{ route('roles.edit', $role) }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <a href="{{ route('admin.roles.edit', $role) }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                             </svg>
@@ -148,7 +148,7 @@
                             This role has {{ $role->permissions->count() }} assigned permissions.
                         </p>
                     </div>
-                    <a href="{{ route('roles.edit', $role) }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <a href="{{ route('admin.roles.edit', $role) }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Modify Permissions
                     </a>
                 </div>
@@ -207,7 +207,7 @@
                             Users currently assigned to the {{ $role->name }} role.
                         </p>
                     </div>
-                    <a href="{{ route('users.index') }}?role={{ $role->id }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <a href="{{ route('admin.users.index') }}?role={{ $role->id }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         View All Users
                     </a>
                 </div>
@@ -253,7 +253,7 @@
                             <h3 class="mt-2 text-sm font-medium text-gray-900">No users</h3>
                             <p class="mt-1 text-sm text-gray-500">No users are currently assigned to this role.</p>
                             <div class="mt-6">
-                                <a href="{{ route('users.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <a href="{{ route('admin.users.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                                     </svg>
@@ -281,7 +281,7 @@
                             onclick="closeDeleteConfirmModal()">
                         Cancel
                     </button>
-                    <form id="deleteRoleForm" method="POST" action="{{ route('roles.destroy', $role) }}" class="inline">
+                    <form id="deleteRoleForm" method="POST" action="{{ route('admin.roles.destroy', $role) }}" class="inline">
                         @csrf
                         @method('DELETE')
                         <button type="submit"

@@ -229,7 +229,7 @@
                                                     </svg>
                                                 </button>
 
-                                                <a href="{{ route('roles.show', $role->id) }}"
+                                                <a href="{{ route('admin.roles.show', $role->id) }}"
                                                    class="text-gray-600 hover:text-gray-900">
                                                     <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
                                                          viewBox="0 0 24 24" stroke="currentColor">
@@ -279,7 +279,7 @@
 
     <!-- Create Role Modal -->
     <x-modal id="createRoleModal" title="Create New Role" iconType="create">
-        <form action="{{ route('roles.store') }}" method="POST">
+        <form action="{{ route('admin.roles.store') }}" method="POST">
             @csrf
             <div class="space-y-6">
                 <div>
@@ -497,7 +497,7 @@
             }
 
             document.getElementById('deleteConfirmText').innerText = `Are you sure you want to delete the role "${roleName}"? This action cannot be undone.`;
-            {{--document.getElementById('deleteRoleForm').action = `{{ url('roles') }}/${roleId}`;--}}
+            document.getElementById('deleteRoleForm').action = `{{ url('admin/roles') }}/${roleId}`;
             document.getElementById('deleteConfirmModal').classList.remove('hidden');
         }
 
