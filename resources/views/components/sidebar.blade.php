@@ -77,9 +77,13 @@
                                 <p class="text-sm font-medium text-white">
                                     Admin
                                 </p>
-                                <a href="{{ route('logout') }}" class="text-xs font-medium text-gray-300 hover:text-gray-200 transition-colors duration-200">
-                                    Logout
-                                </a>
+                                <form method="POST" action="{{ route('logout') }}" class="block">
+                                    @csrf
+                                    <button type="submit" class="text-xs font-medium text-gray-300 hover:text-gray-200 transition-colors duration-200">
+                                        Logout
+                                    </button>
+                                </form>
+
                             </div>
                         </div>
                     </div>
