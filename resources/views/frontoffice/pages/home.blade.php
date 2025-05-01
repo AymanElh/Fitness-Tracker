@@ -1,8 +1,29 @@
-@extends('layouts.app')
+@extends('layouts.app', ['activePage' => 'home'])
 
 @section('title', 'FitTrack - Your Fitness Companion')
 
+@section('styles')
+    <style>
+        /* Profile dropdown transitions */
+        .profile-dropdown .transform {
+            transition-property: opacity, transform;
+            transition-duration: 150ms;
+        }
+
+        .profile-dropdown .scale-95 {
+            transform: scale(0.95);
+        }
+
+        .profile-dropdown .scale-100 {
+            transform: scale(1);
+        }
+    </style>
+@endsection
+
 @section('content')
+
+    <!-- Header section -->
+
     <!-- Hero Section -->
     <section class="relative min-h-screen flex items-center overflow-hidden">
         <div class="absolute inset-0 z-0">
@@ -47,10 +68,17 @@
                     </div>
 
                     <div class="flex flex-wrap gap-4">
-                        <a href="{{ url('/register') }}"
-                           class="btn-primary py-4 px-8 rounded-full text-white font-medium text-lg flex items-center shadow-lg hover:scale-105 transition duration-300">
-                            Get Started Free <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
+                        @guest
+                            <a href="{{ route('register') }}"
+                               class="btn-primary py-4 px-8 rounded-full text-white font-medium text-lg flex items-center shadow-lg hover:scale-105 transition duration-300">
+                                Get Started Free <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        @else
+                            <a href="{{ route('nutrition-plans.create') }}"
+                               class="btn-primary py-4 px-8 rounded-full text-white font-medium text-lg flex items-center shadow-lg hover:scale-105 transition duration-300">
+                                Create Nutrition Plan <i class="fas fa-utensils ml-2"></i>
+                            </a>
+                        @endguest
                         <a href="#features"
                            class="bg-white/10 hover:bg-white/20 py-4 px-8 rounded-full text-white font-medium text-lg flex items-center border border-white/10 transition duration-300 hover:scale-105">
                             <i class="fas fa-play-circle mr-2"></i> See how it works
@@ -58,11 +86,6 @@
                     </div>
                 </div>
 
-                <div class="hidden lg:block hero-animation">
-                    <img src="https://i.imgur.com/jSVIoMO.png"
-                         alt="FitTrack dashboard preview"
-                         class="w-full rounded-xl shadow-2xl hover:glow transition duration-500">
-                </div>
             </div>
         </div>
 
@@ -141,16 +164,18 @@
 
                 <!-- Exercise Category Pills -->
                 <div class="flex flex-wrap justify-center gap-3 mt-6">
-                    <span
-                        class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition">All</span>
-                    <span
-                        class="bg-blue-500/20 hover:bg-blue-500/30 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition">Strength</span>
-                    <span
-                        class="bg-green-500/20 hover:bg-green-500/30 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition">Cardio</span>
-                    <span
-                        class="bg-purple-500/20 hover:bg-purple-500/30 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition">Flexibility</span>
-                    <span
-                        class="bg-yellow-500/20 hover:bg-yellow-500/30 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition">Bodyweight</span>
+                    <div class="flex flex-wrap justify-center gap-3 mt-6">
+                     <span
+                         class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition">All</span>
+                        <span
+                            class="bg-blue-500/20 hover:bg-blue-500/30 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition">Strength</span>
+                        <span
+                            class="bg-green-500/20 hover:bg-green-500/30 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition">Cardio</span>
+                        <span
+                            class="bg-purple-500/20 hover:bg-purple-500/30 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition">Flexibility</span>
+                        <span
+                            class="bg-yellow-500/20 hover:bg-yellow-500/30 px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition">Bodyweight</span>
+                    </div>
                 </div>
             </div>
 
@@ -177,84 +202,85 @@
     </section>
 
     <!-- Testimonials Section -->
-    <section class="py-24 bg-slate-900 relative overflow-hidden">
-        <div class="container mx-auto px-4">
-            <div class="text-center max-w-2xl mx-auto mb-16 fade-in-element">
-                <span
-                    class="px-4 py-2 rounded-full bg-blue-500/10 text-blue-400 text-sm font-semibold inline-block mb-4">
-                    SUCCESS STORIES
-                </span>
-                <h2 class="text-3xl md:text-4xl font-bold mb-6">What Our <span
-                        class="gradient-text">Community Says</span></h2>
-                <p class="text-gray-400 text-lg">Real results from real people using FitTrack.</p>
-            </div>
+    {{--    <section class="py-24 bg-slate-900 relative overflow-hidden">--}}
+    {{--        <div class="container mx-auto px-4">--}}
+    {{--            <div class="text-center max-w-2xl mx-auto mb-16 fade-in-element">--}}
+    {{--                <span--}}
+    {{--                    class="px-4 py-2 rounded-full bg-blue-500/10 text-blue-400 text-sm font-semibold inline-block mb-4">--}}
+    {{--                    SUCCESS STORIES--}}
+    {{--                </span>--}}
+    {{--                <h2 class="text-3xl md:text-4xl font-bold mb-6">What Our <span--}}
+    {{--                        class="gradient-text">Community Says</span></h2>--}}
+    {{--                <p class="text-gray-400 text-lg">Real results from real people using FitTrack.</p>--}}
+    {{--            </div>--}}
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div
-                    class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-blue-500/20 transition duration-300">
-                    <div class="flex items-center mb-4">
-                        <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="User testimonial"
-                             class="w-12 h-12 rounded-full object-cover mr-4">
-                        <div>
-                            <h4 class="font-semibold text-white">Sarah J.</h4>
-                            <p class="text-gray-400 text-sm">Lost 15kg in 6 months</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 italic">"FitTrack helped me stay consistent with my workouts and meal
-                        planning. The nutrition database made counting macros so much easier!"</p>
-                    <div class="mt-4 text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
+    {{--            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">--}}
+    {{--                <div--}}
+    {{--                    class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-blue-500/20 transition duration-300">--}}
+    {{--                    <div class="flex items-center mb-4">--}}
+    {{--                        <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="User testimonial"--}}
+    {{--                             class="w-12 h-12 rounded-full object-cover mr-4">--}}
+    {{--                        <div>--}}
+    {{--                            <h4 class="font-semibold text-white">Sarah J.</h4>--}}
+    {{--                            <p class="text-gray-400 text-sm">Lost 15kg in 6 months</p>--}}
+    {{--                        </div>--}}
+    {{--                    </div>--}}
+    {{--                    <p class="text-gray-300 italic">"FitTrack helped me stay consistent with my workouts and meal--}}
+    {{--                        planning. The nutrition database made counting macros so much easier!"</p>--}}
+    {{--                    <div class="mt-4 text-yellow-400">--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                    </div>--}}
+    {{--                </div>--}}
 
-                <div
-                    class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-blue-500/20 transition duration-300">
-                    <div class="flex items-center mb-4">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User testimonial"
-                             class="w-12 h-12 rounded-full object-cover mr-4">
-                        <div>
-                            <h4 class="font-semibold text-white">Michael T.</h4>
-                            <p class="text-gray-400 text-sm">Gained 8kg muscle mass</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 italic">"The exercise library is fantastic! I've discovered so many new
-                        workouts that helped me break through plateaus in my training."</p>
-                    <div class="mt-4 text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                </div>
+    {{--                <div--}}
+    {{--                    class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-blue-500/20 transition duration-300">--}}
+    {{--                    <div class="flex items-center mb-4">--}}
+    {{--                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User testimonial"--}}
+    {{--                             class="w-12 h-12 rounded-full object-cover mr-4">--}}
+    {{--                        <div>--}}
+    {{--                            <h4 class="font-semibold text-white">Michael T.</h4>--}}
+    {{--                            <p class="text-gray-400 text-sm">Gained 8kg muscle mass</p>--}}
+    {{--                        </div>--}}
+    {{--                    </div>--}}
+    {{--                    <p class="text-gray-300 italic">"The exercise library is fantastic! I've discovered so many new--}}
+    {{--                        workouts that helped me break through plateaus in my training."</p>--}}
+    {{--                    <div class="mt-4 text-yellow-400">--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                        <i class="fas fa-star-half-alt"></i>--}}
+    {{--                    </div>--}}
+    {{--                </div>--}}
 
-                <div
-                    class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-blue-500/20 transition duration-300">
-                    <div class="flex items-center mb-4">
-                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="User testimonial"
-                             class="w-12 h-12 rounded-full object-cover mr-4">
-                        <div>
-                            <h4 class="font-semibold text-white">Emily R.</h4>
-                            <p class="text-gray-400 text-sm">Marathon runner</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 italic">"As a runner, nutrition is crucial. FitTrack's meal plans helped me
-                        fuel properly for my training and improved my race times significantly!"</p>
-                    <div class="mt-4 text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {{--                <div--}}
+    {{--                    class="bg-slate-800/50 p-6 rounded-xl border border-white/5 hover:border-blue-500/20 transition duration-300">--}}
+    {{--                    <div class="flex items-center mb-4">--}}
+    {{--                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="User testimonial"--}}
+    {{--                             class="w-12 h-12 rounded-full object-cover mr-4">--}}
+    {{--                        <div>--}}
+    {{--                            <h4 class="font-semibold text-white">Emily R.</h4>--}}
+    {{--                            <p class="text-gray-400 text-sm">Marathon runner</p>--}}
+    {{--                        </div>--}}
+    {{--                    </div>--}}
+    {{--                    <p class="text-gray-300 italic">"As a runner, nutrition is crucial. FitTrack's meal plans helped me--}}
+    {{--                        fuel properly for my training and improved my race times significantly!"</p>--}}
+    {{--                    <div class="mt-4 text-yellow-400">--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                        <i class="fas fa-star"></i>--}}
+    {{--                    </div>--}}
+    {{--                </div>--}}
+    {{--            </div>--}}
+    {{--        </div>--}}
+    {{--    </section>--}}
+
 
     <!-- Nutrition Section -->
     <section id="nutrition" class="py-24 bg-slate-800/50">
@@ -273,13 +299,13 @@
                         name="{{ $meal->name }}"
                         category="{{ $meal->category ?? 'Meal' }}"
                         description="{{ Str::limit($meal->description, 100) }}"
-                        calories="{{ $meal->getTotalCaloriesAttribute() ?? '0' }}"
+                        calories="{{ $meal->calories ?? '0' }}"
                     />
                 @endforeach
             </div>
 
             <div class="mt-12 text-center">
-                <a href="{{ url('/meals') }}"
+                <a href="{{ route('nutrition-plans.index') }}"
                    class="btn-primary py-3 px-8 rounded-full text-white font-medium mx-auto inline-flex items-center hover:scale-105 transition duration-300">
                     Browse All Meals <i class="fas fa-arrow-right ml-2"></i>
                 </a>
@@ -295,15 +321,6 @@
                     Database</h2>
                 <p class="text-gray-400 text-lg">Browse our extensive collection of foods with detailed nutritional
                     information.</p>
-
-                <!-- Quick Search Bar -->
-{{--                <div class="mt-8 max-w-md mx-auto">--}}
-{{--                    <div class="relative">--}}
-{{--                        <input type="text" placeholder="Search for foods..."--}}
-{{--                               class="bg-slate-800/80 w-full py-3 px-4 pl-10 rounded-full border border-white/10 focus:border-blue-500 outline-none text-white">--}}
-{{--                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -326,9 +343,9 @@
                         category="{{ $food->category->name ?? 'Food' }}"
                         categoryColor="{{ $categoryColor }}"
                         calories="{{ $nutrients['calories'] ?? $food->getCalories() ?? '0' }}"
-                        protein="{{ $nutrients['protein_g'] ?? '0' }}"
-                        carbs="{{ $nutrients['carbs_g']  ?? '0' }}"
-                        fats="{{ $nutrients['fat_g'] ?? '0' }}"
+                        protein="{{ $nutrients['protein'] ?? '0' }}"
+                        carbs="{{ $nutrients['carbs']  ?? '0' }}"
+                        fats="{{ $nutrients['fat'] ?? '0' }}"
                         servingSize="{{ $food->portion_default ?? '100g' }}"
                     />
                 @endforeach
@@ -352,10 +369,17 @@
                 <p class="text-gray-300 text-lg mb-8">Get access to our exercises, meals, and foods database to help
                     achieve your fitness goals.</p>
                 <div class="flex flex-wrap justify-center gap-4">
-                    <a href="{{ url('/register') }}"
-                       class="btn-primary py-4 px-10 rounded-full text-white font-medium text-lg flex items-center shadow-lg hover:scale-105 transition duration-300">
-                        Get Started Free <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
+                    @guest
+                        <a href="{{ route('register') }}"
+                           class="btn-primary py-4 px-10 rounded-full text-white font-medium text-lg flex items-center shadow-lg hover:scale-105 transition duration-300">
+                            Get Started Free <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    @else
+                        <a href="{{ route('nutrition-plans.create') }}"
+                           class="btn-primary py-4 px-10 rounded-full text-white font-medium text-lg flex items-center shadow-lg hover:scale-105 transition duration-300">
+                            Create Your Plan <i class="fas fa-utensils ml-2"></i>
+                        </a>
+                    @endguest
                     <a href="#features"
                        class="bg-white/10 hover:bg-white/20 py-4 px-10 rounded-full text-white font-medium text-lg flex items-center border border-white/10 transition duration-300 hover:scale-105">
                         Learn More

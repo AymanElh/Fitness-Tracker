@@ -175,6 +175,7 @@ function clearAllFilters() {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
+    console.log(document.getElementById("noResultsMessage"));
     if (!document.getElementById('noResultsMessage')) {
         const container = document.querySelector('.container');
         const noResultsMsg = document.createElement('p');

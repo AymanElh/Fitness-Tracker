@@ -1,6 +1,6 @@
 <footer class="bg-slate-900 border-t border-slate-800 py-16">
     <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div>
                 <a href="{{ url('/') }}" class="text-2xl font-bold flex items-center mb-4">
                     <span class="mr-2 text-3xl"><i class="fas fa-heartbeat text-blue-500"></i></span>
@@ -32,26 +32,9 @@
                 </h3>
                 <ul class="space-y-4">
                     <li><a href="#features" class="text-gray-400 hover:text-white transition duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Features</a></li>
-                    <li><a href="#exercises" class="text-gray-400 hover:text-white transition duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Exercises</a></li>
-                    <li><a href="#nutrition" class="text-gray-400 hover:text-white transition duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Nutrition</a></li>
-                    <li><a href="#testimonials" class="text-gray-400 hover:text-white transition duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Testimonials</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Pricing</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h3 class="text-lg font-semibold text-white mb-6 flex items-center">
-                    <span class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center mr-3">
-                        <i class="fas fa-book text-purple-400"></i>
-                    </span>
-                    Resources
-                </h3>
-                <ul class="space-y-4">
-                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-400"></i> Blog</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-400"></i> Workout Tips</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-400"></i> Nutrition Guides</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-400"></i> Success Stories</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white transition duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-400"></i> Video Tutorials</a></li>
+                    <li><a href="{{ route('exercises.index') }}" class="text-gray-400 hover:text-white transition duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Exercises</a></li>
+                    <li><a href="{{ route('foods.index') }}" class="text-gray-400 hover:text-white transition duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Nutrition</a></li>
+                    <li><a href="" class="text-gray-400 hover:text-white transition duration-300 flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Testimonials</a></li>
                 </ul>
             </div>
 
@@ -69,7 +52,7 @@
                     </li>
                     <li class="flex items-start">
                         <i class="fas fa-phone text-green-400 mt-1.5 mr-3"></i>
-                        <span class="text-gray-400">+1 (555) 123-4567</span>
+                        <span class="text-gray-400">+212 6 54 68 47 57</span>
                     </li>
                     <li class="flex items-start">
                         <i class="fas fa-map-marker-alt text-green-400 mt-1.5 mr-3"></i>
