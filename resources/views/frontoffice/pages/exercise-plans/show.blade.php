@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['activePage' => 'exercise-plans'])
 
 @section('title', $plan->name . ' - FitTrack')
 
