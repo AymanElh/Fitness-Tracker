@@ -28,7 +28,6 @@ class AuthService
     public function register(array $data): mixed
     {
         $user = $this->userRepository->create($data);
-//        event(new Registred($user));
 
         Auth::login($user);
         return $user;

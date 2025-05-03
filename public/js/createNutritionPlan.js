@@ -82,6 +82,14 @@ document.addEventListener("DOMContentLoaded", function () {
         container.appendChild(mealElement);
     }
 
+    function addFoodItem(dayIndex, mealType, container)  {
+        const foodElement = foodItemTemplate.content.cloneNode(true);
+        const foodCount = container.querySelectorAll('.food-item').length;
+        console.log(foodElement, container);
+        updateInputNames(foodElement, 'days[0][foods][0]', `days[${dayIndex}][foods][${foodCount}]`)
+        container.appendChild(foodElement);
+    }
+
     function addDay() {
         if (daysContainer.querySelector('p')) {
             daysContainer.innerHTML = "";
