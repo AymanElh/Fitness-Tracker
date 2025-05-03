@@ -15,12 +15,17 @@ class NutritionPlanController extends Controller
 {
     public function index(): View
     {
-        $nutritionPlans = NutritionPlan::where('user_id', auth()->id())
-            ->orWhere('is_public', true)
+        $myPlans = NutritionPlan::where('user_id', auth()->id())
             ->latest()
-            ->paginate(20);
+            ->paginate(9);
 
-        return view('frontoffice.pages.nutrition-plans.index', compact('nutritionPlans'));
+        // Get public plans from other users
+        $publicPlans = NutritionPlan::where('is_public', true)
+            ->where('user_id', '!=', auth()->id())
+            ->latest()
+            ->paginate(6);
+
+        return view('frontoffice.pages.nutrition-plans.index', compact('myPlans', 'publicPlans'));
     }
 
     public function create(): View

@@ -1,26 +1,22 @@
 @extends('layouts.app', ['activePage' => 'nutrition-plans'])
 
-@section('title', 'Nutrition Plans - FitTrack')
+@section('title', 'My Nutrition Plans - FitTrack')
 
 @section('content')
     <section class="pt-32 pb-16 bg-slate-900">
         <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
-                    <span class="gradient-text">Nutrition Plans</span> for Your Fitness Goals
-                </h1>
-                <p class="text-gray-400 max-w-2xl mx-auto">
-                    Browse custom nutrition plans or create your own to support your fitness journey.
-                </p>
-                <div class="mt-6">
-                    <a href="{{ route('nutrition-plans.create') }}" class="btn-primary py-2 px-6 rounded-lg text-white inline-flex items-center transition">
-                        <i class="fas fa-plus mr-2"></i> Create New Plan
-                    </a>
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-white mb-2">My Nutrition Plans</h1>
+                    <p class="text-gray-400">Create and manage your personalized meal plans</p>
                 </div>
+                <a href="{{ route('nutrition-plans.create') }}" class="btn-primary py-2 px-6 rounded-full text-white flex items-center">
+                    <i class="fas fa-plus mr-2"></i> Create New Plan
+                </a>
             </div>
 
-            <!-- Search & Filter -->
-            <div class="max-w-3xl mx-auto mb-10">
+            <!-- Search Bar -->
+            <div class="max-w-3xl mb-10">
                 <form method="GET" action="{{ route('nutrition-plans.index') }}" class="flex">
                     <input type="text" name="search" placeholder="Search plans..." value="{{ request('search') }}"
                            class="w-full bg-slate-800 border border-slate-700 rounded-l-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -30,56 +26,138 @@
                 </form>
             </div>
 
-            <!-- Plans Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @forelse ($nutritionPlans as $plan)
-                    <div class="card-gradient rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
-                        <div class="p-5">
-                            <h3 class="text-xl font-semibold text-white mb-2">{{ $plan->name }}</h3>
-                            <p class="text-gray-400 text-sm mb-3 line-clamp-2">{{ $plan->description ?? 'No description provided.' }}</p>
-
-                            <div class="flex items-center justify-between mb-4">
-                            <span class="text-gray-400 flex items-center">
-                                <i class="fas fa-calendar-day mr-2"></i>{{ $plan->duration_days }} days
-                            </span>
-                                <span class="text-gray-400 flex items-center">
-                                <i class="fas fa-fire mr-2"></i>{{ $plan->daily_average_calories ?? 'N/A' }} cal/day
-                            </span>
-                            </div>
-
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center">
-                                    <img src="{{ $plan->user->profile_photo_url }}" alt="{{ $plan->user->name }}" class="h-8 w-8 rounded-full mr-2">
-                                    <span class="text-sm text-gray-400">
-                                    {{ $plan->user_id === auth()->id() ? 'You' : $plan->user->name }}
-                                </span>
+            <!-- User's Plans -->
+            @if($myPlans->count() > 0)
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                    @foreach($myPlans as $plan)
+                        <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-blue-500/30 transition duration-300">
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xl font-bold text-white">{{ $plan->name }}</h3>
+                                    <span class="px-3 py-1 rounded-full text-xs {{ $plan->is_public ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400' }}">
+                                        {{ $plan->is_public ? 'Public' : 'Private' }}
+                                    </span>
                                 </div>
 
-                                <a href="{{ route('nutrition-plans.show', $plan) }}" class="text-blue-400 hover:underline flex items-center">
-                                    View Plan <i class="fas fa-chevron-right ml-1 text-xs"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                    <div class="col-span-full text-center py-12">
-                        <div class="bg-slate-800/50 rounded-lg p-8 max-w-xl mx-auto">
-                            <div class="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-utensils text-2xl text-gray-400"></i>
-                            </div>
-                            <h3 class="text-xl font-semibold text-white mb-2">No nutrition plans found</h3>
-                            <p class="text-gray-400 mb-6">
-                                {{ request('search') ? 'Try different search terms or create your first nutrition plan.' : 'Create your first nutrition plan to get started!' }}
-                            </p>
-                        </div>
-                    </div>
-                @endforelse
-            </div>
+                                <p class="text-gray-400 mb-6 line-clamp-2">{{ $plan->description ?: 'No description provided' }}</p>
 
-            <!-- Pagination -->
-            <div class="mt-12">
-                {{ $nutritionPlans->links('pagination::tailwind') }}
-            </div>
+                                <div class="flex items-center mb-6">
+                                    <div class="flex items-center mr-6">
+                                        <i class="fas fa-calendar-alt text-blue-400 mr-2"></i>
+                                        <span class="text-gray-300">{{ $plan->duration_days }} days</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-fire text-blue-400 mr-2"></i>
+                                        <span class="text-gray-300">{{ $plan->daily_average_calories ?? 'N/A' }} cal/day</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex space-x-3">
+                                    <a href="{{ route('nutrition-plans.show', $plan) }}" class="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 py-2 rounded-lg text-center transition">
+                                        <i class="fas fa-eye mr-2"></i> View
+                                    </a>
+                                    <a href="{{ route('nutrition-plans.edit', $plan) }}" class="flex-1 bg-white/10 hover:bg-white/20 text-white py-2 rounded-lg text-center transition">
+                                        <i class="fas fa-edit mr-2"></i> Edit
+                                    </a>
+                                    <button
+                                            onclick="confirmDelete('{{ $plan->id }}', '{{ $plan->name }}')"
+                                            class="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 py-2 rounded-lg text-center transition">
+                                        <i class="fas fa-trash-alt mr-2"></i> Delete
+                                    </button>
+
+                                    <form id="delete-form-{{ $plan->id }}" action="{{ route('nutrition-plans.destroy', $plan) }}" method="post" class="hidden">
+                                        @csrf
+                                        @method('delete')
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="bg-slate-800/50 rounded-lg p-8 text-center mb-16">
+                    <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-blue-500/20 text-blue-400 rounded-full">
+                        <i class="fas fa-utensils text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">No Nutrition Plans Yet</h3>
+                    <p class="text-gray-400 mb-6">Create your first nutrition plan to get started!</p>
+                    <a href="{{ route('nutrition-plans.create') }}" class="btn-primary py-3 px-8 rounded-full text-white inline-flex items-center">
+                        <i class="fas fa-plus mr-2"></i> Create New Plan
+                    </a>
+                </div>
+            @endif
+
+            <!-- Community Plans -->
+            @if($publicPlans->count() > 0)
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">Community Nutrition Plans</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @foreach($publicPlans as $plan)
+                            <div class="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-purple-500/30 transition duration-300">
+                                <div class="p-6">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <h3 class="text-xl font-bold text-white">{{ $plan->name }}</h3>
+                                        <span class="px-3 py-1 rounded-full text-xs bg-green-500/20 text-green-400">
+                                            Public
+                                        </span>
+                                    </div>
+
+                                    <p class="text-gray-400 mb-4 line-clamp-2">{{ $plan->description ?: 'No description provided' }}</p>
+
+                                    <div class="flex items-center mb-2">
+                                        <img src="{{ $plan->user->profile_photo_url }}"
+                                             alt="{{ $plan->user->name }}"
+                                             class="w-6 h-6 rounded-full mr-2">
+                                        <span class="text-gray-300 text-sm">Created by {{ $plan->user->name }}</span>
+                                    </div>
+
+                                    <div class="flex items-center mb-6">
+                                        <div class="flex items-center mr-6">
+                                            <i class="fas fa-calendar-alt text-purple-400 mr-2"></i>
+                                            <span class="text-gray-300">{{ $plan->duration_days }} days</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-fire text-purple-400 mr-2"></i>
+                                            <span class="text-gray-300">{{ $plan->daily_average_calories ?? 'N/A' }} cal/day</span>
+                                        </div>
+                                    </div>
+
+                                    <a href="{{ route('nutrition-plans.show', $plan) }}" class="w-full bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 py-2 rounded-lg text-center block transition">
+                                        <i class="fas fa-eye mr-2"></i> View Plan
+                                    </a>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            <!-- Pagination - if needed -->
+            @if($myPlans->hasPages() || $publicPlans->hasPages())
+                <div class="mt-8">
+                    @if($myPlans->hasPages())
+                        <div class="mb-4">
+                            {{ $myPlans->links('pagination::tailwind') }}
+                        </div>
+                    @endif
+
+                    @if($publicPlans->hasPages())
+                        <div>
+                            {{ $publicPlans->links('pagination::tailwind') }}
+                        </div>
+                    @endif
+                </div>
+            @endif
         </div>
     </section>
+@endsection
+
+@section('scripts')
+    <script>
+        function confirmDelete(planId, planName) {
+            if(confirm(`Are you sure to delete "${planName}"? This action cannot be undone`)) {
+                document.getElementById(`delete-form-${planId}`).submit();
+            }
+        }
+    </script>
 @endsection
