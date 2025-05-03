@@ -77,6 +77,18 @@ Route::middleware('auth')->group(function () {
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 
+    // Front office pages
+    Route::get('/exercises', [\App\Http\Controllers\FrontOffice\ExerciseController::class, 'index'])->name('exercises.index');
+    Route::get('/exercises/{exercise}', [\App\Http\Controllers\FrontOffice\ExerciseController::class, 'show'])->name('exercises.show');
+
+    Route::get('/meals', [\App\Http\Controllers\FrontOffice\MealsController::class, 'index'])->name('meals.index');
+    Route::get('/meals/{meal}', [\App\Http\Controllers\FrontOffice\MealsController::class, 'show'])->name('meals.show');
+
+    Route::get('/foods', [\App\Http\Controllers\FrontOffice\FoodsController::class, 'index'])->name('foods.index');
+    Route::get('/foods/{food}', [\App\Http\Controllers\FrontOffice\FoodsController::class, 'show'])->name('foods.show');
+
+
+
     // Exercise Plans routes
     Route::get('/exercise-plans', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'index'])->name('exercise-plans.index');
     Route::get('/exercise-plans/create', [App\Http\Controllers\FrontOffice\ExercisePlanController::class, 'create'])->name('exercise-plans.create');
@@ -106,17 +118,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
     Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
 });
-
-
-// Front office pages
-Route::get('/exercises', [\App\Http\Controllers\FrontOffice\ExerciseController::class, 'index'])->name('exercises.index');
-Route::get('/exercises/{exercise}', [\App\Http\Controllers\FrontOffice\ExerciseController::class, 'show'])->name('exercises.show');
-
-Route::get('/meals', [\App\Http\Controllers\FrontOffice\MealsController::class, 'index'])->name('meals.index');
-Route::get('/meals/{meal}', [\App\Http\Controllers\FrontOffice\MealsController::class, 'show'])->name('meals.show');
-
-Route::get('/foods', [\App\Http\Controllers\FrontOffice\FoodsController::class, 'index'])->name('foods.index');
-Route::get('/foods/{food}', [\App\Http\Controllers\FrontOffice\FoodsController::class, 'show'])->name('foods.show');
 
 
 

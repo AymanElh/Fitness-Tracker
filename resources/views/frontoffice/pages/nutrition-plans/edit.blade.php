@@ -1,6 +1,4 @@
-<!-- Create a new file: resources/views/frontoffice/pages/nutrition-plans/edit.blade.php -->
-
-@extends('layouts.app')
+@extends('layouts.app', ['activePage' => 'nutrition-plans'])
 
 @section('title', 'Edit Nutrition Plan - FitTrack')
 

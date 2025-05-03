@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['activePage' => 'nutrition-plans'])
 
 @section('title', 'Create nutrition plan - FitTrack')
 
