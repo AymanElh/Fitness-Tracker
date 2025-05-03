@@ -10,7 +10,8 @@
                     <h1 class="text-3xl font-bold text-white mb-2">My Nutrition Plans</h1>
                     <p class="text-gray-400">Create and manage your personalized meal plans</p>
                 </div>
-                <a href="{{ route('nutrition-plans.create') }}" class="btn-primary py-2 px-6 rounded-full text-white flex items-center">
+                <a href="{{ route('nutrition-plans.create') }}"
+                   class="btn-primary py-2 px-6 rounded-full text-white flex items-center">
                     <i class="fas fa-plus mr-2"></i> Create New Plan
                 </a>
             </div>
@@ -53,10 +54,12 @@
                                 </div>
 
                                 <div class="flex space-x-3">
-                                    <a href="{{ route('nutrition-plans.show', $plan) }}" class="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 py-2 rounded-lg text-center transition">
+                                    <a href="{{ route('nutrition-plans.show', $plan) }}"
+                                       class="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 py-2 rounded-lg text-center transition">
                                         <i class="fas fa-eye mr-2"></i> View
                                     </a>
-                                    <a href="{{ route('nutrition-plans.edit', $plan) }}" class="flex-1 bg-white/10 hover:bg-white/20 text-white py-2 rounded-lg text-center transition">
+                                    <a href="{{ route('nutrition-plans.edit', $plan) }}"
+                                       class="flex-1 bg-white/10 hover:bg-white/20 text-white py-2 rounded-lg text-center transition">
                                         <i class="fas fa-edit mr-2"></i> Edit
                                     </a>
                                     <button
@@ -65,7 +68,9 @@
                                         <i class="fas fa-trash-alt mr-2"></i> Delete
                                     </button>
 
-                                    <form id="delete-form-{{ $plan->id }}" action="{{ route('nutrition-plans.destroy', $plan) }}" method="post" class="hidden">
+                                    <form id="delete-form-{{ $plan->id }}"
+                                          action="{{ route('nutrition-plans.destroy', $plan) }}" method="post"
+                                          class="hidden">
                                         @csrf
                                         @method('delete')
                                     </form>
@@ -81,7 +86,8 @@
                     </div>
                     <h3 class="text-xl font-semibold text-white mb-2">No Nutrition Plans Yet</h3>
                     <p class="text-gray-400 mb-6">Create your first nutrition plan to get started!</p>
-                    <a href="{{ route('nutrition-plans.create') }}" class="btn-primary py-3 px-8 rounded-full text-white inline-flex items-center">
+                    <a href="{{ route('nutrition-plans.create') }}"
+                       class="btn-primary py-3 px-8 rounded-full text-white inline-flex items-center">
                         <i class="fas fa-plus mr-2"></i> Create New Plan
                     </a>
                 </div>
@@ -122,7 +128,8 @@
                                         </div>
                                     </div>
 
-                                    <a href="{{ route('nutrition-plans.show', $plan) }}" class="w-full bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 py-2 rounded-lg text-center block transition">
+                                    <a href="{{ route('nutrition-plans.show', $plan) }}"
+                                       class="w-full bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 py-2 rounded-lg text-center block transition">
                                         <i class="fas fa-eye mr-2"></i> View Plan
                                     </a>
                                 </div>
@@ -154,10 +161,37 @@
 
 @section('scripts')
     <script>
+        // Add this to your page's script section or include in a JS file
         function confirmDelete(planId, planName) {
-            if(confirm(`Are you sure to delete "${planName}"? This action cannot be undone`)) {
+            // Create modal backdrop
+            const backdrop = document.createElement('div');
+            backdrop.className = 'fixed inset-0 bg-slate-900/80 flex items-center justify-center z-50';
+            document.body.appendChild(backdrop);
+
+            // Create modal content
+            backdrop.innerHTML = `
+                <div class="bg-slate-800 border border-slate-700 rounded-lg p-6 max-w-md w-full mx-4 transform transition-all">
+                    <h3 class="text-xl font-bold text-white mb-2">Delete Plan</h3>
+                    <p class="text-gray-300 mb-6">Are you sure you want to delete "${planName}"? This action cannot be undone.</p>
+                    <div class="flex justify-end space-x-3">
+                        <button id="cancel-delete" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded">
+                            Cancel
+                        </button>
+                        <button id="confirm-delete" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+                `;
+
+            // Add event listeners
+            backdrop.querySelector('#cancel-delete').addEventListener('click', () => {
+                document.body.removeChild(backdrop);
+            });
+
+            backdrop.querySelector('#confirm-delete').addEventListener('click', () => {
                 document.getElementById(`delete-form-${planId}`).submit();
-            }
+            });
         }
     </script>
 @endsection
