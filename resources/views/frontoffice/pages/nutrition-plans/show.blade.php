@@ -184,8 +184,60 @@
                                                 <!-- Similar structure to breakfast -->
                                                 @if($item['type'] === 'meal')
                                                     <!-- Meal display -->
+                                                    <div class="bg-slate-700/30 rounded-lg p-4">
+                                                        <div class="flex items-start">
+                                                            <div class="bg-blue-500/20 p-2 rounded-full mr-4 mt-1">
+                                                                <i class="fas fa-utensils text-blue-400"></i>
+                                                            </div>
+                                                            <div class="flex-1">
+                                                                <h4 class="text-white font-medium">{{ $item['data']->meal->name }}</h4>
+                                                                <p class="text-gray-400 text-sm mt-1">{{ $item['data']->meal->description }}</p>
+
+                                                                @if($item['data']->notes)
+                                                                    <div
+                                                                        class="mt-2 bg-slate-700/50 p-2 rounded-md text-gray-300 text-sm">
+                                                                        <i class="fas fa-info-circle text-blue-400 mr-2"></i> {{ $item['data']->notes }}
+                                                                    </div>
+                                                                @endif
+
+                                                                <div class="flex flex-wrap gap-2 mt-3">
+                                                                <span
+                                                                    class="bg-green-500/20 text-green-400 px-2 py-1 rounded-full text-xs">
+                                                                    {{ $item['data']->meal->totalCalories() }} calories
+                                                                </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 @elseif($item['type'] === 'food')
                                                     <!-- Food display -->
+                                                    <div class="bg-slate-700/30 rounded-lg p-4">
+                                                        <div class="flex items-start">
+                                                            <div class="bg-green-500/20 p-2 rounded-full mr-4 mt-1">
+                                                                <i class="fas fa-apple-alt text-green-400"></i>
+                                                            </div>
+                                                            <div class="flex-1">
+                                                                <h4 class="text-white font-medium">{{ $item['data']->food->name }}</h4>
+                                                                <p class="text-gray-400 text-sm mt-1">
+                                                                    {{ $item['data']->quantity }} {{ $item['data']->quantity_unit }}
+                                                                </p>
+
+                                                                @if($item['data']->notes)
+                                                                    <div
+                                                                        class="mt-2 bg-slate-700/50 p-2 rounded-md text-gray-300 text-sm">
+                                                                        <i class="fas fa-info-circle text-blue-400 mr-2"></i> {{ $item['data']->notes }}
+                                                                    </div>
+                                                                @endif
+
+                                                                <div class="flex flex-wrap gap-2 mt-3">
+                                                                <span
+                                                                    class="bg-green-500/20 text-green-400 px-2 py-1 rounded-full text-xs">
+                                                                    {{ $item['data']->food->getCalories() * $item['data']->quantity }} calories
+                                                                </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 @endif
                                             @endforeach
                                         </div>
