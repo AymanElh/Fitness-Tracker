@@ -65,7 +65,7 @@
                     <!-- User Profile Dropdown -->
                     <div class="relative profile-dropdown">
                         <button id="profileDropdownButton" class="flex items-center space-x-2 focus:outline-none">
-                            <img src="{{ auth()->user()->profile_photo_url ?? 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&color=7F9CF5&background=EBF4FF' }}"
+                            <img src="{{ auth()->user()->profile_photo_path ? asset('storage/' . auth()->user()->profile_photo_path) : 'https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&color=7F9CF5&background=EBF4FF' }}"
                                  alt="{{ auth()->user()->name }}"
                                  class="h-10 w-10 rounded-full object-cover border-2 {{ $activePage === 'profile' ? 'border-blue-400' : 'border-blue-500' }}">
                             <span class="text-white hidden sm:inline">{{ auth()->user()->name }}</span>
