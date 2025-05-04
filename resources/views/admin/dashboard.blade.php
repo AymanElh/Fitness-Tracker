@@ -317,90 +317,11 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @vite('resources/js/charts/userRegistrationChart.js')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('userRegistrationChart').getContext('2d');
-
-            // User registration data from PHP
-            const labels = @json($userRegistrationData['labels']);
-            const data = @json($userRegistrationData['counts']);
-
-            const gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
-            gradientFill.addColorStop(0, 'rgba(79, 70, 229, 0.2)');
-            gradientFill.addColorStop(1, 'rgba(79, 70, 229, 0.0)');
-
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'New Registrations',
-                        data: data,
-                        borderColor: 'rgba(79, 70, 229, 1)',
-                        backgroundColor: gradientFill,
-                        tension: 0.3,
-                        fill: true,
-                        pointBackgroundColor: 'rgba(79, 70, 229, 1)',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(17, 24, 39, 0.9)',
-                            padding: 12,
-                            titleColor: '#fff',
-                            titleFont: {
-                                size: 14,
-                                weight: 'bold'
-                            },
-                            bodyColor: '#fff',
-                            bodyFont: {
-                                size: 13
-                            },
-                            borderColor: 'rgba(255, 255, 255, 0.1)',
-                            borderWidth: 1,
-                            displayColors: false
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                font: {
-                                    size: 11
-                                },
-                                color: '#9CA3AF'
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(243, 244, 246, 1)',
-                                drawBorder: false
-                            },
-                            ticks: {
-                                stepSize: 1,
-                                font: {
-                                    size: 11
-                                },
-                                color: '#9CA3AF'
-                            }
-                        }
-                    }
-                }
-            });
-        });
+        window.userChartData = {
+            labels: @json($userRegistrationData['labels']),
+            counts: @json($userRegistrationData['counts'])
+        }
     </script>
 @endsection

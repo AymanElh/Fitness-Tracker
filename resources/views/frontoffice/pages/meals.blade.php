@@ -91,9 +91,41 @@
                                 <h3 class="text-lg font-semibold text-white mb-2">{{ $meal->name }}</h3>
                                 <p class="text-gray-400 text-sm mb-3">{{ $meal->description }}</p>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-400 flex items-center">
-                                        <i class="fas fa-clock mr-2"></i>{{ $meal->duration }} mins
-                                    </span>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-gray-400 flex items-center">
+                                            @switch($meal->type)
+                                                @case('breakfast')
+                                                    <span
+                                                        class="px-2 py-1 rounded-full bg-yellow-500/20 text-yellow-400 text-xs flex items-center">
+                                                        <i class="fas fa-sun mr-1"></i> Breakfast
+                                                    </span>
+                                                    @break
+                                                @case('lunch')
+                                                    <span
+                                                        class="px-2 py-1 rounded-full bg-blue-500/20 text-blue-400 text-xs flex items-center">
+                                                        <i class="fas fa-cloud-sun mr-1"></i> Lunch
+                                                    </span>
+                                                    @break
+                                                @case('dinner')
+                                                    <span
+                                                        class="px-2 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs flex items-center">
+                                                        <i class="fas fa-moon mr-1"></i> Dinner
+                                                    </span>
+                                                    @break
+                                                @case('snack')
+                                                    <span
+                                                        class="px-2 py-1 rounded-full bg-green-500/20 text-green-400 text-xs flex items-center">
+                                                        <i class="fas fa-cookie mr-1"></i> Snack
+                                                    </span>
+                                                    @break
+                                                @default
+                                                    <span
+                                                        class="px-2 py-1 rounded-full bg-gray-500/20 text-gray-400 text-xs flex items-center">
+                                                        <i class="fas fa-utensils mr-1"></i> Meal
+                                                    </span>
+                                            @endswitch
+                                        </span>
+                                    </div>
                                     <a href="{{ route('meals.show', $meal) }}"
                                        class="text-blue-400 hover:underline flex items-center">
                                         Details <i class="fas fa-chevron-right ml-1 text-xs"></i>
@@ -104,7 +136,8 @@
                     @endforeach
                 </div>
 
-                <p id="noResultsMessage" class="text-center text-gray-400 py-8 hidden">No meals found matching your criteria.</p>
+                <p id="noResultsMessage" class="text-center text-gray-400 py-8 hidden">No meals found matching your
+                    criteria.</p>
 
                 <!-- Pagination -->
                 <div class="mt-12">

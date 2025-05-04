@@ -36,7 +36,7 @@ class NutritionPlanDay extends Model
         });
 
         $foodCalories = $this->foodItems->sum(function($item) {
-            return $item->food ? $item->quantity * $item->food->getCalories() : 0;
+            return $item->food ? $item->quantity * $item->food->calories : 0;
         });
 
         return $mealCalories + $foodCalories;

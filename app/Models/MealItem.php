@@ -35,9 +35,9 @@ class MealItem extends Model
     /**
      * Get the food for this meal item.
      */
-    public function food(): HasMany
+    public function food(): BelongsTo
     {
-        return $this->hasMany(Food::class, 'food_id');
+        return $this->belongsTo(Food::class, 'food_id');
     }
 
     /**

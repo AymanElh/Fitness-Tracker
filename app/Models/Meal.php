@@ -41,7 +41,19 @@ class Meal extends Model
     public function getTotalCaloriesAttribute(): float
     {
         return $this->items->sum(function ($item) {
-            return $item->nutrients['calories'] ?? 0;
+            $nutrients = $item->nutrients;
+
+            if (is_string($nutrients)) {
+                $decoded = json_decode($nutrients, true);
+
+                if (is_string($decoded)) {
+                    $nutrients = json_decode($decoded, true);
+                } else {
+                    $nutrients = $decoded;
+                }
+            }
+
+            return $nutrients['calories'] ?? 0;
         });
     }
 
@@ -51,7 +63,12 @@ class Meal extends Model
     public function getTotalProteinAttribute(): float
     {
         return $this->items->sum(function ($item) {
-            return $item->nutrients['protein_g'] ?? 0;
+            $nutrients = $item->nutrients;
+
+            if(is_string($nutrients)) {
+                $nutrients = json_decode($nutrients, true);
+            }
+            return $nutrients['protein'];
         });
     }
 
@@ -61,7 +78,12 @@ class Meal extends Model
     public function getTotalCarbsAttribute(): float
     {
         return $this->items->sum(function ($item) {
-            return $item->nutrients['carbs_g'] ?? 0;
+            $nutrients = $item->nutrients;
+
+            if(is_string($nutrients)) {
+                $nutrients = json_decode($nutrients, true);
+            }
+            return $nutrients['carbs'];
         });
     }
 
@@ -71,15 +93,12 @@ class Meal extends Model
     public function getTotalFatAttribute(): float
     {
         return $this->items->sum(function ($item) {
-            return $item->nutrients['fat_g'] ?? 0;
-        });
-    }
+            $nutrients = $item->nutrients;
 
-    // In your Meal model, add methods to calculate total nutrition
-    public function totalCalories()
-    {
-        return $this->items->sum(function($item) {
-            return $item->food ? $item->food->getCalories() * $item->quantity : 0;
+            if(is_string($nutrients)) {
+                $nutrients = json_decode($nutrients, true);
+            }
+            return $nutrients['fat'];
         });
     }
 }
