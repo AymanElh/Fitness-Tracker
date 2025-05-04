@@ -260,5 +260,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/createNutritionPlan.js') }}"></script>
+    @vite('resources/js/member/createNutritionPlan.js')
 @endsection

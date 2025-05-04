@@ -14,7 +14,13 @@ export default defineConfig({
                 'resources/js/charts/adminMealStatsChart.js',
                 'resources/js/admin/foods.js',
                 'resources/js/admin/foodItems.js',
-                'resources/js/admin/meals.js'
+                'resources/js/admin/meals.js',
+                'resources/js/member/createNutritionPlan.js',
+                'resources/js/member/exercises.js',
+                'resources/js/member/meals.js',
+                'resources/js/member/foods.js',
+                'resources/js/member/updateNutritionPlan.js',
+                'resources/js/member/header.js'
             ],
             refresh: true,
         }),

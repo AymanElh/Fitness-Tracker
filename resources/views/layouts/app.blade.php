@@ -125,7 +125,8 @@
         });
     });
 </script>
-<script src="{{ asset('js/header.js') }}"></script>
+
+@vite('resources/js/member/header.js')
 @yield('scripts')
 </body>
 </html>

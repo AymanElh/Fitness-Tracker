@@ -129,7 +129,7 @@
                                                                 <div class="flex flex-wrap gap-2 mt-3">
                                                                 <span
                                                                         class="bg-green-500/20 text-green-400 px-2 py-1 rounded-full text-xs">
-                                                                    {{ $item['data']->meal->totalCalories() }} calories
+                                                                    {{ $item['data']->meal->totalCalories }} calories
                                                                 </span>
                                                                 </div>
                                                             </div>
@@ -203,7 +203,7 @@
                                                                 <div class="flex flex-wrap gap-2 mt-3">
                                                                 <span
                                                                     class="bg-green-500/20 text-green-400 px-2 py-1 rounded-full text-xs">
-                                                                    {{ $item['data']->meal->totalCalories() }} calories
+                                                                    {{ $item['data']->meal->totalCalories }} calories
                                                                 </span>
                                                                 </div>
                                                             </div>
@@ -279,7 +279,7 @@
                                                                 <div class="flex flex-wrap gap-2 mt-3">
                                                                 <span
                                                                         class="bg-green-500/20 text-green-400 px-2 py-1 rounded-full text-xs">
-                                                                    {{ $item['data']->meal->totalCalories() }} calories
+                                                                    {{ $item['data']->meal->totalCalories }} calories
                                                                 </span>
                                                                 </div>
                                                             </div>
@@ -351,7 +351,7 @@
                                                                 <div class="flex flex-wrap gap-2 mt-3">
                                                                 <span
                                                                         class="bg-green-500/20 text-green-400 px-2 py-1 rounded-full text-xs">
-                                                                    {{ $item['data']->meal->totalCalories() }} calories
+                                                                    {{ $item['data']->meal->totalCalories }} calories
                                                                 </span>
                                                                 </div>
                                                             </div>

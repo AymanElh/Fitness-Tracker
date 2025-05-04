@@ -131,5 +131,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/exercises.js') }}"></script>
+    @vite('resources/js/member/exercises.js')
 @endsection

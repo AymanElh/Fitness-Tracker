@@ -11,7 +11,8 @@
                     Discover <span class="gradient-text">Foods</span> for Your Nutrition Goals
                 </h1>
                 <p class="text-gray-400 max-w-2xl mx-auto">
-                    Browse our extensive collection of foods with detailed nutritional information to make informed dietary choices.
+                    Browse our extensive collection of foods with detailed nutritional information to make informed
+                    dietary choices.
                 </p>
             </div>
         </div>
@@ -32,7 +33,8 @@
                 <div class="flex flex-wrap justify-center gap-3">
                     <!-- Category Filter -->
                     <div class="relative group">
-                        <select id="categoryFilter" class="filter-select appearance-none bg-slate-900 text-white border border-slate-700 rounded-full px-5 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
+                        <select id="categoryFilter"
+                                class="filter-select appearance-none bg-slate-900 text-white border border-slate-700 rounded-full px-5 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
                             <option value="">All Categories</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -57,16 +59,18 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach ($foods as $food)
-                    <div class="card-gradient rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 food-card"
-                         data-name="{{ strtolower($food->name) }}"
-                         data-description="{{ strtolower($food->description ?? '') }}"
-                         data-category="{{ $food->category_id ?? '' }}"
-                         data-brand="{{ strtolower($food->brand ?? '') }}">
+                    <div
+                        class="card-gradient rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 food-card"
+                        data-name="{{ strtolower($food->name) }}"
+                        data-description="{{ strtolower($food->description ?? '') }}"
+                        data-category="{{ $food->category_id ?? '' }}"
+                        data-brand="{{ strtolower($food->brand ?? '') }}">
                         <!-- Food Image -->
                         <div class="h-48 overflow-hidden">
-                            <img src="{{ $food->image_url ?? 'https://images.unsplash.com/photo-1592545287571-8afd34aada57?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }}"
-                                 alt="{{ $food->name }}"
-                                 class="w-full h-full object-cover transition duration-300 transform hover:scale-105">
+                            <img
+                                src="{{ $food->image_url ?? 'https://images.unsplash.com/photo-1592545287571-8afd34aada57?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }}"
+                                alt="{{ $food->name }}"
+                                class="w-full h-full object-cover transition duration-300 transform hover:scale-105">
                         </div>
                         <!-- Food Content -->
                         <div class="p-5">
@@ -76,7 +80,8 @@
                                 <span class="text-gray-400 flex items-center">
                                     <i class="fas fa-utensils mr-2"></i>{{ $food->portion_default }}
                                 </span>
-                                <a href="{{ route('foods.show', $food) }}" class="text-blue-400 hover:underline flex items-center">
+                                <a href="{{ route('foods.show', $food) }}"
+                                   class="text-blue-400 hover:underline flex items-center">
                                     Details <i class="fas fa-chevron-right ml-1 text-xs"></i>
                                 </a>
                             </div>
@@ -85,11 +90,12 @@
                 @endforeach
             </div>
 
-            <p id="noResultsMessage" class="text-center text-gray-400 py-8 hidden">No foods found matching your criteria.</p>
+            <p id="noResultsMessage" class="text-center text-gray-400 py-8 hidden">No foods found matching your
+                criteria.</p>
         </div>
     </section>
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/foods.js') }}"></script>
+    @vite('resources/js/member/foods.js')
 @endsection

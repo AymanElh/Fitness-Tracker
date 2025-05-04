@@ -32,7 +32,7 @@ class NutritionPlanDay extends Model
     public function getTotalCaloriesAttribute()
     {
         $mealCalories = $this->meals->sum(function($meal) {
-            return $meal->meal ? $meal->meal->totalCalories() : 0;
+            return $meal->meal ? $meal->meal->totalCalories : 0;
         });
 
         $foodCalories = $this->foodItems->sum(function($item) {
