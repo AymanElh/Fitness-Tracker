@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'exercise-plans'])
+@extends('layouts.app', ['activePage' => 'foods'])
 
 @section('title', $food->name . ' - FitTrack')
 
@@ -45,15 +45,15 @@
                             <div class="grid grid-cols-3 gap-4 mt-4">
                                 <div class="flex items-center">
                                     <div class="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
-                                    <span class="text-gray-300">Carbs</span>
+                                    <span class="text-gray-300">Carbs: {{ $food->carbs ?? 0 }}</span>
                                 </div>
                                 <div class="flex items-center">
                                     <div class="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
-                                    <span class="text-gray-300">Protein</span>
+                                    <span class="text-gray-300">Protein: {{ $food->protein ?? 0 }}</span>
                                 </div>
                                 <div class="flex items-center">
                                     <div class="w-4 h-4 rounded-full bg-yellow-500 mr-2"></div>
-                                    <span class="text-gray-300">Fat</span>
+                                    <span class="text-gray-300">Fat: {{ $food->fat ?? 0 }}</span>
                                 </div>
                             </div>
                         </div>
@@ -77,72 +77,8 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @vite('resources/js/charts/foodMacroChart.js')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Extract macronutrient values from nutrients json
-            const nutrients = @json($food->nutrients);
-
-            // Get values for the three main macronutrients
-            const carbs = parseFloat(nutrients.carbohydrates || nutrients.carbs || 0);
-            const protein = parseFloat(nutrients.protein || 0);
-            const fat = parseFloat(nutrients.fat || nutrients.fats || 0);
-
-            // Calculate calories from each macronutrient
-            const carbsCal = carbs * 4;  // 4 calories per gram of carbs
-            const proteinCal = protein * 4;  // 4 calories per gram of protein
-            const fatCal = fat * 9;  // 9 calories per gram of fat
-
-            // Total calories from macros
-            const totalCal = carbsCal + proteinCal + fatCal;
-
-            // Create the pie chart
-            const ctx = document.getElementById('macroChart').getContext('2d');
-            const macroChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['Carbs', 'Protein', 'Fat'],
-                    datasets: [{
-                        data: [carbs, protein, fat],
-                        backgroundColor: [
-                            'rgba(59, 130, 246, 0.8)',  // Blue for carbs
-                            'rgba(16, 185, 129, 0.8)',  // Green for protein
-                            'rgba(234, 179, 8, 0.8)'    // Yellow for fat
-                        ],
-                        borderColor: [
-                            'rgba(59, 130, 246, 1)',
-                            'rgba(16, 185, 129, 1)',
-                            'rgba(234, 179, 8, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false  // We'll use our custom legend below the chart
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const label = context.label || '';
-                                    const value = context.raw || 0;
-                                    const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
-                                    const percentage = Math.round((value / total) * 100);
-                                    return `${label}: ${value}g (${percentage}%)`;
-                                }
-                            },
-                            backgroundColor: 'rgba(17, 24, 39, 0.8)',
-                            titleColor: '#ffffff',
-                            bodyColor: '#ffffff',
-                            borderColor: '#374151',
-                            borderWidth: 1
-                        }
-                    }
-                }
-            });
-        });
+        window.foodNutrients = @json($food->nutrients);
     </script>
 @endsection
