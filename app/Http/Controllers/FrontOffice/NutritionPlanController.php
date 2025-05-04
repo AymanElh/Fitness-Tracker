@@ -13,15 +13,21 @@ use Illuminate\View\View;
 
 class NutritionPlanController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
         $myPlans = NutritionPlan::where('user_id', auth()->id())
+            ->when($request->filled('search'), function($query) use ($request) {
+                return $query->where('name', 'like', '%' . $request->search . '%');
+            })
             ->latest()
             ->paginate(9);
 
         // Get public plans from other users
         $publicPlans = NutritionPlan::where('is_public', true)
             ->where('user_id', '!=', auth()->id())
+            ->when($request->filled('search'), function ($query) use ($request) {
+                return $query->where('name', 'like', '%' . $request->search . '%');
+            })
             ->latest()
             ->paginate(6);
 

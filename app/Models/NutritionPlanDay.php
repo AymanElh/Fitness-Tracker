@@ -42,27 +42,27 @@ class NutritionPlanDay extends Model
         return $mealCalories + $foodCalories;
     }
 
-    public function getBreakfastItemsAttribute()
+    public function getBreakfastItemsAttribute(): \Illuminate\Support\Collection
     {
         return $this->combineItems('breakfast');
     }
 
-    public function getLunchItemsAttribute()
+    public function getLunchItemsAttribute(): \Illuminate\Support\Collection
     {
         return $this->combineItems('lunch');
     }
 
-    public function getDinnerItemsAttribute()
+    public function getDinnerItemsAttribute(): \Illuminate\Support\Collection
     {
         return $this->combineItems('dinner');
     }
 
-    public function getSnackItemsAttribute()
+    public function getSnackItemsAttribute(): \Illuminate\Support\Collection
     {
         return $this->combineItems('snack');
     }
 
-    protected function combineItems($mealType)
+    protected function combineItems($mealType): \Illuminate\Support\Collection
     {
         $items = collect();
 
