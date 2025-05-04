@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MealItem extends Model
 {
@@ -34,9 +35,9 @@ class MealItem extends Model
     /**
      * Get the food for this meal item.
      */
-    public function food(): BelongsTo
+    public function food(): HasMany
     {
-        return $this->belongsTo(Food::class, 'food_id');
+        return $this->hasMany(Food::class, 'food_id');
     }
 
     /**

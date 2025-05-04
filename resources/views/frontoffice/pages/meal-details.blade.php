@@ -27,6 +27,7 @@
                     <ul class="space-y-4">
                         <li class="flex items-center">
                             <i class="fas fa-fire text-orange-400 mr-3"></i>
+{{--                            {{ dd($meal->items) }}--}}
                             <span class="text-gray-300">Calories: {{ $meal->calories ?? 'N/A' }}</span>
                         </li>
                         <li class="flex items-center">
