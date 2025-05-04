@@ -12,7 +12,7 @@
                         <div class="bg-slate-800/50 rounded-xl p-6 shadow-lg">
                             <div class="flex flex-col items-center">
                                 <div class="w-32 h-32 mb-4 relative">
-                                    <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" class="w-full h-full rounded-full object-cover">
+                                    <img src="{{ asset('storage/' . $user->profile_photo_path) }}" alt="{{ $user->name }}" class="w-full h-full rounded-full object-cover">
                                 </div>
 
                                 <h2 class="text-2xl font-bold text-white mb-1">{{ $user->name }}</h2>

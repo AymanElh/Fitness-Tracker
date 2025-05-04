@@ -92,7 +92,7 @@ class MealController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-
+            \Log::error("Error creating meal: " . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create meal',
