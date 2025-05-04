@@ -79,7 +79,7 @@ class Meal extends Model
     public function totalCalories()
     {
         return $this->items->sum(function($item) {
-            return $item->food ? $item->food->getCalories() * $item->quantity : 0;
+            return $item->food ? $item->food->calories * $item->quantity : 0;
         });
     }
 }
