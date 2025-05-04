@@ -11,6 +11,7 @@ class Food extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'food_items';
+    protected $primaryKey = 'id';
     /**
      * The attributes that are mass assignable.
      * @var array
@@ -45,8 +46,23 @@ class Food extends Model
         return $this->belongsTo(FoodCategory::class, 'category_id', 'id');
     }
 
-    public function getCalories()
+    public function getCaloriesAttribute(): float
     {
         return $this->nutrients['calories'] ?? 0;
+    }
+
+    public function getProteinAttribute(): float
+    {
+        return $this->nutrients['protein_g'] ?? 0;
+    }
+
+    public function getCarbsAttribute(): float
+    {
+        return $this->nutrients['carbs_g'] ?? 0;
+    }
+
+    public function getFatAttribute(): float
+    {
+        return $this->nutrients['fat_g'] ?? 0;
     }
 }
