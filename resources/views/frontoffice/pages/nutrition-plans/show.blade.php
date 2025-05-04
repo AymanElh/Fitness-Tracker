@@ -13,7 +13,7 @@
 
                         <!-- Author Info -->
                         <div class="flex items-center mt-2 sm:mt-0">
-                            <img src="{{ $nutritionPlan->user->profile_photo_url }}"
+                            <img src="{{ $nutritionPlan->user->profile_photo_url ? asset('storage/' . $nutritionPlan->user->profile_photo_path) : "https://ui-avatars.com/api/?name='.urlencode(auth()->user()->name).'&color=7F9CF5&background=EBF4FF" }}"
                                  alt="{{ $nutritionPlan->user->name }}" class="h-10 w-10 rounded-full mr-3">
                             <div>
                                 <p class="text-sm text-gray-400">Created by</p>
