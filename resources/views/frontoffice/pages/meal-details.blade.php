@@ -16,7 +16,8 @@
                 <!-- Meal Details -->
                 <div>
                     <div class="mb-4">
-                        <a href="{{ route('meals.index') }}" class="text-blue-400 hover:text-blue-300 flex items-center w-fit">
+                        <a href="{{ route('meals.index') }}"
+                           class="text-blue-400 hover:text-blue-300 flex items-center w-fit">
                             <i class="fas fa-arrow-left mr-2"></i> Back to Meals
                         </a>
                     </div>
@@ -94,7 +95,7 @@
 @endsection
 
 @section('scripts')
-    @vite('resources/js/charts/   mealStatsChart.js')
+    @vite('resources/js/charts/mealStatsChart.js')
     <script>
         window.mealProtein = {{ $meal->totalProtein ?? 0 }};
         window.mealCarbs = {{ $meal->totalCarbs ?? 0 }};
