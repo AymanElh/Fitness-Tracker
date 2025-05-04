@@ -27,8 +27,7 @@
                     <ul class="space-y-4">
                         <li class="flex items-center">
                             <i class="fas fa-fire text-orange-400 mr-3"></i>
-{{--                            {{ dd($meal->items) }}--}}
-                            <span class="text-gray-300">Calories: {{ $meal->calories ?? 'N/A' }}</span>
+                            <span class="text-gray-300">Calories: {{ $meal->totalCalories ?? 'N/A' }}</span>
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-clock text-blue-400 mr-3"></i>
@@ -58,15 +57,15 @@
                             <div class="grid grid-cols-3 gap-4 mt-4">
                                 <div class="flex items-center">
                                     <div class="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
-                                    <span class="text-gray-300">Protein: {{ $meal->protein ?? '0' }}g</span>
+                                    <span class="text-gray-300">Protein: {{ $meal->totalProtein ?? '0' }}g</span>
                                 </div>
                                 <div class="flex items-center">
                                     <div class="w-4 h-4 rounded-full bg-yellow-500 mr-2"></div>
-                                    <span class="text-gray-300">Carbs: {{ $meal->carbs ?? '0' }}g</span>
+                                    <span class="text-gray-300">Carbs: {{ $meal->totalCarbs ?? '0' }}g</span>
                                 </div>
                                 <div class="flex items-center">
                                     <div class="w-4 h-4 rounded-full bg-red-500 mr-2"></div>
-                                    <span class="text-gray-300">Fat: {{ $meal->fat ?? '0' }}g</span>
+                                    <span class="text-gray-300">Fat: {{ $meal->totalFat ?? '0' }}g</span>
                                 </div>
                             </div>
                         </div>
