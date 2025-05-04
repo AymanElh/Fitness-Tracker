@@ -16,72 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-/**
- * Initialize macronutrient chart on the meal view page
- */
-function initMealChart() {
-    const chartCanvas = document.getElementById('macronutrientChart');
-    if (!chartCanvas) return; // Not on the meal view page
 
-    // Get nutrient data from the data attributes
-    const protein = parseFloat(chartCanvas.getAttribute('data-protein') || 0);
-    const carbs = parseFloat(chartCanvas.getAttribute('data-carbs') || 0);
-    const fat = parseFloat(chartCanvas.getAttribute('data-fat') || 0);
-
-    // Convert to calories
-    const proteinCal = protein * 4;  // 4 calories per gram of protein
-    const carbsCal = carbs * 4;      // 4 calories per gram of carbs
-    const fatCal = fat * 9;          // 9 calories per gram of fat
-
-    // Create chart
-    new Chart(chartCanvas.getContext('2d'), {
-        type: 'doughnut',
-        data: {
-            labels: ['Protein', 'Carbs', 'Fat'],
-            datasets: [{
-                data: [proteinCal, carbsCal, fatCal],
-                backgroundColor: [
-                    'rgba(59, 130, 246, 0.8)',  // Blue for protein
-                    'rgba(16, 185, 129, 0.8)',  // Green for carbs
-                    'rgba(245, 158, 11, 0.8)'   // Yellow for fat
-                ],
-                borderColor: [
-                    'rgba(59, 130, 246, 1)',
-                    'rgba(16, 185, 129, 1)',
-                    'rgba(245, 158, 11, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.raw || 0;
-                            const total = context.dataset.data.reduce((acc, curr) => acc + curr, 0);
-                            const percentage = Math.round((value / total) * 100);
-                            return `${label}: ${value} cal (${percentage}%)`;
-                        }
-                    }
-                },
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 20,
-                        boxWidth: 15,
-                        font: {
-                            size: 12
-                        }
-                    }
-                },
-            }
-        }
-    });
-}
 
 // open and close create meal modal
 function openCreateMealModal() {
@@ -145,7 +80,7 @@ function openEditMealModal(mealId) {
                 document.getElementById('edit_description').value = meal.description || '';
                 document.getElementById('edit_type').value = meal.type;
                 document.getElementById('edit_image_url').value = meal.image_url || '';
-                console.log(meal);
+
                 // Add food items to form
                 if (meal.items && meal.items.length > 0) {
                     document.getElementById('edit-no-food-items').style.display = 'none';

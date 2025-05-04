@@ -104,7 +104,7 @@
                             <!-- Exercise Image -->
                             <div class="h-48 overflow-hidden">
                                 <img
-                                    src="{{ $exercise->image_url ?? 'https://via.placeholder.com/400x300?text=No+Image' }}"
+                                    src="{{ $exercise->image_url ?? 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }}"
                                     alt="{{ $exercise->name }}"
                                     class="w-full h-full object-cover transition duration-300 transform hover:scale-105">
                             </div>

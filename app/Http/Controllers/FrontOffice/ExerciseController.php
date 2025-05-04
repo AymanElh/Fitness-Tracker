@@ -12,7 +12,7 @@ class ExerciseController extends Controller
      */
     public function index()
     {
-        $exercises = Exercise::paginate(9);
+        $exercises = Exercise::all();
         return view('frontoffice.pages.exercises', compact('exercises'));
     }
 

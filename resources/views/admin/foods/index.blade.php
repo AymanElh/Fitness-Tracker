@@ -467,7 +467,7 @@
     </x-modal>
 @endsection
 
-    <!-- JavaScript for modals and interactions -->
 @section('scripts')
-   <script src="{{ asset('js/admin/foods.js') }}"></script>
+    <script src="{{ asset('js/admin/foods.js') }}"></script>
+{{--    @vite('resources/js/admin/foods.js')--}}
 @endsection

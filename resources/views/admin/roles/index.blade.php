@@ -432,6 +432,10 @@
         </div>
     </x-modal>
 
+@endsection
+
+
+@section('scripts')
     <script>
         const roles = @json($roles);
         // Modal functions

@@ -61,9 +61,6 @@
                     <div style="width: 200px; height: 200px;">
                         <canvas
                             id="macronutrientChart"
-                            data-protein="{{ $meal->total_protein }}"
-                            data-carbs="{{ $meal->total_carbs }}"
-                            data-fat="{{ $meal->total_fat }}"
                         ></canvas>
                     </div>
                 </div>
@@ -201,6 +198,14 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ asset('js/admin/meals.js') }}"></script>
+
+    @vite('resources/js/charts/adminMealStatsChart.js')
+    <script>
+        window.mealNutrients = {
+            protein: {{ $meal->totalProtein ?? 0 }},
+            carbs: {{ $meal->totalCarbs ?? 0 }},
+            fat: {{ $meal->totalFat ?? 0 }}
+        };
+    </script>
+{{--    <script src="{{ asset('js/admin/meals.js') }}"></script>--}}
 @endsection

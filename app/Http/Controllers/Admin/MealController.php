@@ -282,4 +282,14 @@ class MealController extends Controller
             ], 500);
         }
     }
+
+    public function getMealData(Meal $meal): \Illuminate\Http\JsonResponse
+    {
+        $meal->load('items.food', 'creator');
+
+        return response()->json([
+            'success' => true,
+            'meal' => $meal
+        ]);
+    }
 }

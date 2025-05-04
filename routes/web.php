@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/meals/{meal}', [MealController::class, 'show'])->name('meals.show');
         Route::put('/meals/{meal}', [MealController::class, 'update'])->name('meals.update');
         Route::delete('/meals/{meal}', [MealController::class, 'destroy'])->name('meals.destroy');
+        Route::get('/meals/{meal}/data', [MealController::class, 'getMealData']);
 
         // Roles routes
         Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');

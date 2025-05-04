@@ -405,73 +405,9 @@
 @endsection
 
 @section('scripts')
-    <!-- Include Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    @vite('resources/js/charts/macroNutrientChart.js')
     <script>
-        // Initialize Chart
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get data from backend
-            const proteinG = {{ $food->nutrients['protein_g'] ?? 0 }};
-            const carbsG = {{ $food->nutrients['carbs_g'] ?? 0 }};
-            const fatG = {{ $food->nutrients['fat_g'] ?? 0 }};
-
-            // Convert grams to calories
-            const proteinCal = proteinG * 4;  // 4 calories per gram of protein
-            const carbsCal = carbsG * 4;      // 4 calories per gram of carbs
-            const fatCal = fatG * 9;          // 9 calories per gram of fat
-
-            // Create chart
-            const ctx = document.getElementById('macronutrientChart').getContext('2d');
-            const macronutrientChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Protein', 'Carbs', 'Fat'],
-                    datasets: [{
-                        data: [proteinCal, carbsCal, fatCal],
-                        backgroundColor: [
-                            'rgba(59, 130, 246, 0.8)', // Blue for protein
-                            'rgba(16, 185, 129, 0.8)', // Green for carbs
-                            'rgba(245, 158, 11, 0.8)'  // Yellow for fat
-                        ],
-                        borderColor: [
-                            'rgba(59, 130, 246, 1)',
-                            'rgba(16, 185, 129, 1)',
-                            'rgba(245, 158, 11, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const label = context.label || '';
-                                    const value = context.raw || 0;
-                                    const total = context.dataset.data.reduce((acc, curr) => acc + curr, 0);
-                                    const percentage = Math.round((value / total) * 100);
-                                    return `${label}: ${value} cal (${percentage}%)`;
-                                }
-                            }
-                        },
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                boxWidth: 15,
-                                font: {
-                                    size: 12
-                                }
-                            }
-                        },
-                    }
-                }
-            });
-        });
-
+        window.foodMacros = @json($food->nutrients);
         // Modal Functions
         function confirmDeleteFood(id, name) {
             document.getElementById('delete-food-text').textContent = `Are you sure you want to delete "${name}"? This action cannot be undone.`;
