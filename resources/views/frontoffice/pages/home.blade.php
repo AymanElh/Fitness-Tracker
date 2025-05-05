@@ -299,7 +299,7 @@
                         name="{{ $meal->name }}"
                         category="{{ $meal->category ?? 'Meal' }}"
                         description="{{ Str::limit($meal->description, 100) }}"
-                        calories="{{ $meal->calories ?? '0' }}"
+                        calories="{{ $meal->totalCalories ?? '0' }}"
                     />
                 @endforeach
             </div>
@@ -342,10 +342,10 @@
                         name="{{ $food->name }}"
                         category="{{ $food->category->name ?? 'Food' }}"
                         categoryColor="{{ $categoryColor }}"
-                        calories="{{ $nutrients['calories'] ?? $food->getCalories() ?? '0' }}"
-                        protein="{{ $nutrients['protein'] ?? '0' }}"
-                        carbs="{{ $nutrients['carbs']  ?? '0' }}"
-                        fats="{{ $nutrients['fat'] ?? '0' }}"
+                        calories="{{ $food->calories ?? '0' }}"
+                        protein="{{ $food->calories ?? '0' }}"
+                        carbs="{{ $food->carbs  ?? '0' }}"
+                        fats="{{ $food->fat ?? '0' }}"
                         servingSize="{{ $food->portion_default ?? '100g' }}"
                     />
                 @endforeach
