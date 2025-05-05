@@ -104,9 +104,16 @@ class MealController extends Controller
     /**
      * Display the specified meal.
      */
-    public function show(Meal $meal)
+    public function show(Request $request, Meal $meal)
     {
         $meal->load('items.food', 'creator');
+
+        if($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'meal' => $meal
+            ]);
+        }
 
         $relatedMeals = Meal::where('type', $meal->type)
             ->where('id', '!=', $meal->id)
@@ -283,13 +290,4 @@ class MealController extends Controller
         }
     }
 
-    public function getMealData(Meal $meal): \Illuminate\Http\JsonResponse
-    {
-        $meal->load('items.food', 'creator');
-
-        return response()->json([
-            'success' => true,
-            'meal' => $meal
-        ]);
-    }
 }
