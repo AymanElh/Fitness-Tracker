@@ -63,7 +63,7 @@
 
                         <div class="mb-6">
                             <label class="flex items-center">
-                                <input type="checkbox" name="is_public" class="form-checkbox bg-slate-700 border-slate-600 rounded text-blue-500 focus:ring-blue-500">
+                                <input type="checkbox" name="is_public" value="1" class="form-checkbox bg-slate-700 border-slate-600 rounded text-blue-500 focus:ring-blue-500">
                                 <span class="ml-2 text-gray-300">Make this plan public (share with community)</span>
                             </label>
                             @error('is_public')

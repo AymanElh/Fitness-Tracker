@@ -70,7 +70,7 @@
 
                             <div class="mb-6">
                                 <label class="flex items-center">
-                                    <input type="checkbox" name="is_public" {{ $plan->is_public ? 'checked' : '' }}
+                                    <input type="checkbox" value="1" name="is_public" {{ $plan->is_public ? 'checked' : '' }}
                                     class="form-checkbox bg-slate-700 border-slate-600 rounded text-blue-500 focus:ring-blue-500">
                                     <span class="ml-2 text-gray-300">Make this plan public</span>
                                 </label>

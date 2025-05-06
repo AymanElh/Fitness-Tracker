@@ -44,6 +44,7 @@ class ExercisePlanController extends Controller
 
     public function store(Request $request)
     {
+//        dd($request->all());
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -54,7 +55,7 @@ class ExercisePlanController extends Controller
 
         $validated['user_id'] = Auth::id();
         $validated['is_public'] = $request->has('is_public');
-
+//        dd($validated);
         $plan = ExercisePlan::create($validated);
 
         return redirect()->route('exercise-plans.edit', $plan)

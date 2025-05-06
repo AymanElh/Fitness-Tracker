@@ -17,7 +17,8 @@ class ExercisePlan extends Model
         'name',
         'description',
         'level',
-        'duration_weeks'
+        'duration_weeks',
+        'is_public'
     ];
 
     /**
