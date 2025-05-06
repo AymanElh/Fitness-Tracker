@@ -1,13 +1,20 @@
+/**
+ * Meal Management System
+ * Handles CRUD operations and UI interactions for meals
+ */
+
+// Global variables
 let csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 let targetFoodContainer = null;
 let selectedFood = null;
 let currentlyEditingMeal = null;
 
+/**
+ * Initialize all event listeners and components
+ */
 document.addEventListener('DOMContentLoaded', function () {
+    // Set up search functionality
     startSearchFoods();
-
-    // Initialize chart on meal view page
-    initMealChart();
 
     // Initialize delete form handler
     const deleteMealForm = document.getElementById('deleteMealForm');
@@ -16,9 +23,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+/***********************************
+ * Modal Management Functions
+ ***********************************/
 
-
-// open and close create meal modal
+/**
+ * Create meal modal functions
+ */
 function openCreateMealModal() {
     const modal = document.getElementById("createMealModal");
     if (!modal) return;
@@ -34,15 +45,23 @@ function closeCreateMealModal() {
     document.getElementById("createMealModal").classList.add("hidden");
 }
 
-// open and close edit meal modal
+/**
+ * Edit meal modal functions
+ */
 function openEditMealModal(mealId) {
     try {
+        console.log("Opening edit modal for meal ID:", mealId);
+        console.log("Type of mealId:", typeof mealId);
+
         currentlyEditingMeal = mealId;
 
         // Show loading in the modal
         const modal = document.getElementById('editMealModal');
         const form = document.getElementById('editMealForm');
-        if (!modal || !form) return;
+        if (!modal || !form) {
+            console.error("Missing modal or form elements");
+            return;
+        }
 
         // Reset and prepare form
         form.reset();
@@ -59,16 +78,24 @@ function openEditMealModal(mealId) {
         // Fetch meal data
         fetch(`/admin/meals/${mealId}`, {
             headers: {
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             }
         })
             .then(response => {
+                console.log("Response status:", response.status);
+
                 if (!response.ok) {
-                    throw new Error('Failed to fetch meal data');
+                    return response.text().then(text => {
+                        console.error("Error response body:", text);
+                        throw new Error(`Failed to fetch meal data: ${response.status}`);
+                    });
                 }
                 return response.json();
             })
             .then(data => {
+                console.log("Success! Meal data:", data);
+
                 if (!data.success) {
                     throw new Error(data.message || 'Failed to fetch meal data');
                 }
@@ -111,7 +138,9 @@ function closeEditMealModal() {
     currentlyEditingMeal = null;
 }
 
-// open and close food search modal
+/**
+ * Food search modal functions
+ */
 function addFoodItem() {
     targetFoodContainer = 'create';
     openFoodSearchModal();
@@ -141,7 +170,39 @@ function closeFoodSearchModal() {
     document.getElementById("foodSearchModal").classList.add("hidden");
 }
 
-// Search food Item
+/**
+ * Delete meal modal functions
+ */
+function confirmDeleteMeal(id, name) {
+    const modal = document.getElementById('deleteMealModal');
+    if (!modal) return;
+
+    document.getElementById('delete-meal-text').textContent = `Are you sure you want to delete "${name}"? This action cannot be undone.`;
+
+    // Set form action
+    const form = document.getElementById('deleteMealForm');
+    if (form) {
+        form.action = `/admin/meals/${id}`;
+    }
+
+    // Show modal
+    modal.classList.remove('hidden');
+}
+
+function closeDeleteMealModal() {
+    const modal = document.getElementById('deleteMealModal');
+    if (!modal) return;
+
+    modal.classList.add('hidden');
+}
+
+/***********************************
+ * Food Search & Selection Functions
+ ***********************************/
+
+/**
+ * Initialize food search functionality
+ */
 function startSearchFoods() {
     const searchInput = document.getElementById("food-search-input");
     if (!searchInput) return;
@@ -153,7 +214,6 @@ function startSearchFoods() {
         clearTimeout(searchTimeout);
 
         const key = this.value.trim();
-        console.log(key);
         if (key.length < 2) {
             document.getElementById("food-search-results").innerHTML = `
                 <div class="text-center text-gray-500 py-4">
@@ -169,6 +229,9 @@ function startSearchFoods() {
     });
 }
 
+/**
+ * Search foods by keyword
+ */
 function searchFoods(key) {
     try {
         const resultContainer = document.getElementById("food-search-results");
@@ -184,10 +247,11 @@ function searchFoods(key) {
         `;
 
         fetch(`/admin/meals/search-foods?search=${encodeURIComponent(key)}`, {
-            method: 'get',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             }
         })
             .then(response => {
@@ -198,65 +262,68 @@ function searchFoods(key) {
             })
             .then(data => {
                 if (!data.success) {
-                    throw new Error("Failed to search foods" || data.message);
+                    throw new Error(data.message || "Failed to search foods");
                 }
 
                 if (data.foods.length === 0) {
                     resultContainer.innerHTML = `
-                        <div class="text-center text-gray-500 py-4">
-                            No foods found matching "${key}"
-                        </div>
-                    `;
+                    <div class="text-center text-gray-500 py-4">
+                        No foods found matching "${key}"
+                    </div>
+                `;
                     return;
                 }
 
                 let html = `<div class="grid grid-cols-1 gap-2">`;
                 data.foods.forEach(food => {
                     html += `
-                        <div class="border rounded-lg p-3 hover:bg-gray-50 cursor-pointer flex items-center" onclick="selectFood(${JSON.stringify(food).replace(/"/g, '&quot;')})">
+                    <div class="border rounded-lg p-3 hover:bg-gray-50 cursor-pointer flex items-center"
+                         onclick='selectFood(${JSON.stringify(food).replace(/"/g, '&quot;')})'>
                         ${food.image_url ?
                         `<img src="${food.image_url}" alt="${food.name}" class="h-10 w-10 rounded-full object-cover">` :
                         `<div class="h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
-                            <svg class="h-6 w-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                            </svg>
-                        </div>`
+                                <svg class="h-6 w-6 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                                </svg>
+                            </div>`
                     }
-                    <div class="ml-3 flex-1">
-                        <div class="flex justify-between">
-                            <h3 class="text-sm font-medium text-gray-900">${food.name}</h3>
-                            <span class="text-sm text-gray-600">${food.nutrients.calories || 0} cal</span>
-                        </div>
-                        <div class="text-xs text-gray-500">
-                            <span>P: ${food.nutrients.protein_g || 0}g</span>
-                            <span class="mx-2">C: ${food.nutrients.carbs_g || 0}g</span>
-                            <span>F: ${food.nutrients.fat_g || 0}g</span>
+                        <div class="ml-3 flex-1">
+                            <div class="flex justify-between">
+                                <h3 class="text-sm font-medium text-gray-900">${food.name}</h3>
+                                <span class="text-sm text-gray-600">${food.nutrients.calories || 0} cal</span>
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                <span>P: ${food.nutrients.protein_g || 0}g</span>
+                                <span class="mx-2">C: ${food.nutrients.carbs_g || 0}g</span>
+                                <span>F: ${food.nutrients.fat_g || 0}g</span>
+                            </div>
                         </div>
                     </div>
-                    </div>
-                    `;
+                `;
                 });
 
                 html += '</div>';
                 resultContainer.innerHTML = html;
             })
             .catch(error => {
-                console.error("Error search foods: ", error);
+                console.error("Error searching foods: ", error);
                 resultContainer.innerHTML = `
-                    <div class="text-center text-red-500 py-4">
-                        Error searching foods. Please try again.
-                    </div>
-                `;
+                <div class="text-center text-red-500 py-4">
+                    Error searching foods. Please try again.
+                </div>
+            `;
             });
-
     } catch (error) {
-        console.error("Error search foods: ", error.message);
+        console.error("Error searching foods: ", error.message);
     }
 }
 
+/**
+ * Select a food item from search results
+ */
 function selectFood(food) {
     selectedFood = food;
-    // console.log(food);
+
     // Show quantity section
     document.getElementById('food-quantity-section').classList.remove('hidden');
     document.getElementById('add-selected-food-btn').classList.remove('hidden');
@@ -314,6 +381,13 @@ function addSelectedFood() {
     closeFoodSearchModal();
 }
 
+/***********************************
+ * UI Manipulation Functions
+ ***********************************/
+
+/**
+ * Add a food item to the UI
+ */
 function addFoodItemToUI(item, containerId, isEdit = false, itemId = null) {
     const container = document.getElementById(containerId);
 
@@ -393,259 +467,23 @@ function removeFoodItem(itemId) {
  */
 function reindexFoodItems() {
     // Reindex create form
-    const createContainer = document.getElementById('food-items-container');
-    if (createContainer) {
-        Array.from(createContainer.children).forEach((item, index) => {
-            const inputs = item.querySelectorAll('input[name^="food_items"]');
-            inputs.forEach(input => {
-                const name = input.name;
-                const newName = name.replace(/food_items\[\d+\]/, `food_items[${index}]`);
-                input.name = newName;
-            });
-        });
-    }
-
+    reindexContainer('food-items-container');
     // Reindex edit form
-    const editContainer = document.getElementById('edit-food-items-container');
-    if (editContainer) {
-        Array.from(editContainer.children).forEach((item, index) => {
-            const inputs = item.querySelectorAll('input[name^="food_items"]');
-            inputs.forEach(input => {
-                const name = input.name;
-                const newName = name.replace(/food_items\[\d+\]/, `food_items[${index}]`);
-                input.name = newName;
-            });
+    reindexContainer('edit-food-items-container');
+}
+
+function reindexContainer(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    Array.from(container.children).forEach((item, index) => {
+        const inputs = item.querySelectorAll('input[name^="food_items"]');
+        inputs.forEach(input => {
+            const name = input.name;
+            const newName = name.replace(/food_items\[\d+\]/, `food_items[${index}]`);
+            input.name = newName;
         });
-    }
-}
-
-/**
- * Submit the create meal form
- */
-function submitCreateMealForm() {
-    try {
-        const form = document.getElementById('createMealForm');
-        const formData = new FormData(form);
-
-        // Validate that there's at least one food item
-        const container = document.getElementById('food-items-container');
-        if (container.children.length === 0) {
-            showNotification('Please add at least one food item to the meal', 'error');
-            return;
-        }
-
-        // Disable submit button
-        const submitButton = document.querySelector('#createMealModal button[type="button"]');
-        if (submitButton) {
-            submitButton.disabled = true;
-            submitButton.textContent = 'Creating...';
-        }
-
-        // Clear previous error messages
-        clearFormErrors(form);
-
-        fetch(form.action, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrf,
-                'Accept': 'application/json'
-            },
-            body: formData
-        })
-            .then(response => response.json())
-            .then(result => {
-                if (!result.success) {
-                    if (result.errors) {
-                        displayValidationErrors(result.errors);
-                    } else {
-                        showNotification(result.message || 'An error occurred while creating the meal', 'error');
-                    }
-                    return;
-                }
-
-                // Success
-                showNotification(result.message || 'Meal created successfully');
-
-                // Add the new meal to the table or reload the page
-                if (result.meal) {
-                    addMealRow(result.meal);
-                } else {
-                    window.location.reload();
-                }
-
-                // Close modal
-                closeCreateMealModal();
-            })
-            .catch(error => {
-                console.error('Error creating meal:', error);
-                showNotification('An error occurred while creating the meal', 'error');
-            })
-            .finally(() => {
-                // Re-enable submit button
-                const submitButton = document.querySelector('#createMealModal button[type="button"]');
-                if (submitButton) {
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Create Meal';
-                }
-            });
-    } catch (error) {
-        console.error('Error creating meal:', error);
-        showNotification('An error occurred while creating the meal', 'error');
-    }
-}
-
-/**
- * Submit the edit meal form
- */
-function submitEditMealForm() {
-    try {
-        const form = document.getElementById('editMealForm');
-        const formData = new FormData(form);
-
-        // Validate that there's at least one food item
-        const container = document.getElementById('edit-food-items-container');
-        if (container.children.length === 0) {
-            showNotification('Please add at least one food item to the meal', 'error');
-            return;
-        }
-
-        // Disable submit button
-        const submitButton = document.querySelector('#editMealModal button[type="button"]');
-        if (submitButton) {
-            submitButton.disabled = true;
-            submitButton.textContent = 'Updating...';
-        }
-
-        // Clear previous error messages
-        clearFormErrors(form);
-
-        fetch(form.action, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrf,
-                'Accept': 'application/json',
-                'X-HTTP-Method-Override': 'PUT'
-            },
-            body: formData
-        })
-            .then(response => response.json())
-            .then(result => {
-                if (!result.success) {
-                    if (result.errors) {
-                        displayValidationErrors(result.errors);
-                    } else {
-                        showNotification(result.message || 'An error occurred while updating the meal', 'error');
-                    }
-                    return;
-                }
-
-                // Success
-                showNotification(result.message || 'Meal updated successfully');
-
-                // Update the meal row or reload the page
-                if (result.meal) {
-                    updateMealRow(result.meal);
-                } else {
-                    window.location.reload();
-                }
-
-                // Close modal
-                closeEditMealModal();
-            })
-            .catch(error => {
-                console.error('Error updating meal:', error);
-                showNotification('An error occurred while updating the meal', 'error');
-            })
-            .finally(() => {
-                // Re-enable submit button
-                const submitButton = document.querySelector('#editMealModal button[type="button"]');
-                if (submitButton) {
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Update Meal';
-                }
-            });
-    } catch (error) {
-        console.error('Error updating meal:', error);
-        showNotification('An error occurred while updating the meal', 'error');
-    }
-}
-
-/**
- * Confirm meal deletion
- */
-function confirmDeleteMeal(id, name) {
-    const modal = document.getElementById('deleteMealModal');
-    if (!modal) return;
-
-    document.getElementById('delete-meal-text').textContent = `Are you sure you want to delete "${name}"? This action cannot be undone.`;
-
-    // Set form action
-    const form = document.getElementById('deleteMealForm');
-    if (form) {
-        form.action = `/admin/meals/${id}`;
-    }
-
-    // Show modal
-    modal.classList.remove('hidden');
-}
-
-/**
- * Close the delete meal modal
- */
-function closeDeleteMealModal() {
-    const modal = document.getElementById('deleteMealModal');
-    if (!modal) return;
-
-    modal.classList.add('hidden');
-}
-
-/**
- * Handle meal deletion
- */
-async function handleDeleteMeal(e) {
-    e.preventDefault();
-
-    try {
-        const form = e.target;
-
-        const response = await fetch(form.action, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': csrf,
-                'Accept': 'application/json'
-            }
-        });
-
-        const result = await response.json();
-
-        if (!result.success) {
-            showNotification(result.message || 'Failed to delete meal', 'error');
-            return;
-        }
-
-        // Success - redirect if on view page, remove row if on index page
-        const mealId = form.action.split('/').pop();
-        const mealRow = document.querySelector(`.meal-row[data-id="${mealId}"]`);
-
-        if (mealRow) {
-            // On index page - remove row
-            mealRow.remove();
-
-            // Update stats
-            // refreshStats();
-
-            showNotification(result.message || 'Meal deleted successfully');
-            closeDeleteMealModal();
-        } else {
-            // On view page - redirect to index
-            showNotification(result.message || 'Meal deleted successfully');
-            window.location.href = '/admin/meals';
-        }
-
-    } catch (error) {
-        console.error('Error deleting meal:', error);
-        showNotification('An error occurred while deleting the meal', 'error');
-    }
+    });
 }
 
 /**
@@ -725,9 +563,6 @@ function addMealRow(meal) {
 
     // Add to table
     tableBody.prepend(newRow);
-
-    // Update stats
-    // refreshStats();
 }
 
 /**
@@ -800,9 +635,6 @@ function updateMealRow(meal) {
             </button>
         </td>
     `;
-
-    // Update stats
-    // refreshStats();
 }
 
 /**
@@ -821,49 +653,209 @@ function calculateTotalCalories(meal) {
     return Math.round(totalCalories);
 }
 
+
 /**
- * Refresh statistics on the page
+ * Submit the create meal form via AJAX
  */
-// async function refreshStats() {
-//     try {
-//         const response = await fetch('/admin/meals/stats/refresh', {
-//             headers: {
-//                 'Accept': 'application/json'
-//             }
-//         });
-//
-//         if (!response.ok) {
-//             throw new Error('Failed to fetch stats');
-//         }
-//
-//         const data = await response.json();
-//
-//         if (!data.success) {
-//             throw new Error(data.message || 'Failed to fetch stats');
-//         }
-//
-//         // Update stat cards
-//         if (data.stats.totalMeals !== undefined) {
-//             const totalMealsElement = document.getElementById('totalMeals');
-//             if (totalMealsElement) totalMealsElement.textContent = data.stats.totalMeals;
-//         }
-//
-//         if (data.stats.avgCalories !== undefined) {
-//             const avgCaloriesElement = document.getElementById('avgCalories');
-//             if (avgCaloriesElement) avgCaloriesElement.textContent = data.stats.avgCalories;
-//         }
-//
-//         if (data.stats.mealTypeCount !== undefined) {
-//             const mealTypesElement = document.getElementById('mealTypes');
-//             if (mealTypesElement) {
-//                 const total = Object.values(data.stats.mealTypeCount).reduce((a, b) => a + b, 0);
-//                 mealTypesElement.textContent = total;
-//             }
-//         }
-//     } catch (error) {
-//         console.error('Error refreshing stats:', error);
-//     }
-// }
+function submitCreateMealForm() {
+    try {
+        const form = document.getElementById('createMealForm');
+        const formData = new FormData(form);
+
+        // Validate that there's at least one food item
+        const container = document.getElementById('food-items-container');
+        if (container.children.length === 0) {
+            showNotification('Please add at least one food item to the meal', 'error');
+            return;
+        }
+
+        // Disable submit button
+        const submitButton = document.querySelector('#createMealModal button[type="button"]');
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Creating...';
+        }
+
+        // Clear previous error messages
+        clearFormErrors(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrf,
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (!result.success) {
+                    if (result.errors) {
+                        displayValidationErrors(result.errors);
+                    } else {
+                        showNotification(result.message || 'An error occurred while creating the meal', 'error');
+                    }
+                    return;
+                }
+
+                // Success
+                showNotification(result.message || 'Meal created successfully');
+
+                // Add the new meal to the table or reload the page
+                if (result.meal) {
+                    addMealRow(result.meal);
+                } else {
+                    window.location.reload();
+                }
+
+                // Close modal
+                closeCreateMealModal();
+            })
+            .catch(error => {
+                console.error('Error creating meal:', error);
+                showNotification('An error occurred while creating the meal', 'error');
+            })
+            .finally(() => {
+                // Re-enable submit button
+                const submitButton = document.querySelector('#createMealModal button[type="button"]');
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Create Meal';
+                }
+            });
+    } catch (error) {
+        console.error('Error creating meal:', error);
+        showNotification('An error occurred while creating the meal', 'error');
+    }
+}
+
+/**
+ * Submit the edit meal form via AJAX
+ */
+function submitEditMealForm() {
+    try {
+        const form = document.getElementById('editMealForm');
+        const formData = new FormData(form);
+
+        // Validate that there's at least one food item
+        const container = document.getElementById('edit-food-items-container');
+        if (container.children.length === 0) {
+            showNotification('Please add at least one food item to the meal', 'error');
+            return;
+        }
+
+        // Disable submit button
+        const submitButton = document.querySelector('#editMealModal button[type="button"]');
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Updating...';
+        }
+
+        // Clear previous error messages
+        clearFormErrors(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrf,
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-HTTP-Method-Override': 'PUT'
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (!result.success) {
+                    if (result.errors) {
+                        displayValidationErrors(result.errors);
+                    } else {
+                        showNotification(result.message || 'An error occurred while updating the meal', 'error');
+                    }
+                    return;
+                }
+
+                // Success
+                showNotification(result.message || 'Meal updated successfully');
+
+                // Update the meal row or reload the page
+                if (result.meal) {
+                    updateMealRow(result.meal);
+                } else {
+                    window.location.reload();
+                }
+
+                // Close modal
+                closeEditMealModal();
+            })
+            .catch(error => {
+                console.error('Error updating meal:', error);
+                showNotification('An error occurred while updating the meal', 'error');
+            })
+            .finally(() => {
+                // Re-enable submit button
+                const submitButton = document.querySelector('#editMealModal button[type="button"]');
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Update Meal';
+                }
+            });
+    } catch (error) {
+        console.error('Error updating meal:', error);
+        showNotification('An error occurred while updating the meal', 'error');
+    }
+}
+
+/**
+ * Handle meal deletion via AJAX
+ */
+async function handleDeleteMeal(e) {
+    e.preventDefault();
+
+    try {
+        const form = e.target;
+
+        const response = await fetch(form.action, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': csrf,
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+            showNotification(result.message || 'Failed to delete meal', 'error');
+            return;
+        }
+
+        // Success - redirect if on view page, remove row if on index page
+        const mealId = form.action.split('/').pop();
+        const mealRow = document.querySelector(`.meal-row[data-id="${mealId}"]`);
+
+        if (mealRow) {
+            // On index page - remove row
+            mealRow.remove();
+            showNotification(result.message || 'Meal deleted successfully');
+            closeDeleteMealModal();
+        } else {
+            // On view page - redirect to index
+            showNotification(result.message || 'Meal deleted successfully');
+            window.location.href = '/admin/meals';
+        }
+
+    } catch (error) {
+        console.error('Error deleting meal:', error);
+        showNotification('An error occurred while deleting the meal', 'error');
+    }
+}
+
+/***********************************
+ * Utility Functions
+ ***********************************/
 
 /**
  * Clear all error messages from a form
@@ -904,9 +896,6 @@ function displayValidationErrors(errors) {
     });
 }
 
-/**
- * Show a notification message
- */
 /**
  * Show a notification message
  */
@@ -955,3 +944,20 @@ function showNotification(message, type = 'success') {
         }, 500);
     }, 3000);
 }
+
+// Make functions available globally (important for inline onclick handlers)
+window.openCreateMealModal = openCreateMealModal;
+window.closeCreateMealModal = closeCreateMealModal;
+window.openEditMealModal = openEditMealModal;
+window.closeEditMealModal = closeEditMealModal;
+window.addFoodItem = addFoodItem;
+window.addFoodItemToEdit = addFoodItemToEdit;
+window.openFoodSearchModal = openFoodSearchModal;
+window.closeFoodSearchModal = closeFoodSearchModal;
+window.selectFood = selectFood;
+window.addSelectedFood = addSelectedFood;
+window.removeFoodItem = removeFoodItem;
+window.submitCreateMealForm = submitCreateMealForm;
+window.submitEditMealForm = submitEditMealForm;
+window.confirmDeleteMeal = confirmDeleteMeal;
+window.closeDeleteMealModal = closeDeleteMealModal;

@@ -366,5 +366,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/admin/meals.js') }}"></script>
+    @vite('resources/js/admin/meals.js')
 @endsection
