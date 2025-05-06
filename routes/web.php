@@ -74,7 +74,7 @@ Route::middleware(['auth', 'isBanned'])->group(function () {
         Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
         Route::patch('/users/{user}/ban', [UserController::class, 'ban'])->name('users.ban');
-        Route::patch('/users/{user}/reinstate', [UserController::class, 'reinstate'])->name('users.reinstate');
+        Route::patch('/users/{user}/reinstate', [UserController::class, 'reactiveUser'])->name('users.reinstate');
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 

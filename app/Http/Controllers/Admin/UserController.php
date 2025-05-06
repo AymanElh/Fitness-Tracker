@@ -51,19 +51,13 @@ class UserController extends Controller
         return back()->with("success", "User {$user->name} has been banned");
     }
 
+
     /**
-     * Reinstate a user.
+     * Reactive user
+     *
+     * @param User $user
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function reinstate(User $user): \Illuminate\Http\RedirectResponse
-    {
-        $user->update([
-            'status' => 'active',
-            'banned_at' => null,
-        ]);
-
-        return back()->with('success', "User {$user->name} has been reinstated.");
-    }
-
     public function reactiveUser(User $user): \Illuminate\Http\RedirectResponse
     {
         $user->update([

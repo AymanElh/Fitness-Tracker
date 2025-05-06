@@ -1,4 +1,3 @@
-<!-- resources/views/admin/users/index.blade.php -->
 @extends('layouts.admin')
 
 @section('title', 'User Management')
@@ -147,9 +146,9 @@
                                     <span class="text-gray-400">(You)</span>
                                 @endif
 
-                                <a href="{{ route('admin.users.edit', $user) }}" class="text-blue-600 hover:text-blue-900">
-                                    Edit
-                                </a>
+{{--                                <a href="{{ route('admin.users.edit', $user) }}" class="text-blue-600 hover:text-blue-900">--}}
+{{--                                    Edit--}}
+{{--                                </a>--}}
                             </div>
                         </td>
                     </tr>
