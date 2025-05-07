@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'edamam' => [
+        'base_url' => env('EDAMAM_BASE_URL', 'https://api.edamam.com'),
+        'app_id' => env('EDAMAM_APP_ID'),
+        'app_key' => env('EDAMAM_APP_KEY')
+    ],
+
 ];
